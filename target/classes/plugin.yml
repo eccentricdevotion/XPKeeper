@@ -1,0 +1,13 @@
+author: eccentric_nz
+description: Allows you to store your XP by clicking on a special sign
+main: me.eccentric_nz.plugins.xpkeeper.Xpkeeper
+name: XPKeeper
+startup: postworld
+version: '1.0'
+commands:
+  setXP:
+    description: Set your Total EP.
+    usage: /<command> [amount]
+  xpkremove:
+    description: Remove an XPKeeper sign.
+    usage: /<command>
