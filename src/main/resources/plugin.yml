@@ -10,9 +10,15 @@ permissions:
     description: Allow players to use XPKeeper signs
     default: true
 commands:
+  giveXP:
+    description: Give yourself XP.
+    usage: /<command> [amount]
   setXP:
-    description: Set your Total EP.
+    description: Set your total XP.
     usage: /<command> [amount]
   xpkremove:
     description: Remove an XPKeeper sign.
+    usage: /<command>
+  xpkfist:
+    description: Toggle the XPKeeper must_use_fist config option.
     usage: /<command>
