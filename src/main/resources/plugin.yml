@@ -4,11 +4,11 @@ main: me.eccentric_nz.plugins.xpkeeper.Xpkeeper
 dev-url: http://de.bukkit.org/server-mods/xpkeeper/
 name: XPKeeper
 startup: postworld
-version: '1.0.2'
+version: '1.1'
 permissions:
   xpkeeper.use:
     description: Allow players to use XPKeeper signs
-    default: true
+    default: op
 commands:
   giveXP:
     description: Give yourself XP.
