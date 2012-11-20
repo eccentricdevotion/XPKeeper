@@ -37,24 +37,19 @@ public class XPKarrgghh implements Listener {
                         event.blockList().remove(blockdown);
                     }
                     if (block.getType() == Material.WALL_SIGN) {
-                        //BlockFace face = plugin.getFace(block);
                         Block blockbehind = null;
                         byte data = block.getData();
                         if (data == 4) {
                             blockbehind = block.getRelative(BlockFace.SOUTH, 1);
-                            //System.out.println("[XPKeeper] East/South");
                         }
                         if (data == 5) {
                             blockbehind = block.getRelative(BlockFace.NORTH, 1);
-                            //System.out.println("[XPKeeper] West/North");
                         }
                         if (data == 3) {
                             blockbehind = block.getRelative(BlockFace.EAST, 1);
-                            //System.out.println("[XPKeeper] North/East");
                         }
                         if (data == 2) {
                             blockbehind = block.getRelative(BlockFace.WEST, 1);
-                            //System.out.println("[XPKeeper] South/West");
                         }
                         event.blockList().remove(blockbehind);
                     }
