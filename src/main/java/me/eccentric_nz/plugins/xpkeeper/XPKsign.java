@@ -20,7 +20,7 @@ public class XPKsign implements Listener {
         String playerNameStr = player.getName();
         String xpkLine = event.getLine(0);
         String firstline = plugin.getConfig().getString("firstline");
-        if (xpkLine.equals("[" + firstline + "]")) {
+        if (xpkLine.equalsIgnoreCase("[" + firstline + "]")) {
             // check to see if they have a keeper already
             int keptLevel = plugin.getKeptLevel(playerNameStr, world);
             double keptXP = plugin.getKeptXP(playerNameStr, world);
