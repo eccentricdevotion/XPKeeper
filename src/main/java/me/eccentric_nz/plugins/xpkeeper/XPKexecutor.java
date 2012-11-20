@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package me.eccentric_nz.plugins.xpkeeper;
 
 import org.bukkit.ChatColor;
@@ -21,16 +17,32 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("setXP")) {
+        if (cmd.getName().equalsIgnoreCase("giveXP")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
+                XPKCalculator xpkc = new XPKCalculator(player);
+                int xp = xpkc.getCurrentExp();
                 int i = 0;
                 try {
                     i = Integer.parseInt(args[0]);
                 } catch (NumberFormatException nfe) {
                     System.err.println("[XPKeeper] could not convert to number]");
                 }
-                player.setLevel(i);
+                xpkc.changeExp(i);
+                return true;
+            }
+        }
+        if (cmd.getName().equalsIgnoreCase("setXP")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                XPKCalculator xpkc = new XPKCalculator(player);
+                int i = 0;
+                try {
+                    i = Integer.parseInt(args[0]);
+                } catch (NumberFormatException nfe) {
+                    System.err.println("[XPKeeper] could not convert to number]");
+                }
+                xpkc.setExp(i);
                 return true;
             }
         }
@@ -41,6 +53,13 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
                 player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Click the XPKeeper sign you wish to remove.");
                 return true;
             }
+        }
+        if (cmd.getName().equalsIgnoreCase("xpkfist")) {
+            boolean bool = plugin.getConfig().getBoolean("must_use_fist");
+            plugin.getConfig().set("must_use_fist", !bool);
+            plugin.saveConfig();
+            sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " XPKeeper must_use_fist config set to:" + !bool);
+            return true;
         }
         return false;
     }
