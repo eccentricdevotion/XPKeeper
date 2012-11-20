@@ -17,35 +17,35 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
-        if (cmd.getName().equalsIgnoreCase("giveXP")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                XPKCalculator xpkc = new XPKCalculator(player);
-                int xp = xpkc.getCurrentExp();
-                int i = 0;
-                try {
-                    i = Integer.parseInt(args[0]);
-                } catch (NumberFormatException nfe) {
-                    System.err.println("[XPKeeper] could not convert to number]");
-                }
-                xpkc.changeExp(i);
-                return true;
-            }
-        }
-        if (cmd.getName().equalsIgnoreCase("setXP")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
-                XPKCalculator xpkc = new XPKCalculator(player);
-                int i = 0;
-                try {
-                    i = Integer.parseInt(args[0]);
-                } catch (NumberFormatException nfe) {
-                    System.err.println("[XPKeeper] could not convert to number]");
-                }
-                xpkc.setExp(i);
-                return true;
-            }
-        }
+//        if (cmd.getName().equalsIgnoreCase("giveXP")) {
+//            if (sender instanceof Player) {
+//                Player player = (Player) sender;
+//                XPKCalculator xpkc = new XPKCalculator(player);
+//                int xp = xpkc.getCurrentExp();
+//                int i = 0;
+//                try {
+//                    i = Integer.parseInt(args[0]);
+//                } catch (NumberFormatException nfe) {
+//                    System.err.println("[XPKeeper] could not convert to number]");
+//                }
+//                xpkc.changeExp(i);
+//                return true;
+//            }
+//        }
+//        if (cmd.getName().equalsIgnoreCase("setXP")) {
+//            if (sender instanceof Player) {
+//                Player player = (Player) sender;
+//                XPKCalculator xpkc = new XPKCalculator(player);
+//                int i = 0;
+//                try {
+//                    i = Integer.parseInt(args[0]);
+//                } catch (NumberFormatException nfe) {
+//                    System.err.println("[XPKeeper] could not convert to number]");
+//                }
+//                xpkc.setExp(i);
+//                return true;
+//            }
+//        }
         if (cmd.getName().equalsIgnoreCase("xpkremove")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
@@ -55,6 +55,13 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             }
         }
         if (cmd.getName().equalsIgnoreCase("xpkfist")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                if (!player.hasPermission("xpkeeper.fist")) {
+                    player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You do not have permission to use that command!");
+                    return true;
+                }
+            }
             boolean bool = plugin.getConfig().getBoolean("must_use_fist");
             plugin.getConfig().set("must_use_fist", !bool);
             plugin.saveConfig();

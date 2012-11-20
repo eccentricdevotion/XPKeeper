@@ -9,13 +9,16 @@ permissions:
   xpkeeper.use:
     description: Allow players to use XPKeeper signs
     default: op
+  xpkeeper.fist:
+    description: Allow players to toggle must_use_fist true|false
+    default: op
 commands:
-  giveXP:
-    description: Give yourself XP.
-    usage: /<command> [amount]
-  setXP:
-    description: Set your total XP.
-    usage: /<command> [amount]
+#  giveXP:
+#    description: Give yourself XP.
+#    usage: /<command> [amount]
+#  setXP:
+#    description: Set your total XP.
+#    usage: /<command> [amount]
   xpkremove:
     description: Remove an XPKeeper sign.
     usage: /<command>

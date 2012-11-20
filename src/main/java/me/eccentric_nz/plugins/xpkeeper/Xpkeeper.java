@@ -38,8 +38,8 @@ public class Xpkeeper extends JavaPlugin implements Listener {
         this.getConfig().options().copyDefaults(true);
         saveConfig();
         xpkExecutor = new XPKexecutor(this);
-        getCommand("giveXP").setExecutor(xpkExecutor);
-        getCommand("setXP").setExecutor(xpkExecutor);
+//        getCommand("giveXP").setExecutor(xpkExecutor);
+//        getCommand("setXP").setExecutor(xpkExecutor);
         getCommand("xpkremove").setExecutor(xpkExecutor);
         getCommand("xpkfist").setExecutor(xpkExecutor);
         pm.registerEvents(signListener, this);
@@ -52,6 +52,9 @@ public class Xpkeeper extends JavaPlugin implements Listener {
             service.createTable();
         } catch (Exception e) {
             System.err.println("[XPKeeper] Connection and Tables Error: " + e);
+        }
+        if (!getConfig().contains("must_use_fist")) {
+            getConfig().set("must_use_fist", true);
         }
     }
 
