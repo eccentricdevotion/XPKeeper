@@ -92,7 +92,6 @@ public class XPKbreak implements Listener {
         String line2 = sign.getLine(2);
         String line3 = sign.getLine(3);
         if (line0.equalsIgnoreCase("[" + firstline + "]")) {
-            System.out.println(line0);
             e.setCancelled(true);
             sign.setLine(0, line0);
             sign.setLine(1, line1);
