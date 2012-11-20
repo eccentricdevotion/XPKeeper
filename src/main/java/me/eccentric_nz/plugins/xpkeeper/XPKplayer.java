@@ -31,7 +31,7 @@ public class XPKplayer implements Listener {
             Material blockType = block.getType();
             byte data = block.getData();
             Action action = event.getAction();
-            if ((blockType == Material.WALL_SIGN || blockType == Material.SIGN_POST)) {
+            if (blockType == Material.WALL_SIGN || blockType == Material.SIGN_POST) {
                 // check the text on the sign
                 String firstline = plugin.getConfig().getString("firstline");
                 Sign sign = (Sign) block.getState();
