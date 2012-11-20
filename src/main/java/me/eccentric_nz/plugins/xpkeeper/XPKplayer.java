@@ -31,19 +31,13 @@ public class XPKplayer implements Listener {
             Material blockType = block.getType();
             byte data = block.getData();
             Action action = event.getAction();
-            if ((blockType == Material.WALL_SIGN || blockType == Material.SIGN_POST) && inhand == Material.AIR) {
+            if ((blockType == Material.WALL_SIGN || blockType == Material.SIGN_POST)) {
                 // check the text on the sign
                 String firstline = plugin.getConfig().getString("firstline");
                 Sign sign = (Sign) block.getState();
                 String line0 = sign.getLine(0);
                 String line1 = sign.getLine(1);
-                int level = player.getLevel();
-                int newLevel = 0;
-                int tenth = 0;
-                double one = 1.0;
-                double XPamount = player.getExp();
-                float newXPamount = 0;
-                if (line0.equals("[" + firstline + "]")) {
+                if (line0.equalsIgnoreCase("[" + firstline + "]")) {
                     if (plugin.trackPlayers.containsKey(playerNameStr) && line1.equals(playerNameStr)) {
                         plugin.trackPlayers.remove(playerNameStr);
                         // set the sign block to AIR and delete the XPKeeper data
@@ -51,50 +45,41 @@ public class XPKplayer implements Listener {
                         plugin.delKeptXP(playerNameStr, world);
                         player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " The XPKeeper was successfully removed.");
                     } else {
-                        if (action == Action.LEFT_CLICK_BLOCK) {
+                        if (plugin.getConfig().getBoolean("must_use_fist") && inhand != Material.AIR) {
+                            player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You must hit the sign with your fist.");
+                        } else {
+                            XPKCalculator xpkc = new XPKCalculator(player);
                             // get players XP
-                            // deposit XP
-                            if (line1.equals(playerNameStr)) {
-                                // sign is set up so update the amount kept
-                                double keptXP = plugin.getKeptXP(playerNameStr, world);
-                                int keptLevel = plugin.getKeptLevel(playerNameStr, world);
-                                double tmpXP = XPamount + keptXP;
-                                if (tmpXP > one) {
-                                    newXPamount = ((Double) (tmpXP - one)).floatValue();
-                                    tenth = 1;
-                                } else {
-                                    newXPamount = ((Double) tmpXP).floatValue();
+                            int xp = xpkc.getCurrentExp();
+                            if (action == Action.LEFT_CLICK_BLOCK) {
+                                // deposit XP
+                                if (line1.equals(playerNameStr)) {
+                                    // sign is set up so update the amount kept
+                                    int keptXP = plugin.getKeptXP(playerNameStr, world);
+                                    //int keptLevel = plugin.getKeptLevel(playerNameStr, world);
+                                    int newXPamount = xp + keptXP;
+                                    plugin.setKeptXP(newXPamount, playerNameStr, world);
+                                    // calculate level and update the sign
+                                    int newLevel = xpkc.getLevelForExp(newXPamount);
+                                    int levelxp = xpkc.getXpForLevel(newLevel);
+                                    int leftoverxp = newXPamount - levelxp;
+                                    sign.setLine(2, "Level: " + newLevel);
+                                    sign.setLine(3, "XP: " + leftoverxp);
+                                    sign.update();
+                                    // remove XP from player
+                                    xpkc.setExp(0);
                                 }
-                                newLevel = level + keptLevel + tenth;
-                                plugin.setKeptXP(newLevel, newXPamount, playerNameStr, world);
                             }
-                            // update the sign
-                            sign.setLine(2, "Level: " + newLevel);
-                            sign.setLine(3, "XP: " + newXPamount);
-                            sign.update();
-                            // remove XP from player
-                            player.setLevel(0);
-                            player.setExp(0);
-                        }
-                        if (action == Action.RIGHT_CLICK_BLOCK) {
-                            // withdraw XP
-                            int keptLevel = plugin.getKeptLevel(playerNameStr, world);
-                            double keptXP = plugin.getKeptXP(playerNameStr, world);
-                            double tmpXP = XPamount + keptXP;
-                            if (tmpXP > one) {
-                                newXPamount = ((Double) (tmpXP - one)).floatValue();
-                                tenth = 1;
-                            } else {
-                                newXPamount = ((Double) tmpXP).floatValue();
+                            if (action == Action.RIGHT_CLICK_BLOCK) {
+                                // withdraw XP
+                                int keptXP = plugin.getKeptXP(playerNameStr, world);
+                                xpkc.changeExp(keptXP);
+                                plugin.setKeptXP(0, playerNameStr, world);
+                                // update the sign
+                                sign.setLine(2, "Level: 0");
+                                sign.setLine(3, "XP: 0");
+                                sign.update();
                             }
-                            newLevel = level + keptLevel + tenth;
-                            player.setLevel(newLevel);
-                            player.setExp(newXPamount);
-                            plugin.setKeptXP(0, 0, playerNameStr, world);
-                            // update the sign
-                            sign.setLine(2, "Level: 0");
-                            sign.setLine(3, "XP: 0");
-                            sign.update();
                         }
                     }
                 }
