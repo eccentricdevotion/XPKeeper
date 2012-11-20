@@ -44,7 +44,7 @@ public class XPKplayer implements Listener {
                 double XPamount = player.getExp();
                 float newXPamount = 0;
                 if (line0.equals("[" + firstline + "]")) {
-                    if (plugin.trackPlayers.containsKey(playerNameStr) == true && line1.equals(playerNameStr)) {
+                    if (plugin.trackPlayers.containsKey(playerNameStr) && line1.equals(playerNameStr)) {
                         plugin.trackPlayers.remove(playerNameStr);
                         // set the sign block to AIR and delete the XPKeeper data
                         block.setType(Material.AIR);
