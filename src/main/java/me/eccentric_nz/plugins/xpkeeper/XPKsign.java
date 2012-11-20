@@ -32,6 +32,9 @@ public class XPKsign implements Listener {
                 event.setCancelled(true);
                 player.sendMessage("You already have an XPKeeper in this world!");
             }
+        } else {
+            event.setLine(0, "");
+            player.sendMessage("You do not have permission to make an XPKeeper sign!");
         }
     }
 }
