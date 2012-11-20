@@ -38,8 +38,10 @@ public class Xpkeeper extends JavaPlugin implements Listener {
         this.getConfig().options().copyDefaults(true);
         saveConfig();
         xpkExecutor = new XPKexecutor(this);
+        getCommand("giveXP").setExecutor(xpkExecutor);
         getCommand("setXP").setExecutor(xpkExecutor);
         getCommand("xpkremove").setExecutor(xpkExecutor);
+        getCommand("xpkfist").setExecutor(xpkExecutor);
         pm.registerEvents(signListener, this);
         pm.registerEvents(playerListener, this);
         pm.registerEvents(breakListener, this);
@@ -53,32 +55,15 @@ public class Xpkeeper extends JavaPlugin implements Listener {
         }
     }
 
-    public int getKeptLevel(String p, String w) {
-        int keptLevel = -1;
-        try {
-            Connection connection = service.getConnection();
-            Statement statement = connection.createStatement();
-            String queryLevelGet = "SELECT level FROM xpk WHERE player = '" + p + "' AND world = '" + w + "'";
-            ResultSet rsget = statement.executeQuery(queryLevelGet);
-            if (rsget != null && rsget.next()) {
-                keptLevel = rsget.getInt("level");
-            }
-            rsget.close();
-            statement.close();
-        } catch (SQLException e) {
-            System.err.println("[XPKeeper] Could not GET Level: " + e);
-        }
-        return keptLevel;
-    }
-    public double getKeptXP(String p, String w) {
-        double keptXP = -1;
+    public int getKeptXP(String p, String w) {
+        int keptXP = -1;
         try {
             Connection connection = service.getConnection();
             Statement statement = connection.createStatement();
             String queryXPGet = "SELECT amount FROM xpk WHERE player = '" + p + "' AND world = '" + w + "'";
             ResultSet rsget = statement.executeQuery(queryXPGet);
             if (rsget != null && rsget.next()) {
-                keptXP = rsget.getDouble("amount");
+                keptXP = rsget.getInt("amount");
             }
             rsget.close();
             statement.close();
@@ -88,11 +73,11 @@ public class Xpkeeper extends JavaPlugin implements Listener {
         return keptXP;
     }
 
-    public void setKeptXP(int l, double a, String p, String w) {
+    public void setKeptXP(double a, String p, String w) {
         try {
             Connection connection = service.getConnection();
             Statement statement = connection.createStatement();
-            String queryXPSet = "UPDATE xpk SET level = " + l + ", amount = " + a + " WHERE player = '" + p + "' AND world = '" + w + "'";
+            String queryXPSet = "UPDATE xpk SET amount = " + a + " WHERE player = '" + p + "' AND world = '" + w + "'";
             statement.executeUpdate(queryXPSet);
             statement.close();
         } catch (SQLException e) {
@@ -104,7 +89,7 @@ public class Xpkeeper extends JavaPlugin implements Listener {
         try {
             Connection connection = service.getConnection();
             Statement statement = connection.createStatement();
-            String queryXPInsert = "INSERT INTO xpk (player,world,level,amount) VALUES ('" + p + "','" + w + "',0,0)";
+            String queryXPInsert = "INSERT INTO xpk (player,world,amount) VALUES ('" + p + "','" + w + "',0)";
             statement.executeUpdate(queryXPInsert);
             statement.close();
         } catch (SQLException e) {
