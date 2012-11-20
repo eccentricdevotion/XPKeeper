@@ -19,12 +19,11 @@ public class XPKsign implements Listener {
         String world = event.getBlock().getWorld().getName();
         String playerNameStr = player.getName();
         String xpkLine = event.getLine(0);
-        String firstline = plugin.getConfig().getString("firstline");
-        if (xpkLine.equalsIgnoreCase("[" + firstline + "]")) {
+        String firstline = "[" + plugin.getConfig().getString("firstline") + "]";
+        if (firstline.equalsIgnoreCase(xpkLine) && player.hasPermission("xpkeeper.use")) {
             // check to see if they have a keeper already
-            int keptLevel = plugin.getKeptLevel(playerNameStr, world);
-            double keptXP = plugin.getKeptXP(playerNameStr, world);
-            if (keptLevel < 0) {
+            int keptXP = plugin.getKeptXP(playerNameStr, world);
+            if (keptXP < 0) {
                 plugin.insKeptXP(playerNameStr, world);
                 event.setLine(1, playerNameStr);
                 event.setLine(2, "Level: 0");
