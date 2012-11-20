@@ -28,7 +28,7 @@ public class XPKdatabase {
     public void createTable() {
         try {
             statement = connection.createStatement();
-            String queryXPK = "CREATE TABLE IF NOT EXISTS xpk (xpk_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, player TEXT COLLATE NOCASE, world TEXT, level INTEGER, amount REAL)";
+            String queryXPK = "CREATE TABLE IF NOT EXISTS xpk (xpk_id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, player TEXT COLLATE NOCASE, world TEXT, amount REAL)";
             statement.executeUpdate(queryXPK);
         } catch (SQLException e) {
             System.err.println("[XPKeeper] Create table error: " + e);
