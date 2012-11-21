@@ -20,21 +20,23 @@ public class XPKsign implements Listener {
         String playerNameStr = player.getName();
         String xpkLine = event.getLine(0);
         String firstline = "[" + plugin.getConfig().getString("firstline") + "]";
-        if (firstline.equalsIgnoreCase(xpkLine) && player.hasPermission("xpkeeper.use")) {
-            // check to see if they have a keeper already
-            int keptXP = plugin.getKeptXP(playerNameStr, world);
-            if (keptXP < 0) {
-                plugin.insKeptXP(playerNameStr, world);
-                event.setLine(1, playerNameStr);
-                event.setLine(2, "Level: 0");
-                event.setLine(3, "XP: 0");
+        if (firstline.equalsIgnoreCase(xpkLine)) {
+            if (player.hasPermission("xpkeeper.use")) {
+                // check to see if they have a keeper already
+                int keptXP = plugin.getKeptXP(playerNameStr, world);
+                if (keptXP < 0) {
+                    plugin.insKeptXP(playerNameStr, world);
+                    event.setLine(1, playerNameStr);
+                    event.setLine(2, "Level: 0");
+                    event.setLine(3, "XP: 0");
+                } else {
+                    event.setCancelled(true);
+                    player.sendMessage("You already have an XPKeeper in this world!");
+                }
             } else {
-                event.setCancelled(true);
-                player.sendMessage("You already have an XPKeeper in this world!");
+                event.setLine(0, "");
+                player.sendMessage("You do not have permission to make an XPKeeper sign!");
             }
-        } else {
-            event.setLine(0, "");
-            player.sendMessage("You do not have permission to make an XPKeeper sign!");
         }
     }
 }
