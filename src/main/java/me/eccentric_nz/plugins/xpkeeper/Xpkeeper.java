@@ -1,6 +1,7 @@
 package me.eccentric_nz.plugins.xpkeeper;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -55,6 +56,12 @@ public class Xpkeeper extends JavaPlugin implements Listener {
         }
         if (!getConfig().contains("must_use_fist")) {
             getConfig().set("must_use_fist", true);
+        }
+        try {
+            MetricsLite metrics = new MetricsLite(this);
+            metrics.start();
+        } catch (IOException e) {
+            // Failed to submit the stats :-(
         }
     }
 
