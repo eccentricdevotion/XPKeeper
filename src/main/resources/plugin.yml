@@ -22,6 +22,9 @@ commands:
   xpkremove:
     description: Remove an XPKeeper sign.
     usage: /<command>
+  xpkforceremove:
+    description: Remove ALL player data from the database - use with caution.
+    usage: /<command> [player]
   xpkfist:
     description: Toggle the XPKeeper must_use_fist config option.
     usage: /<command>

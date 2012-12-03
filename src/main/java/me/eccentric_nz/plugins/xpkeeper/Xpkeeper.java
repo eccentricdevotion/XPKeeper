@@ -42,6 +42,7 @@ public class Xpkeeper extends JavaPlugin implements Listener {
 //        getCommand("giveXP").setExecutor(xpkExecutor);
 //        getCommand("setXP").setExecutor(xpkExecutor);
         getCommand("xpkremove").setExecutor(xpkExecutor);
+        getCommand("xpkforceremove").setExecutor(xpkExecutor);
         getCommand("xpkfist").setExecutor(xpkExecutor);
         pm.registerEvents(signListener, this);
         pm.registerEvents(playerListener, this);
