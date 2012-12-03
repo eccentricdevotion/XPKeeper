@@ -35,7 +35,7 @@ public class Xpkeeper extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
 
-        getServer().getPluginManager().registerEvents(this, this);
+        //getServer().getPluginManager().registerEvents(this, this);
         this.getConfig().options().copyDefaults(true);
         saveConfig();
         xpkExecutor = new XPKexecutor(this);
