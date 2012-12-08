@@ -61,7 +61,7 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
         }
         if (cmd.getName().equalsIgnoreCase("xpkforceremove")) {
             String player;
-            if (args.length == 1) {
+            if (args.length == 1 && sender.hasPermission("xpkeeper.force")) {
                 player = args[0];
             } else {
                 if (sender instanceof Player) {

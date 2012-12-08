@@ -4,13 +4,16 @@ main: me.eccentric_nz.plugins.xpkeeper.Xpkeeper
 dev-url: http://de.bukkit.org/server-mods/xpkeeper/
 name: XPKeeper
 startup: postworld
-version: '1.2'
+version: '1.2.1'
 permissions:
   xpkeeper.use:
     description: Allow players to use XPKeeper signs
     default: op
   xpkeeper.fist:
     description: Allow players to toggle must_use_fist true|false
+    default: op
+  xpkeeper.force:
+    description: Allow players to force remove player data
     default: op
 commands:
 #  giveXP:
