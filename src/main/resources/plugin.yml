@@ -4,7 +4,7 @@ main: me.eccentric_nz.plugins.xpkeeper.Xpkeeper
 dev-url: http://de.bukkit.org/server-mods/xpkeeper/
 name: XPKeeper
 startup: postworld
-version: '1.2.1'
+version: '1.2.2'
 permissions:
   xpkeeper.use:
     description: Allow players to use XPKeeper signs
@@ -15,19 +15,32 @@ permissions:
   xpkeeper.force:
     description: Allow players to force remove player data
     default: op
+  xpkeeper.admin:
+    description: Allow players to set/give XP
+    default: op
+  xpkeeper.editsign:
+    description: Allow players to edit signs
+    default: op
 commands:
-#  giveXP:
-#    description: Give yourself XP.
-#    usage: /<command> [amount]
-#  setXP:
-#    description: Set your total XP.
-#    usage: /<command> [amount]
+  xpkgive:
+    description: Give a player some XP.
+    usage: /<command> [player] [amount]
+  xpkset:
+    description: Set a player's total XP.
+    usage: /<command> [player] [amount]
   xpkremove:
+    aliases: [xpkr, xpkrem]
     description: Remove an XPKeeper sign.
     usage: /<command>
   xpkforceremove:
+    aliases: [xpkfr, xpkforce]
     description: Remove ALL player data from the database - use with caution.
     usage: /<command> [player]
   xpkfist:
+    aliases: [xpkf]
     description: Toggle the XPKeeper must_use_fist config option.
+    usage: /<command>
+  xpkedit:
+    aliases: [xpke]
+    description: Edit the first line of th XPKeeper sign.
     usage: /<command>
