@@ -29,7 +29,6 @@ public class XPKplayer implements Listener {
         if (block != null) {
             String world = block.getLocation().getWorld().getName();
             Material blockType = block.getType();
-            byte data = block.getData();
             Action action = event.getAction();
             if (blockType == Material.WALL_SIGN || blockType == Material.SIGN_POST) {
                 // check the text on the sign

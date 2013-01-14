@@ -9,7 +9,6 @@ public class XPKdatabase {
 
     private static XPKdatabase instance = new XPKdatabase();
     public Connection connection = null;
-    public int timeout = 30;
     public Statement statement;
 
     public static synchronized XPKdatabase getInstance() {
