@@ -45,6 +45,7 @@ public class Xpkeeper extends JavaPlugin implements Listener {
         getCommand("xpkfist").setExecutor(xpkExecutor);
         getCommand("xpkedit").setExecutor(xpkExecutor);
         getCommand("xpkpay").setExecutor(xpkExecutor);
+        getCommand("xpkwithdraw").setExecutor(xpkExecutor);
         pm.registerEvents(signListener, this);
         pm.registerEvents(playerListener, this);
         pm.registerEvents(breakListener, this);
@@ -58,6 +59,9 @@ public class Xpkeeper extends JavaPlugin implements Listener {
         }
         if (!getConfig().contains("must_use_fist")) {
             getConfig().set("must_use_fist", true);
+        }
+        if (!getConfig().contains("withdraw")) {
+            getConfig().set("withdraw", 0);
         }
         try {
             MetricsLite metrics = new MetricsLite(this);

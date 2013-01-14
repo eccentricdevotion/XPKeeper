@@ -106,17 +106,10 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             } catch (SQLException e) {
                 System.err.println("[XPKeeper] Could not get and remove player data: " + e);
             } finally {
-                if (rsget != null) {
-                    try {
-                        rsget.close();
-                    } catch (Exception e) {
-                    }
-                }
-                if (statement != null) {
-                    try {
-                        statement.close();
-                    } catch (Exception e) {
-                    }
+                try {
+                    rsget.close();
+                    statement.close();
+                } catch (Exception e) {
                 }
             }
             sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " All database entries for " + ChatColor.RED + player + ChatColor.RESET + " were removed.");
@@ -133,7 +126,27 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             boolean bool = plugin.getConfig().getBoolean("must_use_fist");
             plugin.getConfig().set("must_use_fist", !bool);
             plugin.saveConfig();
-            sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " XPKeeper must_use_fist config set to:" + !bool);
+            sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.AQUA + " must_use_fist" + ChatColor.RESET + " config value set to: " + !bool);
+            return true;
+        }
+        if (cmd.getName().equalsIgnoreCase("xpkwithdraw")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                if (!player.hasPermission("xpkeeper.admin")) {
+                    player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You do not have permission to use that command!");
+                    return true;
+                }
+            }
+            int amount;
+            try {
+                amount = Integer.parseInt(args[0]);
+            } catch (NumberFormatException e) {
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " That is not a number!");
+                return false;
+            }
+            plugin.getConfig().set("withdraw", amount);
+            plugin.saveConfig();
+            sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.AQUA + " withdraw" + ChatColor.RESET + " config value set to: " + amount);
             return true;
         }
         if (cmd.getName().equalsIgnoreCase("xpkedit")) {
@@ -191,7 +204,7 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             Player receiver = plugin.getServer().getPlayer(args[0]);
             XPKCalculator xpkc_g = new XPKCalculator(giver);
             XPKCalculator xpkc_r = new XPKCalculator(receiver);
-            int i = 0;
+            int i;
             try {
                 i = Integer.parseInt(args[1]);
             } catch (NumberFormatException nfe) {
@@ -207,7 +220,7 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             xpkc_r.changeExp(i);
             xpkc_g.changeExp(-i);
             giver.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You payed " + args[0] + " " + args[1] + " XP :)");
-            receiver.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + giver.getName()+ " payed you " + args[1] + " XP :)");
+            receiver.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + giver.getName() + " payed you " + args[1] + " XP :)");
             return true;
         }
         return false;
