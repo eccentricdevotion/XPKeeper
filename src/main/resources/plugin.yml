@@ -4,7 +4,7 @@ main: me.eccentric_nz.plugins.xpkeeper.Xpkeeper
 dev-url: http://de.bukkit.org/server-mods/xpkeeper/
 name: XPKeeper
 startup: postworld
-version: '1.2.2'
+version: '1.2.3'
 permissions:
   xpkeeper.use:
     description: Allow players to use XPKeeper signs
@@ -23,9 +23,11 @@ permissions:
     default: op
 commands:
   xpkgive:
+    aliases: [xpkg]
     description: Give a player some XP.
     usage: /<command> [player] [amount]
   xpkset:
+    aliases: [xpks]
     description: Set a player's total XP.
     usage: /<command> [player] [amount]
   xpkremove:
@@ -42,5 +44,9 @@ commands:
     usage: /<command>
   xpkedit:
     aliases: [xpke]
-    description: Edit the first line of th XPKeeper sign.
+    description: Edit the first line of the XPKeeper sign.
     usage: /<command>
+  xpkpay:
+    aliases: [xpkp]
+    description: Pay another player some XP.
+    usage: /<command> [player] [amount]

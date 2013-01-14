@@ -24,7 +24,6 @@ public class Xpkeeper extends JavaPlugin implements Listener {
     XPKbreak breakListener = new XPKbreak(this);
     XPKarrgghh explodeListener = new XPKarrgghh(this);
     PluginManager pm = Bukkit.getServer().getPluginManager();
-    String firstline;
     public HashMap<String, Boolean> trackPlayers = new HashMap<String, Boolean>();
 
     @Override
@@ -45,6 +44,7 @@ public class Xpkeeper extends JavaPlugin implements Listener {
         getCommand("xpkforceremove").setExecutor(xpkExecutor);
         getCommand("xpkfist").setExecutor(xpkExecutor);
         getCommand("xpkedit").setExecutor(xpkExecutor);
+        getCommand("xpkpay").setExecutor(xpkExecutor);
         pm.registerEvents(signListener, this);
         pm.registerEvents(playerListener, this);
         pm.registerEvents(breakListener, this);

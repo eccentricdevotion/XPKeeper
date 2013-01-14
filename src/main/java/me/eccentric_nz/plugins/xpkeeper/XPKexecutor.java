@@ -15,7 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class XPKexecutor extends JavaPlugin implements CommandExecutor {
 
     private Xpkeeper plugin;
-    XPKdatabase service = XPKdatabase.getInstance();
+    private XPKdatabase service = XPKdatabase.getInstance();
 
     public XPKexecutor(Xpkeeper plugin) {
         this.plugin = plugin;
@@ -38,12 +38,11 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             }
             Player player = plugin.getServer().getPlayer(args[0]);
             XPKCalculator xpkc = new XPKCalculator(player);
-            int xp = xpkc.getCurrentExp();
             int i = 0;
             try {
                 i = Integer.parseInt(args[1]);
             } catch (NumberFormatException nfe) {
-                System.err.println("[XPKeeper] could not convert to number]");
+                System.err.println("[XPKeeper] could not convert to number!");
             }
             xpkc.changeExp(i);
             return true;
@@ -67,7 +66,7 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             try {
                 i = Integer.parseInt(args[1]);
             } catch (NumberFormatException nfe) {
-                System.err.println("[XPKeeper] could not convert to number]");
+                System.err.println("[XPKeeper] could not convert to number!");
             }
             xpkc.setExp(i);
             return true;
@@ -93,19 +92,32 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
                     return true;
                 }
             }
+            Statement statement = null;
+            ResultSet rsget = null;
             try {
                 Connection connection = service.getConnection();
-                Statement statement = connection.createStatement();
+                statement = connection.createStatement();
                 String queryRemoveGet = "SELECT xpk_id FROM xpk WHERE player = '" + player + "'";
-                ResultSet rsget = statement.executeQuery(queryRemoveGet);
+                rsget = statement.executeQuery(queryRemoveGet);
                 if (rsget.isBeforeFirst()) {
                     String queryRemovePlayer = "DELETE FROM xpk WHERE player = '" + player + "'";
                     statement.executeUpdate(queryRemovePlayer);
                 }
-                rsget.close();
-                statement.close();
             } catch (SQLException e) {
                 System.err.println("[XPKeeper] Could not get and remove player data: " + e);
+            } finally {
+                if (rsget != null) {
+                    try {
+                        rsget.close();
+                    } catch (Exception e) {
+                    }
+                }
+                if (statement != null) {
+                    try {
+                        statement.close();
+                    } catch (Exception e) {
+                    }
+                }
             }
             sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " All database entries for " + ChatColor.RED + player + ChatColor.RESET + " were removed.");
             return true;
@@ -144,14 +156,58 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
                 player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + "You aren't looking at a sign!");
                 return true;
             }
-            String newline = "";
+            StringBuilder builder = new StringBuilder();
             for (String a : args) {
-                newline += a + " ";
+                builder.append(a).append(" ");
             }
+            String newline = builder.toString();
             // remove trailing space
-            String trimmed = newline.substring(0, newline.length()-1);
+            String trimmed = newline.substring(0, newline.length() - 1);
             sign.setLine(0, trimmed);
             sign.update();
+            return true;
+        }
+        if (cmd.getName().equalsIgnoreCase("xpkpay")) {
+            if (!sender.hasPermission("xpkeeper.use")) {
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You do not have permission to use that command!");
+                return true;
+            }
+            if (args.length < 2) {
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Not enough command arguments!");
+                return false;
+            }
+            if (plugin.getServer().getPlayer(args[0]) == null) {
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Could not find that player!");
+                return true;
+            }
+            Player giver = null;
+            if (sender instanceof Player) {
+                giver = (Player) sender;
+            }
+            if (giver == null) {
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Only players can pay other players!");
+                return true;
+            }
+            Player receiver = plugin.getServer().getPlayer(args[0]);
+            XPKCalculator xpkc_g = new XPKCalculator(giver);
+            XPKCalculator xpkc_r = new XPKCalculator(receiver);
+            int i = 0;
+            try {
+                i = Integer.parseInt(args[1]);
+            } catch (NumberFormatException nfe) {
+                sender.sendMessage("[XPKeeper] could not convert to number!");
+                return false;
+            }
+            // check whether the giver has enough to give
+            int checkEnough = xpkc_g.getCurrentExp();
+            if (i > checkEnough) {
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You don't have enough XP! Try withdrawing from your XPKeeper sign first.");
+                return true;
+            }
+            xpkc_r.changeExp(i);
+            xpkc_g.changeExp(-i);
+            giver.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You payed " + args[0] + " " + args[1] + " XP :)");
+            receiver.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + giver.getName()+ " payed you " + args[1] + " XP :)");
             return true;
         }
         return false;
