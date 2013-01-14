@@ -110,7 +110,7 @@ public class XPKCalculator {
      * @return	the Player object
      * @throws IllegalStateException if the player is no longer online
      */
-    public Player getPlayer() {
+    private Player getPlayer() {
         Player p = Bukkit.getPlayer(playerName);
         if (p == null) {
             throw new IllegalStateException("Player " + playerName + " is not online");
