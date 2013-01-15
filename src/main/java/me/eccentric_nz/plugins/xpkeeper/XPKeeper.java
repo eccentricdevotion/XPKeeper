@@ -15,7 +15,7 @@ import org.bukkit.material.Sign;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class Xpkeeper extends JavaPlugin implements Listener {
+public class XPKeeper extends JavaPlugin implements Listener {
 
     XPKdatabase service = XPKdatabase.getInstance();
     private XPKexecutor xpkExecutor;
@@ -78,7 +78,7 @@ public class Xpkeeper extends JavaPlugin implements Listener {
             Statement statement = connection.createStatement();
             String queryXPGet = "SELECT amount FROM xpk WHERE player = '" + p + "' AND world = '" + w + "'";
             ResultSet rsget = statement.executeQuery(queryXPGet);
-            if (rsget != null && rsget.next()) {
+            if (rsget.next()) {
                 keptXP = rsget.getInt("amount");
             }
             rsget.close();

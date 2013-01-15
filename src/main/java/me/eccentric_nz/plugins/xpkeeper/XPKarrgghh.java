@@ -12,9 +12,9 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 
 public class XPKarrgghh implements Listener {
 
-    private Xpkeeper plugin;
+    private XPKeeper plugin;
 
-    public XPKarrgghh(Xpkeeper plugin) {
+    public XPKarrgghh(XPKeeper plugin) {
         this.plugin = plugin;
     }
 

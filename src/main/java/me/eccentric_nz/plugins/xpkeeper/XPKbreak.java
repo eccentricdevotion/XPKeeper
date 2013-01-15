@@ -16,9 +16,9 @@ import org.bukkit.material.MaterialData;
 
 public class XPKbreak implements Listener {
 
-    private Xpkeeper plugin;
+    private XPKeeper plugin;
 
-    public XPKbreak(Xpkeeper plugin) {
+    public XPKbreak(XPKeeper plugin) {
         this.plugin = plugin;
     }
     List<BlockFace> faces = Arrays.asList(BlockFace.UP, BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH);

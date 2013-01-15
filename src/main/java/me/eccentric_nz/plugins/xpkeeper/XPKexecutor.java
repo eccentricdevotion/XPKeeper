@@ -14,10 +14,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class XPKexecutor extends JavaPlugin implements CommandExecutor {
 
-    private Xpkeeper plugin;
+    private XPKeeper plugin;
     private XPKdatabase service = XPKdatabase.getInstance();
 
-    public XPKexecutor(Xpkeeper plugin) {
+    public XPKexecutor(XPKeeper plugin) {
         this.plugin = plugin;
     }
 

@@ -7,9 +7,9 @@ import org.bukkit.event.block.SignChangeEvent;
 
 public class XPKsign implements Listener {
 
-    private Xpkeeper plugin;
+    private XPKeeper plugin;
 
-    public XPKsign(Xpkeeper plugin) {
+    public XPKsign(XPKeeper plugin) {
         this.plugin = plugin;
     }
 

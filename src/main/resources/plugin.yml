@@ -1,6 +1,6 @@
 author: eccentric_nz
 description: Allows you to store your XP by clicking on a special sign
-main: me.eccentric_nz.plugins.xpkeeper.Xpkeeper
+main: me.eccentric_nz.plugins.xpkeeper.XPKeeper
 dev-url: http://de.bukkit.org/server-mods/xpkeeper/
 name: XPKeeper
 startup: postworld
