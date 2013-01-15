@@ -3,6 +3,7 @@ package me.eccentric_nz.plugins.xpkeeper;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -75,9 +76,12 @@ public class XPKeeper extends JavaPlugin implements Listener {
         int keptXP = -1;
         try {
             Connection connection = service.getConnection();
-            Statement statement = connection.createStatement();
-            String queryXPGet = "SELECT amount FROM xpk WHERE player = '" + p + "' AND world = '" + w + "'";
-            ResultSet rsget = statement.executeQuery(queryXPGet);
+            String queryXPGet = "SELECT amount FROM xpk WHERE player = ? AND world = ?";
+            PreparedStatement statement = connection.prepareStatement(queryXPGet);
+            statement.setString(1, p);
+            statement.setString(2, w);
+//            String queryXPGet = "SELECT amount FROM xpk WHERE player = '" + p + "' AND world = '" + w + "'";
+            ResultSet rsget = statement.executeQuery();
             if (rsget.next()) {
                 keptXP = rsget.getInt("amount");
             }
@@ -92,9 +96,13 @@ public class XPKeeper extends JavaPlugin implements Listener {
     public void setKeptXP(double a, String p, String w) {
         try {
             Connection connection = service.getConnection();
-            Statement statement = connection.createStatement();
-            String queryXPSet = "UPDATE xpk SET amount = " + a + " WHERE player = '" + p + "' AND world = '" + w + "'";
-            statement.executeUpdate(queryXPSet);
+            String queryXPSet = "UPDATE xpk SET amount = ? WHERE player = ? AND world = ?";
+            PreparedStatement statement = connection.prepareStatement(queryXPSet);
+//            String queryXPSet = "UPDATE xpk SET amount = " + a + " WHERE player = '" + p + "' AND world = '" + w + "'";
+            statement.setDouble(1, a);
+            statement.setString(2, p);
+            statement.setString(3, w);
+            statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
             System.err.println("[XPKeeper] Could not SET XP: " + e);
@@ -104,9 +112,12 @@ public class XPKeeper extends JavaPlugin implements Listener {
     public void insKeptXP(String p, String w) {
         try {
             Connection connection = service.getConnection();
-            Statement statement = connection.createStatement();
-            String queryXPInsert = "INSERT INTO xpk (player,world,amount) VALUES ('" + p + "','" + w + "',0)";
-            statement.executeUpdate(queryXPInsert);
+            String queryXPInsert = "INSERT INTO xpk (player,world,amount) VALUES (?,?,0)";
+            PreparedStatement statement = connection.prepareStatement(queryXPInsert);
+//            String queryXPInsert = "INSERT INTO xpk (player,world,amount) VALUES ('" + p + "','" + w + "',0)";
+            statement.setString(1, p);
+            statement.setString(2, w);
+            statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
             System.err.println("[XPKeeper] Could not add new database record: " + e);
@@ -116,9 +127,12 @@ public class XPKeeper extends JavaPlugin implements Listener {
     public void delKeptXP(String p, String w) {
         try {
             Connection connection = service.getConnection();
-            Statement statement = connection.createStatement();
-            String queryXPDelete = "DELETE FROM xpk WHERE player = '" + p + "' AND world= '" + w + "'";
-            statement.executeUpdate(queryXPDelete);
+            String queryXPDelete = "DELETE FROM xpk WHERE player = ? AND world= ?";
+            PreparedStatement statement = connection.prepareStatement(queryXPDelete);
+            statement.setString(1, p);
+            statement.setString(2, w);
+//            String queryXPDelete = "DELETE FROM xpk WHERE player = '" + p + "' AND world= '" + w + "'";
+            statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
             System.err.println("[XPKeeper] Could not delete database record: " + e);
