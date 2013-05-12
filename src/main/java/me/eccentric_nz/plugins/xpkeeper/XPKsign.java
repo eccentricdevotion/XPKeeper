@@ -18,6 +18,10 @@ public class XPKsign implements Listener {
         Player player = event.getPlayer();
         String world = event.getBlock().getWorld().getName();
         String playerNameStr = player.getName();
+        String sign_str = playerNameStr;
+        if (playerNameStr.length() > 15) {
+            sign_str = playerNameStr.substring(0, 15);
+        }
         String xpkLine = event.getLine(0);
         String firstline = "[" + plugin.getConfig().getString("firstline") + "]";
         if (firstline.equalsIgnoreCase(xpkLine)) {
@@ -26,7 +30,7 @@ public class XPKsign implements Listener {
                 int keptXP = plugin.getKeptXP(playerNameStr, world);
                 if (keptXP < 0) {
                     plugin.insKeptXP(playerNameStr, world);
-                    event.setLine(1, playerNameStr);
+                    event.setLine(1, sign_str);
                     event.setLine(2, "Level: 0");
                     event.setLine(3, "XP: 0");
                 } else {

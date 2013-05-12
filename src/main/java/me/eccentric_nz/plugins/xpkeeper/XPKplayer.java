@@ -38,8 +38,13 @@ public class XPKplayer implements Listener {
                 Sign sign = (Sign) block.getState();
                 String line0 = sign.getLine(0);
                 String line1 = sign.getLine(1);
+                // check name length
+                String sign_str = playerNameStr;
+                if (playerNameStr.length() > 15) {
+                    sign_str = playerNameStr.substring(0, 15);
+                }
                 if (line0.equalsIgnoreCase("[" + firstline + "]")) {
-                    if (plugin.trackPlayers.containsKey(playerNameStr) && line1.equals(playerNameStr)) {
+                    if (plugin.trackPlayers.containsKey(playerNameStr) && line1.equals(sign_str)) {
                         plugin.trackPlayers.remove(playerNameStr);
                         // set the sign block to AIR and delete the XPKeeper data
                         block.setType(Material.AIR);
@@ -57,13 +62,13 @@ public class XPKplayer implements Listener {
                         if (plugin.getConfig().getBoolean("must_use_fist") && inhand != Material.AIR) {
                             player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You must hit the sign with your fist.");
                         } else {
-                            if (line1.equals(playerNameStr)) {
+                            if (line1.equals(sign_str)) {
                                 XPKCalculator xpkc = new XPKCalculator(player);
                                 // get players XP
                                 int xp = xpkc.getCurrentExp();
                                 if (action == Action.LEFT_CLICK_BLOCK) {
                                     // deposit XP
-                                    if (line1.equals(playerNameStr)) {
+                                    if (line1.equals(sign_str)) {
                                         // sign is set up so update the amount kept
                                         int keptXP = plugin.getKeptXP(playerNameStr, world);
                                         //int keptLevel = plugin.getKeptLevel(playerNameStr, world);

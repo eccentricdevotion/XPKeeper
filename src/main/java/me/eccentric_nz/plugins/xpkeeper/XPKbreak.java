@@ -53,7 +53,7 @@ public class XPKbreak implements Listener {
                 if (faceBlockType == Material.WALL_SIGN) {
                     Sign sign = (Sign) faceBlock.getState();
                     MaterialData m = sign.getData();
-                    BlockFace attachedFace = null;
+                    BlockFace attachedFace;
                     BlockFace chkFace = null;
                     if (m instanceof Attachable) {
                         attachedFace = ((Attachable) m).getAttachedFace();
