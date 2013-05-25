@@ -43,7 +43,7 @@ public class XPKbreak implements Listener {
                 sign.setLine(2, line2);
                 sign.setLine(3, line3);
                 sign.update();
-                player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Please use the " + ChatColor.GREEN + "/xpkremove" + ChatColor.RESET + " command to delete an XPKeeper sign!");
+                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.use_command"));
             }
         } else {
             // check if breaking block underneath or behind sign
@@ -98,7 +98,7 @@ public class XPKbreak implements Listener {
             sign.setLine(2, line2);
             sign.setLine(3, line3);
             sign.update();
-            p.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Stop trying to grief this XPKeeper sign!");
+            p.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_grief"));
         }
     }
 }

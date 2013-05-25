@@ -1,5 +1,6 @@
 package me.eccentric_nz.plugins.xpkeeper;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,11 +36,11 @@ public class XPKsign implements Listener {
                     event.setLine(3, "XP: 0");
                 } else {
                     event.setCancelled(true);
-                    player.sendMessage("You already have an XPKeeper in this world!");
+                    player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.have_sign"));
                 }
             } else {
                 event.setLine(0, "");
-                player.sendMessage("You do not have permission to make an XPKeeper sign!");
+                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_create"));
             }
         }
     }

@@ -59,9 +59,33 @@ public class XPKeeper extends JavaPlugin implements Listener {
         }
         if (!getConfig().contains("must_use_fist")) {
             getConfig().set("must_use_fist", true);
+            saveConfig();
         }
         if (!getConfig().contains("withdraw")) {
             getConfig().set("withdraw", 0);
+            saveConfig();
+        }
+        if (!getConfig().contains("messages")) {
+            getConfig().set("messages.have_sign", "You already have an XPKeeper in this world!");
+            getConfig().set("messages.no_perms_create", "You do not have permission to make an XPKeeper sign!");
+            getConfig().set("messages.no_perms_command", "You do not have permission to use that command!");
+            getConfig().set("messages.arguments", "Not enough command arguments!");
+            getConfig().set("messages.no_player", "Could not find that player!");
+            getConfig().set("messages.removed", "The XPKeeper was successfully removed.");
+            getConfig().set("messages.use_fist", "You must hit the sign with your fist.");
+            getConfig().set("messages.deposit", "You deposited %d XP and have reached level %d :)");
+            getConfig().set("messages.withdraw_all", "You withdrew all your XP!");
+            getConfig().set("messages.withdraw_some", "You withdrew %d XP Levels!");
+            getConfig().set("messages.not_your_sign", "Get your own sign!");
+            getConfig().set("messages.click_sign", "Click the XPKeeper sign you wish to remove.");
+            getConfig().set("messages.no_sign", "Couldn't find the sign, maybe you're too far away.");
+            getConfig().set("messages.look_sign", "You aren't looking at a sign!");
+            getConfig().set("messages.not_enough", "You don't have enough XP! Try withdrawing from your XPKeeper sign first.");
+            getConfig().set("messages.giver", "You payed %s %d XP :)");
+            getConfig().set("messages.reciever", "%s payed you %d XP :)");
+            getConfig().set("messages.use_command", "Please use the /xpkremove command to delete an XPKeeper sign!");
+            getConfig().set("messages.no_grief", "Stop trying to grief this XPKeeper sign!");
+            saveConfig();
         }
         try {
             MetricsLite metrics = new MetricsLite(this);
@@ -79,7 +103,6 @@ public class XPKeeper extends JavaPlugin implements Listener {
             PreparedStatement statement = connection.prepareStatement(queryXPGet);
             statement.setString(1, p);
             statement.setString(2, w);
-//            String queryXPGet = "SELECT amount FROM xpk WHERE player = '" + p + "' AND world = '" + w + "'";
             ResultSet rsget = statement.executeQuery();
             if (rsget.next()) {
                 keptXP = rsget.getInt("amount");
@@ -113,7 +136,6 @@ public class XPKeeper extends JavaPlugin implements Listener {
             Connection connection = service.getConnection();
             String queryXPInsert = "INSERT INTO xpk (player,world,amount) VALUES (?,?,0)";
             PreparedStatement statement = connection.prepareStatement(queryXPInsert);
-//            String queryXPInsert = "INSERT INTO xpk (player,world,amount) VALUES ('" + p + "','" + w + "',0)";
             statement.setString(1, p);
             statement.setString(2, w);
             statement.executeUpdate();
@@ -130,7 +152,6 @@ public class XPKeeper extends JavaPlugin implements Listener {
             PreparedStatement statement = connection.prepareStatement(queryXPDelete);
             statement.setString(1, p);
             statement.setString(2, w);
-//            String queryXPDelete = "DELETE FROM xpk WHERE player = '" + p + "' AND world= '" + w + "'";
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {

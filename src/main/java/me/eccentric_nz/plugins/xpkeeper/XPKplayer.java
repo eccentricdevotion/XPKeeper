@@ -57,10 +57,10 @@ public class XPKplayer implements Listener {
                         new XPKCalculator(player).changeExp(keptXP);
                         // remove database record
                         plugin.delKeptXP(playerNameStr, world);
-                        player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " The XPKeeper was successfully removed.");
+                        player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.removed"));
                     } else {
                         if (plugin.getConfig().getBoolean("must_use_fist") && inhand != Material.AIR) {
-                            player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You must hit the sign with your fist.");
+                            player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.use_fist"));
                         } else {
                             if (line1.equals(sign_str)) {
                                 XPKCalculator xpkc = new XPKCalculator(player);
@@ -83,7 +83,7 @@ public class XPKplayer implements Listener {
                                         sign.update();
                                         // remove XP from player
                                         xpkc.setExp(0);
-                                        player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You deposited " + xp + " XP and have reached level " + newLevel + " :)");
+                                        player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.deposit"), xp, newLevel));
                                     }
                                 }
                                 if (action == Action.RIGHT_CLICK_BLOCK) {
@@ -97,7 +97,7 @@ public class XPKplayer implements Listener {
                                         // update the sign
                                         sign.setLine(2, "Level: 0");
                                         sign.setLine(3, "XP: 0");
-                                        player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You withdrew all your XP!");
+                                        player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.withdraw_all"));
                                     } else {
                                         int levelXP = xpkc.getXpForLevel(withdrawAmount);
                                         if (keptXP >= levelXP) {
@@ -110,20 +110,20 @@ public class XPKplayer implements Listener {
                                             sign.setLine(2, "Level: " + newLevel);
                                             sign.setLine(3, "XP: " + leftoverxp);
                                             xpkc.changeExp(levelXP);
-                                            player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You withdrew " + withdrawAmount + " XP Levels!");
+                                            player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.withdraw_some"), withdrawAmount));
                                         } else {
                                             xpkc.changeExp(keptXP);
                                             plugin.setKeptXP(0, playerNameStr, world);
                                             // update the sign
                                             sign.setLine(2, "Level: 0");
                                             sign.setLine(3, "XP: 0");
-                                            player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You withdrew all your XP!");
+                                            player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.withdraw_all"));
                                         }
                                     }
                                     sign.update();
                                 }
                             } else {
-                                player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Get your own sign!");
+                                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.not_your_sign"));
                             }
                         }
                     }

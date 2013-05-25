@@ -25,15 +25,15 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("xpkgive")) {
             if (!sender.hasPermission("xpkeeper.admin")) {
-                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You do not have permission to use that command!");
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                 return true;
             }
             if (args.length < 2) {
-                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Not enough command arguments!");
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.arguments"));
                 return false;
             }
             if (plugin.getServer().getPlayer(args[0]) == null) {
-                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Could not find that player!");
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_player"));
                 return true;
             }
             Player player = plugin.getServer().getPlayer(args[0]);
@@ -49,15 +49,15 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
         }
         if (cmd.getName().equalsIgnoreCase("xpkset")) {
             if (!sender.hasPermission("xpkeeper.admin")) {
-                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You do not have permission to use that command!");
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                 return true;
             }
             if (args.length < 2) {
-                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Not enough command arguments!");
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.arguments"));
                 return false;
             }
             if (plugin.getServer().getPlayer(args[0]) == null) {
-                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Could not find that player!");
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_player"));
                 return true;
             }
             Player player = plugin.getServer().getPlayer(args[0]);
@@ -75,7 +75,7 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 plugin.trackPlayers.put(player.getName(), true);
-                player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Click the XPKeeper sign you wish to remove.");
+                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.click_sign"));
                 return true;
             }
         }
@@ -88,7 +88,7 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
                     Player p = (Player) sender;
                     player = p.getName();
                 } else {
-                    sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You must specify a player name when running this command from the console.");
+                    sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "You must specify a player name when running this command from the console.");
                     return true;
                 }
             }
@@ -112,28 +112,28 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
                 } catch (Exception e) {
                 }
             }
-            sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " All database entries for " + ChatColor.RED + player + ChatColor.RESET + " were removed.");
+            sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "All database entries for " + ChatColor.RED + player + ChatColor.RESET + " were removed.");
             return true;
         }
         if (cmd.getName().equalsIgnoreCase("xpkfist")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 if (!player.hasPermission("xpkeeper.fist")) {
-                    player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You do not have permission to use that command!");
+                    player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                     return true;
                 }
             }
             boolean bool = plugin.getConfig().getBoolean("must_use_fist");
             plugin.getConfig().set("must_use_fist", !bool);
             plugin.saveConfig();
-            sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.AQUA + " must_use_fist" + ChatColor.RESET + " config value set to: " + !bool);
+            sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.AQUA + "must_use_fist" + ChatColor.RESET + " config value set to: " + !bool);
             return true;
         }
         if (cmd.getName().equalsIgnoreCase("xpkwithdraw")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
                 if (!player.hasPermission("xpkeeper.admin")) {
-                    player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You do not have permission to use that command!");
+                    player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                     return true;
                 }
             }
@@ -156,17 +156,17 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             }
             Player player = (Player) sender;
             if (!player.hasPermission("xpkeeper.editsign")) {
-                player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + "You don't have permission to edit XPKeeper signs!");
+                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                 return true;
             }
             Sign sign;
             try {
                 sign = (Sign) player.getTargetBlock(null, 10).getState();
             } catch (NullPointerException ex) {
-                player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + "Couldn't find the sign, maybe you're too far away.");
+                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_sign"));
                 return true;
             } catch (ClassCastException ex) {
-                player.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + "You aren't looking at a sign!");
+                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.look_sign"));
                 return true;
             }
             StringBuilder builder = new StringBuilder();
@@ -182,15 +182,15 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
         }
         if (cmd.getName().equalsIgnoreCase("xpkpay")) {
             if (!sender.hasPermission("xpkeeper.use")) {
-                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You do not have permission to use that command!");
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                 return true;
             }
             if (args.length < 2) {
-                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Not enough command arguments!");
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.arguments"));
                 return false;
             }
             if (plugin.getServer().getPlayer(args[0]) == null) {
-                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Could not find that player!");
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_player"));
                 return true;
             }
             Player giver = null;
@@ -198,7 +198,7 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
                 giver = (Player) sender;
             }
             if (giver == null) {
-                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " Only players can pay other players!");
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "Only players can pay other players!");
                 return true;
             }
             Player receiver = plugin.getServer().getPlayer(args[0]);
@@ -214,13 +214,13 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             // check whether the giver has enough to give
             int checkEnough = xpkc_g.getCurrentExp();
             if (i > checkEnough) {
-                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You don't have enough XP! Try withdrawing from your XPKeeper sign first.");
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.not_enough"));
                 return true;
             }
             xpkc_r.changeExp(i);
             xpkc_g.changeExp(-i);
-            giver.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You payed " + args[0] + " " + args[1] + " XP :)");
-            receiver.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + giver.getName() + " payed you " + args[1] + " XP :)");
+            giver.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.giver"), args[0], args[1]));
+            receiver.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.reciever"), giver.getName(), args[1]));
             return true;
         }
         return false;
