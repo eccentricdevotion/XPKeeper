@@ -1,7 +1,12 @@
-# messages must contain %s and %d where appropriate as these are placeholders that get replaced in the message!
 firstline: XPKeeper
 must_use_fist: true
 withdraw: 5
+set_limits: false
+limits:
+  - 30
+  - 50
+  - 100
+# messages must contain %s and %d where appropriate as these are placeholders that get replaced in the message!
 messages:
   have_sign: You already have an XPKeeper in this world!
   no_perms_create: You do not have permission to make an XPKeeper sign!
@@ -19,6 +24,6 @@ messages:
   look_sign: You aren't looking at a sign!
   not_enough: You don't have enough XP! Try withdrawing from your XPKeeper sign first.
   giver: You payed %s %d XP :)
-  reciever: %s payed you %d XP :)
+  reciever: '%s payed you %d XP :)'
   use_command: Please use the /xpkremove command to delete an XPKeeper sign!
   no_grief: Stop trying to grief this XPKeeper sign!

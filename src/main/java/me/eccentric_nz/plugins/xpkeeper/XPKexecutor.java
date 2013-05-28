@@ -129,6 +129,20 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.AQUA + "must_use_fist" + ChatColor.RESET + " config value set to: " + !bool);
             return true;
         }
+        if (cmd.getName().equalsIgnoreCase("xpklimit")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                if (!player.hasPermission("xpkeeper.limit")) {
+                    player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
+                    return true;
+                }
+            }
+            boolean bool = plugin.getConfig().getBoolean("set_limits");
+            plugin.getConfig().set("set_limits", !bool);
+            plugin.saveConfig();
+            sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.AQUA + "set_limits" + ChatColor.RESET + " config value set to: " + !bool);
+            return true;
+        }
         if (cmd.getName().equalsIgnoreCase("xpkwithdraw")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;

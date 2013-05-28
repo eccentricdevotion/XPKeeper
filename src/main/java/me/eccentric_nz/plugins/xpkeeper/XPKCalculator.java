@@ -52,13 +52,6 @@ public class XPKCalculator {
         xpTotalToReachLevel = new int[maxLevel];
 
         xpTotalToReachLevel[0] = 0;
-// 		Code valid for MC 1.2 and earlier
-//		int incr = 7;
-//		for (int i = 1; i < xpTotalToReachLevel.length; i++) {
-//			xpRequiredForNextLevel[i - 1] = incr;
-//			xpTotalToReachLevel[i] = xpTotalToReachLevel[i - 1] + incr;
-//			incr += (i % 2 == 0) ? 4 : 3;
-//		}
 
         // Valid for MC 1.3 and later
         int incr = 17;

@@ -1,5 +1,6 @@
 package me.eccentric_nz.plugins.xpkeeper;
 
+import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -73,17 +74,34 @@ public class XPKplayer implements Listener {
                                         int keptXP = plugin.getKeptXP(playerNameStr, world);
                                         //int keptLevel = plugin.getKeptLevel(playerNameStr, world);
                                         int newXPamount = xp + keptXP;
+                                        int setxp = 0;
+                                        int newLevel = xpkc.getLevelForExp(newXPamount);
+                                        if (plugin.getConfig().getBoolean("set_limits")) {
+                                            List<Double> limits = plugin.getConfig().getDoubleList("limits");
+                                            double l = 0;
+                                            for (Double d : limits) {
+                                                if (!player.hasPermission("xpkeeper.limit.bypass") && player.hasPermission("xpkeeper.limit." + d)) {
+                                                    l = d;
+                                                    break;
+                                                }
+                                            }
+                                            if (l != 0 && (newLevel + 1) > (int) l) {
+                                                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "That amount would take you over your maximum deposit level, depositing as much as we can.");
+                                                newXPamount = xpkc.getXpForLevel((int) l);
+                                                setxp = (xp + keptXP) - newXPamount;
+                                            }
+                                        }
                                         plugin.setKeptXP(newXPamount, playerNameStr, world);
                                         // calculate level and update the sign
-                                        int newLevel = xpkc.getLevelForExp(newXPamount);
-                                        int levelxp = xpkc.getXpForLevel(newLevel);
+                                        int level = xpkc.getLevelForExp(newXPamount);
+                                        int levelxp = xpkc.getXpForLevel(level);
                                         int leftoverxp = newXPamount - levelxp;
-                                        sign.setLine(2, "Level: " + newLevel);
+                                        sign.setLine(2, "Level: " + level);
                                         sign.setLine(3, "XP: " + leftoverxp);
                                         sign.update();
                                         // remove XP from player
-                                        xpkc.setExp(0);
-                                        player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.deposit"), xp, newLevel));
+                                        xpkc.setExp(setxp);
+                                        player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.deposit"), (xp - setxp), level));
                                     }
                                 }
                                 if (action == Action.RIGHT_CLICK_BLOCK) {
