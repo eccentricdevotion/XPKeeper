@@ -4,7 +4,7 @@ main: me.eccentric_nz.plugins.xpkeeper.XPKeeper
 dev-url: http://de.bukkit.org/server-mods/xpkeeper/
 name: XPKeeper
 startup: postworld
-version: '1.3.4'
+version: '1.3.5'
 permissions:
   xpkeeper.use:
     description: Allow players to use XPKeeper signs
@@ -63,4 +63,8 @@ commands:
   xpklimit:
     aliases: [xpkl]
     description: Toggle the XPKeeper set_limits config option.
+    usage: /<command>
+  xpkreload:
+    aliases: [xpkrl]
+    description: Reloads the config file.
     usage: /<command>

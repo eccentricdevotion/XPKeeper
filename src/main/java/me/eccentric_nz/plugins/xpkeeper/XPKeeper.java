@@ -45,6 +45,7 @@ public class XPKeeper extends JavaPlugin implements Listener {
         getCommand("xpkpay").setExecutor(xpkExecutor);
         getCommand("xpkwithdraw").setExecutor(xpkExecutor);
         getCommand("xpklimit").setExecutor(xpkExecutor);
+        getCommand("xpkreload").setExecutor(xpkExecutor);
         pm.registerEvents(signListener, this);
         pm.registerEvents(playerListener, this);
         pm.registerEvents(breakListener, this);

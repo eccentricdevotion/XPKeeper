@@ -23,6 +23,15 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+        if (cmd.getName().equalsIgnoreCase("xpkreload")) {
+            if (!sender.hasPermission("xpkeeper.admin")) {
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
+                return true;
+            }
+            plugin.reloadConfig();
+            sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "Config reloaded!");
+            return true;
+        }
         if (cmd.getName().equalsIgnoreCase("xpkgive")) {
             if (!sender.hasPermission("xpkeeper.admin")) {
                 sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
@@ -107,8 +116,12 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
                 System.err.println("[XPKeeper] Could not get and remove player data: " + e);
             } finally {
                 try {
-                    rsget.close();
-                    statement.close();
+                    if (rsget != null) {
+                        rsget.close();
+                    }
+                    if (statement != null) {
+                        statement.close();
+                    }
                 } catch (Exception e) {
                 }
             }
