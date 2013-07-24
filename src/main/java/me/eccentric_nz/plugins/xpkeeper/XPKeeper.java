@@ -23,6 +23,7 @@ public class XPKeeper extends JavaPlugin implements Listener {
     XPKplayer playerListener = new XPKplayer(this);
     XPKbreak breakListener = new XPKbreak(this);
     XPKarrgghh explodeListener = new XPKarrgghh(this);
+    XPKPistonListener pistonListener = new XPKPistonListener(this);
     PluginManager pm = Bukkit.getServer().getPluginManager();
     public HashMap<String, Boolean> trackPlayers = new HashMap<String, Boolean>();
 
@@ -50,6 +51,7 @@ public class XPKeeper extends JavaPlugin implements Listener {
         pm.registerEvents(playerListener, this);
         pm.registerEvents(breakListener, this);
         pm.registerEvents(explodeListener, this);
+        pm.registerEvents(pistonListener, this);
         try {
             String path = getDataFolder() + File.separator + "XPKeeper.db";
             service.setConnection(path);
