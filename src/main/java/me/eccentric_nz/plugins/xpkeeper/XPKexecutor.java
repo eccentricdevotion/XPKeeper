@@ -246,8 +246,8 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
             }
             xpkc_r.changeExp(i);
             xpkc_g.changeExp(-i);
-            giver.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.giver"), args[0], args[1]));
-            receiver.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.reciever"), giver.getName(), args[1]));
+            giver.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.giver"), args[0], i));
+            receiver.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.reciever"), giver.getName(), i));
             return true;
         }
         return false;

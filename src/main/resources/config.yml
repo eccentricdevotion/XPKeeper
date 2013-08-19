@@ -23,7 +23,7 @@ messages:
   no_sign: Couldn't find the sign, maybe you're too far away.
   look_sign: You aren't looking at a sign!
   not_enough: You don't have enough XP! Try withdrawing from your XPKeeper sign first.
-  giver: You payed %s %d XP :)
+  giver: 'You payed %s %d XP :)'
   reciever: '%s payed you %d XP :)'
   use_command: Please use the /xpkremove command to delete an XPKeeper sign!
   no_grief: Stop trying to grief this XPKeeper sign!
