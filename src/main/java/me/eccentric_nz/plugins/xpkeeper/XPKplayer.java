@@ -16,7 +16,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class XPKplayer implements Listener {
 
-    private XPKeeper plugin;
+    private final XPKeeper plugin;
 
     public XPKplayer(XPKeeper plugin) {
         this.plugin = plugin;

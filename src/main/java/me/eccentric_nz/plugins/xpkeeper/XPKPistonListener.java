@@ -12,8 +12,8 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 
 public class XPKPistonListener implements Listener {
 
-    private XPKeeper plugin;
-    private List<BlockFace> faces = new ArrayList<BlockFace>();
+    private final XPKeeper plugin;
+    private final List<BlockFace> faces = new ArrayList<BlockFace>();
 
     public XPKPistonListener(XPKeeper plugin) {
         this.plugin = plugin;
@@ -66,10 +66,6 @@ public class XPKPistonListener implements Listener {
     private boolean isXPKSign(Block b) {
         Sign s = (Sign) b.getState();
         String line = s.getLine(0);
-        if (line.equalsIgnoreCase("[" + plugin.getConfig().getString("firstline") + "]")) {
-            return true;
-        } else {
-            return false;
-        }
+        return line.equalsIgnoreCase("[" + plugin.getConfig().getString("firstline") + "]");
     }
 }

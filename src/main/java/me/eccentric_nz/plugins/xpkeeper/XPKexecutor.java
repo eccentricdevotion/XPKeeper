@@ -10,12 +10,11 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
-public class XPKexecutor extends JavaPlugin implements CommandExecutor {
+public class XPKexecutor implements CommandExecutor {
 
-    private XPKeeper plugin;
-    private XPKdatabase service = XPKdatabase.getInstance();
+    private final XPKeeper plugin;
+    private final XPKdatabase service = XPKdatabase.getInstance();
 
     public XPKexecutor(XPKeeper plugin) {
         this.plugin = plugin;
@@ -122,7 +121,7 @@ public class XPKexecutor extends JavaPlugin implements CommandExecutor {
                     if (statement != null) {
                         statement.close();
                     }
-                } catch (Exception e) {
+                } catch (SQLException e) {
                 }
             }
             sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "All database entries for " + ChatColor.RED + player + ChatColor.RESET + " were removed.");

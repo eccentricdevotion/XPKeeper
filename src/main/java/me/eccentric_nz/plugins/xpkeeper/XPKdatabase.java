@@ -7,7 +7,7 @@ import java.sql.Statement;
 
 public class XPKdatabase {
 
-    private static XPKdatabase instance = new XPKdatabase();
+    private static final XPKdatabase instance = new XPKdatabase();
     public Connection connection = null;
     public Statement statement;
 

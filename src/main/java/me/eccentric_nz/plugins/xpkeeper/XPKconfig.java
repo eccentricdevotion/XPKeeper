@@ -10,7 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 public class XPKconfig {
 
-    private XPKeeper plugin;
+    private final XPKeeper plugin;
     private FileConfiguration config = null;
     private File configFile = null;
     HashMap<String, String> strOptions = new HashMap<String, String>();

@@ -16,7 +16,7 @@ import org.bukkit.material.MaterialData;
 
 public class XPKbreak implements Listener {
 
-    private XPKeeper plugin;
+    private final XPKeeper plugin;
 
     public XPKbreak(XPKeeper plugin) {
         this.plugin = plugin;
