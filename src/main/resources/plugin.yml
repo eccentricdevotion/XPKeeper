@@ -4,7 +4,7 @@ main: me.eccentric_nz.plugins.xpkeeper.XPKeeper
 dev-url: http://de.bukkit.org/server-mods/xpkeeper/
 name: XPKeeper
 startup: postworld
-version: '1.3.8'
+version: '1.3.9'
 permissions:
   xpkeeper.use:
     description: Allow players to use XPKeeper signs
@@ -68,3 +68,7 @@ commands:
     aliases: [xpkrl]
     description: Reloads the config file.
     usage: /<command>
+  xpkcolour:
+    aliases: [xpkc,xpkcolor]
+    description: Sets 'firstline_colour' in the config file.
+    usage: /<command> [colour code e.g. &6]

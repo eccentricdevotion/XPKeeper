@@ -36,7 +36,7 @@ public class XPKbreak implements Listener {
             String line1 = sign.getLine(1);
             String line2 = sign.getLine(2);
             String line3 = sign.getLine(3);
-            if (line0.equalsIgnoreCase("[" + firstline + "]")) {
+            if (plugin.stripColourCode(line0).equalsIgnoreCase("[" + firstline + "]")) {
                 event.setCancelled(true);
                 sign.setLine(0, line0);
                 sign.setLine(1, line1);
@@ -91,7 +91,7 @@ public class XPKbreak implements Listener {
         String line1 = sign.getLine(1);
         String line2 = sign.getLine(2);
         String line3 = sign.getLine(3);
-        if (line0.equalsIgnoreCase("[" + firstline + "]")) {
+        if (plugin.stripColourCode(line0).equalsIgnoreCase("[" + firstline + "]")) {
             e.setCancelled(true);
             sign.setLine(0, line0);
             sign.setLine(1, line1);

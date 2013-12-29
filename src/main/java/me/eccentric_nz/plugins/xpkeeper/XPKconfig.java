@@ -25,6 +25,7 @@ public class XPKconfig {
         boolOptions.put("set_limits", false);
         intOptions.put("withdraw", 5);
         strOptions.put("firstline", "XPKeeper");
+        strOptions.put("firstline_colour", "&0");
         strOptions.put("messages.arguments", "Not enough command arguments!");
         strOptions.put("messages.click_sign", "Click the XPKeeper sign you wish to remove.");
         strOptions.put("messages.deposit", "You deposited %d XP and have reached level %d :)");

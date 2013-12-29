@@ -31,6 +31,10 @@ public class XPKsign implements Listener {
                 int keptXP = plugin.getKeptXP(playerNameStr, world);
                 if (keptXP < 0) {
                     plugin.insKeptXP(playerNameStr, world);
+                    String flc = plugin.getConfig().getString("firstline_colour");
+                    if (!flc.equals("&0")) {
+                        event.setLine(0, ChatColor.translateAlternateColorCodes('&', flc) + firstline);
+                    }
                     event.setLine(1, sign_str);
                     event.setLine(2, "Level: 0");
                     event.setLine(3, "XP: 0");

@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.material.Sign;
@@ -66,6 +67,7 @@ public class XPKeeper extends JavaPlugin {
         getCommand("xpkwithdraw").setExecutor(xpkExecutor);
         getCommand("xpklimit").setExecutor(xpkExecutor);
         getCommand("xpkreload").setExecutor(xpkExecutor);
+        getCommand("xpkcolour").setExecutor(xpkExecutor);
     }
 
     public int getKeptXP(String p, String w) {
@@ -135,5 +137,13 @@ public class XPKeeper extends JavaPlugin {
         Sign s = (Sign) b.getState().getData();
         BlockFace bf = s.getAttachedFace();
         return bf;
+    }
+
+    public String stripColourCode(String s) {
+        if (s.startsWith(String.valueOf(ChatColor.COLOR_CHAR))) {
+            return s.substring(2);
+        } else {
+            return s;
+        }
     }
 }

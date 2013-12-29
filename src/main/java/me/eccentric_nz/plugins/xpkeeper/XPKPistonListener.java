@@ -65,7 +65,7 @@ public class XPKPistonListener implements Listener {
 
     private boolean isXPKSign(Block b) {
         Sign s = (Sign) b.getState();
-        String line = s.getLine(0);
+        String line = plugin.stripColourCode(s.getLine(0));
         return line.equalsIgnoreCase("[" + plugin.getConfig().getString("firstline") + "]");
     }
 }

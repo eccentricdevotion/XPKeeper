@@ -37,7 +37,7 @@ public class XPKplayer implements Listener {
                 // check the text on the sign
                 String firstline = plugin.getConfig().getString("firstline");
                 Sign sign = (Sign) block.getState();
-                String line0 = sign.getLine(0);
+                String line0 = plugin.stripColourCode(sign.getLine(0));
                 String line1 = sign.getLine(1);
                 // check name length
                 String sign_str = playerNameStr;

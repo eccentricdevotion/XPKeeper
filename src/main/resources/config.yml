@@ -1,4 +1,5 @@
 firstline: XPKeeper
+firstline_colour: &0
 must_use_fist: true
 withdraw: 5
 set_limits: false
