@@ -76,11 +76,12 @@ public class XPKplayer implements Listener {
                                         int newXPamount = xp + keptXP;
                                         int setxp = 0;
                                         int newLevel = xpkc.getLevelForExp(newXPamount);
-                                        if (plugin.getConfig().getBoolean("set_limits")) {
+                                        if (plugin.getConfig().getBoolean("set_limits") && !player.hasPermission("xpkeeper.limit.bypass")) {
                                             List<Double> limits = plugin.getConfig().getDoubleList("limits");
                                             double l = 0;
-                                            for (Double d : limits) {
-                                                if (!player.hasPermission("xpkeeper.limit.bypass") && player.hasPermission("xpkeeper.limit." + d)) {
+                                            for (double d : limits) {
+                                                String perm = "xpkeeper.limit." + ((int) d);
+                                                if (player.hasPermission(perm)) {
                                                     l = d;
                                                     break;
                                                 }
