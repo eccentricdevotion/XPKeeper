@@ -1,4 +1,4 @@
-package me.eccentric_nz.plugins.xpkeeper;
+package me.eccentric_nz.xpkeeper;
 
 import java.util.ArrayList;
 import java.util.List;

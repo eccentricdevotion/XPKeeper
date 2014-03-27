@@ -1,4 +1,4 @@
-package me.eccentric_nz.plugins.xpkeeper;
+package me.eccentric_nz.xpkeeper;
 
 /*
  * Copyright 2011 Tyler Blair. All rights reserved.

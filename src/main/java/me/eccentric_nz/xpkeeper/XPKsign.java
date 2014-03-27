@@ -1,4 +1,4 @@
-package me.eccentric_nz.plugins.xpkeeper;
+package me.eccentric_nz.xpkeeper;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
