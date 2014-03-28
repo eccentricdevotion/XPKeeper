@@ -10,6 +10,22 @@
             <url>http://repo.bukkit.org/content/groups/public</url>
         </repository>
     </repositories>
+    <profiles>
+        <profile>
+            <id>jenkins</id>
+            <repositories>
+                <repository>
+                    <id>macgeek</id>
+                    <url>file:///Users/macgeek/maven/repo</url>
+                </repository>
+            </repositories>
+            <activation>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+        </profile>
+    </profiles>
     <build>
         <finalName>XPKeeper</finalName>
         <plugins>
