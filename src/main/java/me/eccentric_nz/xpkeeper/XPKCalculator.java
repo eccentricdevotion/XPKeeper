@@ -1,6 +1,7 @@
 package me.eccentric_nz.xpkeeper;
 
 import java.util.Arrays;
+import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
@@ -22,7 +23,7 @@ public class XPKCalculator {
     private static int hardMaxLevel = 100000;
     private static int xpRequiredForNextLevel[];
     private static int xpTotalToReachLevel[];
-    private final String playerName;
+    private final UUID uuid;
 
     static {
         // 25 is an arbitrary value for the initial table size - the actual value isn't critically
@@ -93,7 +94,7 @@ public class XPKCalculator {
      * @param player	The player for this XPKCalculator object
      */
     public XPKCalculator(Player player) {
-        this.playerName = player.getName();
+        this.uuid = player.getUniqueId();
         getPlayer();	// ensure it's a valid player name
     }
 
@@ -104,9 +105,9 @@ public class XPKCalculator {
      * @throws IllegalStateException if the player is no longer online
      */
     private Player getPlayer() {
-        Player p = Bukkit.getPlayer(playerName);
+        Player p = Bukkit.getPlayer(uuid);
         if (p == null) {
-            throw new IllegalStateException("Player " + playerName + " is not online");
+            throw new IllegalStateException("Player with UUID: " + uuid + " is not online");
         }
         return p;
     }
@@ -156,7 +157,7 @@ public class XPKCalculator {
     public int getCurrentExp() {
         Player player = getPlayer();
         int lvl = player.getLevel();
-        int cur = getXpForLevel(lvl) + (int) Math.round(xpRequiredForNextLevel[lvl] * player.getExp());
+        int cur = getXpForLevel(lvl) + Math.round(xpRequiredForNextLevel[lvl] * player.getExp());
         return cur;
     }
 
