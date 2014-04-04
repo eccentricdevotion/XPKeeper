@@ -28,3 +28,4 @@ messages:
   reciever: '%s payed you %d XP :)'
   use_command: Please use the /xpkremove command to delete an XPKeeper sign!
   no_grief: Stop trying to grief this XPKeeper sign!
+uuid_conversion_done: true

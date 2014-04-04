@@ -23,6 +23,7 @@ public class XPKconfig {
         this.config = YamlConfiguration.loadConfiguration(configFile);
         boolOptions.put("must_use_fist", true);
         boolOptions.put("set_limits", false);
+        boolOptions.put("uuid_conversion_done", false);
         intOptions.put("withdraw", 5);
         strOptions.put("firstline", "XPKeeper");
         strOptions.put("firstline_colour", "&0");

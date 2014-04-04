@@ -5,7 +5,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -23,28 +25,19 @@ public class XPKeeper extends JavaPlugin {
     XPKarrgghh explodeListener;
     XPKPistonListener pistonListener;
     PluginManager pm;
-    public HashMap<String, Boolean> trackPlayers;
+    public List<String> trackPlayers;
 
     @Override
     public void onDisable() {
-        // TODO: Place any custom disable code here.
+        closeDatabase();
     }
 
     @Override
     public void onEnable() {
 
         saveDefaultConfig();
-        signListener = new XPKsign(this);
-        playerListener = new XPKplayer(this);
-        breakListener = new XPKbreak(this);
-        explodeListener = new XPKarrgghh(this);
-        pistonListener = new XPKPistonListener(this);
-        pm = getServer().getPluginManager();
-        pm.registerEvents(signListener, this);
-        pm.registerEvents(playerListener, this);
-        pm.registerEvents(breakListener, this);
-        pm.registerEvents(explodeListener, this);
-        pm.registerEvents(pistonListener, this);
+        XPKconfig xpkc = new XPKconfig(this);
+        xpkc.checkConfig();
         service = XPKdatabase.getInstance();
         try {
             String path = getDataFolder() + File.separator + "XPKeeper.db";
@@ -53,9 +46,32 @@ public class XPKeeper extends JavaPlugin {
         } catch (Exception e) {
             System.err.println("[XPKeeper] Connection and Tables Error: " + e);
         }
-        XPKconfig xpkc = new XPKconfig(this);
-        xpkc.checkConfig();
-        trackPlayers = new HashMap<String, Boolean>();
+        pm = getServer().getPluginManager();
+        // update database add and populate uuid fields
+        if (!getConfig().getBoolean("uuid_conversion_done")) {
+            XPKeeperUUIDConverter uc = new XPKeeperUUIDConverter(this);
+            if (!uc.convert()) {
+                // conversion failed
+                System.err.println("[XPKeeper]" + ChatColor.RED + "UUID conversion failed, disabling...");
+                pm.disablePlugin(this);
+                return;
+            } else {
+                getConfig().set("uuid_conversion_done", true);
+                saveConfig();
+                System.out.println("[XPKeeper] UUID conversion successful :)");
+            }
+        }
+        signListener = new XPKsign(this);
+        playerListener = new XPKplayer(this);
+        breakListener = new XPKbreak(this);
+        explodeListener = new XPKarrgghh(this);
+        pistonListener = new XPKPistonListener(this);
+        pm.registerEvents(signListener, this);
+        pm.registerEvents(playerListener, this);
+        pm.registerEvents(breakListener, this);
+        pm.registerEvents(explodeListener, this);
+        pm.registerEvents(pistonListener, this);
+        trackPlayers = new ArrayList<String>();
         xpkExecutor = new XPKexecutor(this);
         getCommand("xpkgive").setExecutor(xpkExecutor);
         getCommand("xpkset").setExecutor(xpkExecutor);
@@ -70,13 +86,13 @@ public class XPKeeper extends JavaPlugin {
         getCommand("xpkcolour").setExecutor(xpkExecutor);
     }
 
-    public int getKeptXP(String p, String w) {
+    public int getKeptXP(UUID uuid, String w) {
         int keptXP = -1;
         try {
             Connection connection = service.getConnection();
-            String queryXPGet = "SELECT amount FROM xpk WHERE player = ? AND world = ?";
+            String queryXPGet = "SELECT amount FROM xpk WHERE uuid = ? AND world = ?";
             PreparedStatement statement = connection.prepareStatement(queryXPGet);
-            statement.setString(1, p);
+            statement.setString(1, uuid.toString());
             statement.setString(2, w);
             ResultSet rsget = statement.executeQuery();
             if (rsget.next()) {
@@ -90,13 +106,13 @@ public class XPKeeper extends JavaPlugin {
         return keptXP;
     }
 
-    public void setKeptXP(double a, String p, String w) {
+    public void setKeptXP(double a, UUID uuid, String w) {
         try {
             Connection connection = service.getConnection();
-            String queryXPSet = "UPDATE xpk SET amount = ? WHERE player = ? AND world = ?";
+            String queryXPSet = "UPDATE xpk SET amount = ? WHERE uuid = ? AND world = ?";
             PreparedStatement statement = connection.prepareStatement(queryXPSet);
             statement.setDouble(1, a);
-            statement.setString(2, p);
+            statement.setString(2, uuid.toString());
             statement.setString(3, w);
             statement.executeUpdate();
             statement.close();
@@ -105,12 +121,12 @@ public class XPKeeper extends JavaPlugin {
         }
     }
 
-    public void insKeptXP(String p, String w) {
+    public void insKeptXP(UUID uuid, String w) {
         try {
             Connection connection = service.getConnection();
-            String queryXPInsert = "INSERT INTO xpk (player,world,amount) VALUES (?,?,0)";
+            String queryXPInsert = "INSERT INTO xpk (uuid, world, amount) VALUES (?, ?, 0)";
             PreparedStatement statement = connection.prepareStatement(queryXPInsert);
-            statement.setString(1, p);
+            statement.setString(1, uuid.toString());
             statement.setString(2, w);
             statement.executeUpdate();
             statement.close();
@@ -119,18 +135,38 @@ public class XPKeeper extends JavaPlugin {
         }
     }
 
-    public void delKeptXP(String p, String w) {
+    public void delKeptXP(UUID uuid, String w) {
         try {
             Connection connection = service.getConnection();
-            String queryXPDelete = "DELETE FROM xpk WHERE player = ? AND world= ?";
+            String queryXPDelete = "DELETE FROM xpk WHERE uuid = ? AND world = ?";
             PreparedStatement statement = connection.prepareStatement(queryXPDelete);
-            statement.setString(1, p);
+            statement.setString(1, uuid.toString());
             statement.setString(2, w);
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
             System.err.println("[XPKeeper] Could not delete database record: " + e);
         }
+    }
+
+    public boolean isPlayersXPKSign(UUID uuid, String world) {
+        boolean chk = false;
+        try {
+            Connection connection = service.getConnection();
+            String queryUUIDGet = "SELECT uuid FROM xpk WHERE uuid = ? AND world = ?";
+            PreparedStatement statement = connection.prepareStatement(queryUUIDGet);
+            statement.setString(1, uuid.toString());
+            statement.setString(2, world);
+            ResultSet rsget = statement.executeQuery();
+            if (rsget.isBeforeFirst()) {
+                chk = true;
+            }
+            rsget.close();
+            statement.close();
+        } catch (SQLException e) {
+            System.err.println("[XPKeeper] Could not GET XP: " + e);
+        }
+        return chk;
     }
 
     public BlockFace getFace(Block b) {
@@ -144,6 +180,17 @@ public class XPKeeper extends JavaPlugin {
             return s.substring(2);
         } else {
             return s;
+        }
+    }
+
+    /**
+     * Closes the database.
+     */
+    private void closeDatabase() {
+        try {
+            service.connection.close();
+        } catch (SQLException e) {
+            System.err.println("[XPKeeper] Could not close database connection: " + e);
         }
     }
 }
