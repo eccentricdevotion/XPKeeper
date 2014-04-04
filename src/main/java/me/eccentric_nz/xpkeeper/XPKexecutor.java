@@ -39,6 +39,7 @@ public class XPKexecutor implements CommandExecutor {
         colours.put("&f", "White");
     }
 
+    @SuppressWarnings("deprecation")
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("xpkreload")) {
@@ -101,7 +102,7 @@ public class XPKexecutor implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("xpkremove")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                plugin.trackPlayers.put(player.getName(), true);
+                plugin.trackPlayers.add(player.getName());
                 player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.click_sign"));
                 return true;
             }

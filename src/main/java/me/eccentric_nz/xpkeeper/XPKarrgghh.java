@@ -18,6 +18,7 @@ public class XPKarrgghh implements Listener {
         this.plugin = plugin;
     }
 
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void onEntityExplode(EntityExplodeEvent event) {
         if (event.isCancelled()) {
