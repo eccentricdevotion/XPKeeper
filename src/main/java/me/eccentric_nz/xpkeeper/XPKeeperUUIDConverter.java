@@ -71,7 +71,9 @@ public class XPKeeperUUIDConverter {
             rs = statement.executeQuery(query);
             if (rs.isBeforeFirst()) {
                 while (rs.next()) {
-                    players.add(rs.getString("player"));
+                    if (!rs.getString("player").isEmpty()) {
+                        players.add(rs.getString("player"));
+                    }
                 }
                 XPKUUIDFetcher fetcher = new XPKUUIDFetcher(players);
                 // get UUIDs
@@ -83,7 +85,7 @@ public class XPKeeperUUIDConverter {
                     return false;
                 }
                 if (response != null) {
-                    // update all GMI players to UUIDs
+                    // update all XPKeeper players to UUIDs
                     ps = connection.prepareStatement(inventories_update);
                     for (Map.Entry<String, UUID> map : response.entrySet()) {
                         ps.setString(1, map.getValue().toString());
