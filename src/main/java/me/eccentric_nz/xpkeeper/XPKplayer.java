@@ -38,7 +38,8 @@ public class XPKplayer implements Listener {
         if (block != null && (block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) {
             String firstline = plugin.getConfig().getString("firstline");
             Sign sign = (Sign) block.getState();
-            if (plugin.stripColourCode(sign.getLine(0)).equalsIgnoreCase("[" + firstline + "]")) {
+            String first = ChatColor.stripColor(sign.getLine(0));
+            if (first.equalsIgnoreCase("[" + firstline + "]") || (plugin.is1_8() && first.equalsIgnoreCase(firstline))) {
                 String world = block.getWorld().getName();
                 // is it the player's XPKeeper sign?
                 if (plugin.isPlayersXPKSign(uuid, world)) {

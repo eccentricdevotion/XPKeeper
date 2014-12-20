@@ -193,4 +193,16 @@ public class XPKeeper extends JavaPlugin {
             System.err.println("[XPKeeper] Could not close database connection: " + e);
         }
     }
+
+    /**
+     * Get if CraftBukkit version is 1.8 or higher
+     *
+     * @return true if version is >= 1.8
+     */
+    public boolean is1_8() {
+        String name = getServer().getClass().getPackage().getName();
+        String v = name.substring(name.lastIndexOf('.') + 1);
+        String[] versions = v.split("_");
+        return (versions[0].equals("v1") && Integer.parseInt(versions[1]) >= 8);
+    }
 }
