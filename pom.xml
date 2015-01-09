@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.eccentric_nz.plugins.xpkeeper</groupId>
     <artifactId>XPKeeper</artifactId>
-    <version>1.4.2</version>
+    <version>1.4.3</version>
     <name>XPKeeper</name>
     <repositories>
         <repository>
