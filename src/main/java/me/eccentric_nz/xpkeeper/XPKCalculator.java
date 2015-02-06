@@ -22,16 +22,13 @@ import org.bukkit.entity.Player;
 public class XPKCalculator {
 
     // this is to stop the lookup table growing without control
-
     private static int hardMaxLevel = 100000;
-
     private static int xpTotalToReachLevel[];
-
     private final WeakReference<Player> player;
     private final String playerName;
 
     static {
-		// 25 is an arbitrary value for the initial table size - the actual
+        // 25 is an arbitrary value for the initial table size - the actual
         // value isn't critically important since the table is resized as needed.
         initLookupTables(25);
     }
@@ -161,21 +158,21 @@ public class XPKCalculator {
     private void setExp(double base, double amt) {
         int xp = (int) Math.max(base + amt, 0);
 
-        Player player = getPlayer();
-        int curLvl = player.getLevel();
+        Player p = getPlayer();
+        int curLvl = p.getLevel();
         int newLvl = getLevelForExp(xp);
 
         // Increment level
         if (curLvl != newLvl) {
-            player.setLevel(newLvl);
+            p.setLevel(newLvl);
         }
         // Increment total experience - this should force the server to send an update packet
         if (xp > base) {
-            player.setTotalExperience(player.getTotalExperience() + xp - (int) base);
+            p.setTotalExperience(p.getTotalExperience() + xp - (int) base);
         }
 
         double pct = (base - getXpForLevel(newLvl) + amt) / (double) (getXpNeededToLevelUp(newLvl));
-        player.setExp((float) pct);
+        p.setExp((float) pct);
     }
 
     /**
@@ -184,10 +181,10 @@ public class XPKCalculator {
      * @return the player's total XP
      */
     public int getCurrentExp() {
-        Player player = getPlayer();
+        Player p = getPlayer();
 
-        int lvl = player.getLevel();
-        int cur = getXpForLevel(lvl) + (int) Math.round(getXpNeededToLevelUp(lvl) * player.getExp());
+        int lvl = p.getLevel();
+        int cur = getXpForLevel(lvl) + Math.round(getXpNeededToLevelUp(lvl) * p.getExp());
         return cur;
     }
 
@@ -197,10 +194,10 @@ public class XPKCalculator {
      * @return The player's total XP with fractions.
      */
     private double getCurrentFractionalXP() {
-        Player player = getPlayer();
+        Player p = getPlayer();
 
-        int lvl = player.getLevel();
-        double cur = getXpForLevel(lvl) + (double) (getXpNeededToLevelUp(lvl) * player.getExp());
+        int lvl = p.getLevel();
+        double cur = getXpForLevel(lvl) + (double) (getXpNeededToLevelUp(lvl) * p.getExp());
         return cur;
     }
 
