@@ -5,7 +5,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.Set;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -218,7 +220,7 @@ public class XPKexecutor implements CommandExecutor {
             }
             Sign sign;
             try {
-                sign = (Sign) player.getTargetBlock(null, 10).getState();
+                sign = (Sign) player.getTargetBlock((Set<Material>) null, 10).getState();
             } catch (NullPointerException ex) {
                 player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_sign"));
                 return true;
