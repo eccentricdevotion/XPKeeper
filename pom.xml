@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.eccentric_nz.plugins.xpkeeper</groupId>
     <artifactId>XPKeeper</artifactId>
-    <version>1.4.4</version>
+    <version>1.4.5</version>
     <name>XPKeeper</name>
     <repositories>
         <repository>
@@ -44,7 +44,7 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.8.3-R0.1-SNAPSHOT</version>
+            <version>1.8.4-R0.1-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
