@@ -149,22 +149,28 @@ public class XPKeeper extends JavaPlugin {
         }
     }
 
-    public boolean isPlayersXPKSign(UUID uuid, String world) {
+    public boolean isPlayersXPKSign(UUID uuid, String world, String nameOnSign) {
         boolean chk = false;
-        try {
-            Connection connection = service.getConnection();
-            String queryUUIDGet = "SELECT uuid FROM xpk WHERE uuid = ? AND world = ?";
-            PreparedStatement statement = connection.prepareStatement(queryUUIDGet);
-            statement.setString(1, uuid.toString());
-            statement.setString(2, world);
-            ResultSet rsget = statement.executeQuery();
-            if (rsget.isBeforeFirst()) {
-                chk = true;
+        String alias = getServer().getPlayer(uuid).getName();
+        if (alias.length() > 15) {
+            alias = alias.substring(0, 14);
+        }
+        if (nameOnSign.equals(alias)) {
+            try {
+                Connection connection = service.getConnection();
+                String queryUUIDGet = "SELECT uuid FROM xpk WHERE uuid = ? AND world = ?";
+                PreparedStatement statement = connection.prepareStatement(queryUUIDGet);
+                statement.setString(1, uuid.toString());
+                statement.setString(2, world);
+                ResultSet rsget = statement.executeQuery();
+                if (rsget.isBeforeFirst()) {
+                    chk = true;
+                }
+                rsget.close();
+                statement.close();
+            } catch (SQLException e) {
+                System.err.println("[XPKeeper] Could not GET XP: " + e);
             }
-            rsget.close();
-            statement.close();
-        } catch (SQLException e) {
-            System.err.println("[XPKeeper] Could not GET XP: " + e);
         }
         return chk;
     }

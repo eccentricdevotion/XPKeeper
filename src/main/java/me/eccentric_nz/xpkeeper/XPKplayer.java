@@ -41,8 +41,9 @@ public class XPKplayer implements Listener {
             String first = ChatColor.stripColor(sign.getLine(0));
             if (first.equalsIgnoreCase("[" + firstline + "]") || (plugin.is1_8() && first.equalsIgnoreCase(firstline))) {
                 String world = block.getWorld().getName();
+                String second = ChatColor.stripColor(sign.getLine(1));
                 // is it the player's XPKeeper sign?
-                if (plugin.isPlayersXPKSign(uuid, world)) {
+                if (plugin.isPlayersXPKSign(uuid, world, second)) {
                     String playerNameStr = player.getName();
                     if (plugin.trackPlayers.contains(playerNameStr)) {
                         plugin.trackPlayers.remove(playerNameStr);
