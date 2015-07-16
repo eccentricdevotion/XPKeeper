@@ -44,9 +44,8 @@ public class XPKplayer implements Listener {
                 String second = ChatColor.stripColor(sign.getLine(1));
                 // is it the player's XPKeeper sign?
                 if (plugin.isPlayersXPKSign(uuid, world, second)) {
-                    String playerNameStr = player.getName();
-                    if (plugin.trackPlayers.contains(playerNameStr)) {
-                        plugin.trackPlayers.remove(playerNameStr);
+                    if (plugin.trackPlayers.contains(uuid)) {
+                        plugin.trackPlayers.remove(uuid);
                         // set the sign block to AIR and delete the XPKeeper data
                         block.setType(Material.AIR);
                         // drop a sign
@@ -146,6 +145,11 @@ public class XPKplayer implements Listener {
                             }
                         }
                     }
+                } else if (plugin.trackOps.contains(uuid)) {
+                    plugin.trackOps.remove(uuid);
+                    // set the sign block to AIR
+                    block.setType(Material.AIR);
+                    player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.removed"));
                 } else {
                     player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.not_your_sign"));
                 }

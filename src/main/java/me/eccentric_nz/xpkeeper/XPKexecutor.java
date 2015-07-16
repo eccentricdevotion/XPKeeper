@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -104,19 +105,29 @@ public class XPKexecutor implements CommandExecutor {
         if (cmd.getName().equalsIgnoreCase("xpkremove")) {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
-                plugin.trackPlayers.add(player.getName());
+                plugin.trackPlayers.add(player.getUniqueId());
                 player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.click_sign"));
                 return true;
             }
         }
         if (cmd.getName().equalsIgnoreCase("xpkforceremove")) {
-            String player;
+            Player p = null;
+            if (sender instanceof Player) {
+                p = (Player) sender;
+            }
+            String uuid;
+            String name = "";
             if (args.length == 1 && sender.hasPermission("xpkeeper.force")) {
-                player = args[0];
+                OfflinePlayer player = plugin.getServer().getOfflinePlayer(args[0]);
+                if (player == null) {
+                    sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "Player not found!");
+                    return true;
+                }
+                uuid = player.getUniqueId().toString();
             } else {
-                if (sender instanceof Player) {
-                    Player p = (Player) sender;
-                    player = p.getName();
+                if (sender instanceof Player && p != null) {
+                    uuid = p.getUniqueId().toString();
+                    name = p.getName();
                 } else {
                     sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "You must specify a player name when running this command from the console.");
                     return true;
@@ -127,11 +138,17 @@ public class XPKexecutor implements CommandExecutor {
             try {
                 Connection connection = service.getConnection();
                 statement = connection.createStatement();
-                String queryRemoveGet = "SELECT xpk_id FROM xpk WHERE player = '" + player + "'";
+                String queryRemoveGet = "SELECT xpk_id FROM xpk WHERE uuid = '" + uuid + "'";
                 rsget = statement.executeQuery(queryRemoveGet);
                 if (rsget.isBeforeFirst()) {
-                    String queryRemovePlayer = "DELETE FROM xpk WHERE player = '" + player + "'";
+                    String queryRemovePlayer = "DELETE FROM xpk WHERE uuid = '" + uuid + "'";
                     statement.executeUpdate(queryRemovePlayer);
+                    sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "All database entries for " + ChatColor.RED + name + ChatColor.RESET + " were removed.");
+                    if (p != null) {
+                        plugin.trackOps.add(p.getUniqueId());
+                        sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.click_sign"));
+                    }
+                    return true;
                 }
             } catch (SQLException e) {
                 System.err.println("[XPKeeper] Could not get and remove player data: " + e);
@@ -146,8 +163,7 @@ public class XPKexecutor implements CommandExecutor {
                 } catch (SQLException e) {
                 }
             }
-            sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "All database entries for " + ChatColor.RED + player + ChatColor.RESET + " were removed.");
-            return true;
+            return false;
         }
         if (cmd.getName().equalsIgnoreCase("xpkfist")) {
             if (sender instanceof Player) {
