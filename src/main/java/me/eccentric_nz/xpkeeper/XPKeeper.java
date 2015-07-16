@@ -25,7 +25,8 @@ public class XPKeeper extends JavaPlugin {
     XPKarrgghh explodeListener;
     XPKPistonListener pistonListener;
     PluginManager pm;
-    public List<String> trackPlayers;
+    public List<UUID> trackPlayers;
+    public List<UUID> trackOps;
 
     @Override
     public void onDisable() {
@@ -71,7 +72,8 @@ public class XPKeeper extends JavaPlugin {
         pm.registerEvents(breakListener, this);
         pm.registerEvents(explodeListener, this);
         pm.registerEvents(pistonListener, this);
-        trackPlayers = new ArrayList<String>();
+        trackPlayers = new ArrayList<UUID>();
+        trackOps = new ArrayList<UUID>();
         xpkExecutor = new XPKexecutor(this);
         getCommand("xpkgive").setExecutor(xpkExecutor);
         getCommand("xpkset").setExecutor(xpkExecutor);
