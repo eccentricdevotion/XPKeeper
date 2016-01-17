@@ -4,7 +4,7 @@ main: me.eccentric_nz.xpkeeper.XPKeeper
 dev-url: http://dev.bukkit.org/bukkit-plugins/xpkeeper/
 name: XPKeeper
 load: POSTWORLD
-version: '1.4.6'
+version: '1.4.7'
 permissions:
   xpkeeper.use:
     description: Allow players to use XPKeeper signs
