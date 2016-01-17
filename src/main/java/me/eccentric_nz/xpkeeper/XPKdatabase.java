@@ -8,12 +8,12 @@ import java.sql.Statement;
 
 public class XPKdatabase {
 
-    private static final XPKdatabase instance = new XPKdatabase();
+    private static final XPKdatabase INSTANCE = new XPKdatabase();
     public Connection connection = null;
     public Statement statement;
 
     public static synchronized XPKdatabase getInstance() {
-        return instance;
+        return INSTANCE;
     }
 
     public void setConnection(String path) throws Exception {

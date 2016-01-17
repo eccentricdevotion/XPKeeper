@@ -58,59 +58,80 @@ public class XPKplayer implements Listener {
                         // remove database record
                         plugin.delKeptXP(uuid, world);
                         player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.removed"));
+                    } else if (plugin.getConfig().getBoolean("must_use_fist") && !player.getItemInHand().getType().equals(Material.AIR)) {
+                        player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.use_fist"));
                     } else {
-                        if (plugin.getConfig().getBoolean("must_use_fist") && !player.getItemInHand().getType().equals(Material.AIR)) {
-                            player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.use_fist"));
-                        } else {
-                            Action action = event.getAction();
-                            XPKCalculator xpkc = new XPKCalculator(player);
-                            // get players XP
-                            int xp = xpkc.getCurrentExp();
-                            if (action == Action.LEFT_CLICK_BLOCK) {
-                                // deposit XP
-                                // sign is set up so update the amount kept
-                                int keptXP = plugin.getKeptXP(uuid, world);
-                                //int keptLevel = plugin.getKeptLevel(uuid, world);
-                                int newXPamount = xp + keptXP;
-                                int setxp = 0;
-                                int newLevel = xpkc.getLevelForExp(newXPamount);
-                                if (plugin.getConfig().getBoolean("set_limits") && !player.hasPermission("xpkeeper.limit.bypass")) {
-                                    List<Double> limits = plugin.getConfig().getDoubleList("limits");
-                                    double l = 0;
-                                    for (double d : limits) {
-                                        String perm = "xpkeeper.limit." + ((int) d);
-                                        if (player.hasPermission(perm)) {
-                                            l = d;
-                                            break;
-                                        }
-                                    }
-                                    if (l != 0 && (newLevel + 1) > (int) l) {
-                                        player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "That amount would take you over your maximum deposit level, depositing as much as we can.");
-                                        newXPamount = xpkc.getXpForLevel((int) l);
-                                        setxp = (xp + keptXP) - newXPamount;
+                        Action action = event.getAction();
+                        XPKCalculator xpkc = new XPKCalculator(player);
+                        // get players XP
+                        int xp = xpkc.getCurrentExp();
+                        if (action == Action.LEFT_CLICK_BLOCK) {
+                            // deposit XP
+                            // sign is set up so update the amount kept
+                            int keptXP = plugin.getKeptXP(uuid, world);
+                            //int keptLevel = plugin.getKeptLevel(uuid, world);
+                            int newXPamount = xp + keptXP;
+                            int setxp = 0;
+                            int newLevel = xpkc.getLevelForExp(newXPamount);
+                            if (plugin.getConfig().getBoolean("set_limits") && !player.hasPermission("xpkeeper.limit.bypass")) {
+                                List<Double> limits = plugin.getConfig().getDoubleList("limits");
+                                double l = 0;
+                                for (double d : limits) {
+                                    String perm = "xpkeeper.limit." + ((int) d);
+                                    if (player.hasPermission(perm)) {
+                                        l = d;
+                                        break;
                                     }
                                 }
-                                plugin.setKeptXP(newXPamount, uuid, world);
-                                // calculate level and update the sign
-                                int level = xpkc.getLevelForExp(newXPamount);
-                                int levelxp = xpkc.getXpForLevel(level);
-                                int leftoverxp = newXPamount - levelxp;
-                                // update sign with player's current name
-                                String name = (player.getName().length() > 15) ? player.getName().substring(0, 14) : player.getName();
-                                sign.setLine(1, name);
-                                sign.setLine(2, "Level: " + level);
-                                sign.setLine(3, "XP: " + leftoverxp);
-                                sign.update();
-                                // remove XP from player
-                                xpkc.setExp(setxp);
-                                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.deposit"), (xp - setxp), level));
+                                if (l != 0 && (newLevel + 1) > (int) l) {
+                                    player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "That amount would take you over your maximum deposit level, depositing as much as we can.");
+                                    newXPamount = xpkc.getXpForLevel((int) l);
+                                    setxp = (xp + keptXP) - newXPamount;
+                                }
                             }
-                            if (action == Action.RIGHT_CLICK_BLOCK) {
-                                // get withdrawal amount - 0 = all, 5 = 5 levels
-                                int withdrawAmount = plugin.getConfig().getInt("withdraw");
-                                int keptXP = plugin.getKeptXP(uuid, world);
-                                if (withdrawAmount == 0 || player.isSneaking()) {
-                                    // withdraw XP
+                            plugin.setKeptXP(newXPamount, uuid, world);
+                            // calculate level and update the sign
+                            int level = xpkc.getLevelForExp(newXPamount);
+                            int levelxp = xpkc.getXpForLevel(level);
+                            int leftoverxp = newXPamount - levelxp;
+                            // update sign with player's current name
+                            String name = (player.getName().length() > 15) ? player.getName().substring(0, 14) : player.getName();
+                            sign.setLine(1, name);
+                            sign.setLine(2, "Level: " + level);
+                            sign.setLine(3, "XP: " + leftoverxp);
+                            sign.update();
+                            // remove XP from player
+                            xpkc.setExp(setxp);
+                            player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.deposit"), (xp - setxp), level));
+                        }
+                        if (action == Action.RIGHT_CLICK_BLOCK) {
+                            // get withdrawal amount - 0 = all, 5 = 5 levels
+                            int withdrawAmount = plugin.getConfig().getInt("withdraw");
+                            int keptXP = plugin.getKeptXP(uuid, world);
+                            if (withdrawAmount == 0 || player.isSneaking()) {
+                                // withdraw XP
+                                xpkc.changeExp(keptXP);
+                                plugin.setKeptXP(0, uuid, world);
+                                // update the sign
+                                sign.setLine(2, "Level: 0");
+                                sign.setLine(3, "XP: 0");
+                                sign.update();
+                                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.withdraw_all"));
+                            } else {
+                                int levelXP = xpkc.getXpForLevel(withdrawAmount);
+                                if (keptXP >= levelXP) {
+                                    // calculate remaining XP amount
+                                    int remainingXP = keptXP - levelXP;
+                                    plugin.setKeptXP(remainingXP, uuid, world);
+                                    int newLevel = xpkc.getLevelForExp(remainingXP);
+                                    int newlevelxp = xpkc.getXpForLevel(newLevel);
+                                    int leftoverxp = remainingXP - newlevelxp;
+                                    sign.setLine(2, "Level: " + newLevel);
+                                    sign.setLine(3, "XP: " + leftoverxp);
+                                    sign.update();
+                                    xpkc.changeExp(levelXP);
+                                    player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.withdraw_some"), withdrawAmount));
+                                } else {
                                     xpkc.changeExp(keptXP);
                                     plugin.setKeptXP(0, uuid, world);
                                     // update the sign
@@ -118,29 +139,6 @@ public class XPKplayer implements Listener {
                                     sign.setLine(3, "XP: 0");
                                     sign.update();
                                     player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.withdraw_all"));
-                                } else {
-                                    int levelXP = xpkc.getXpForLevel(withdrawAmount);
-                                    if (keptXP >= levelXP) {
-                                        // calculate remaining XP amount
-                                        int remainingXP = keptXP - levelXP;
-                                        plugin.setKeptXP(remainingXP, uuid, world);
-                                        int newLevel = xpkc.getLevelForExp(remainingXP);
-                                        int newlevelxp = xpkc.getXpForLevel(newLevel);
-                                        int leftoverxp = remainingXP - newlevelxp;
-                                        sign.setLine(2, "Level: " + newLevel);
-                                        sign.setLine(3, "XP: " + leftoverxp);
-                                        sign.update();
-                                        xpkc.changeExp(levelXP);
-                                        player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.withdraw_some"), withdrawAmount));
-                                    } else {
-                                        xpkc.changeExp(keptXP);
-                                        plugin.setKeptXP(0, uuid, world);
-                                        // update the sign
-                                        sign.setLine(2, "Level: 0");
-                                        sign.setLine(3, "XP: 0");
-                                        sign.update();
-                                        player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.withdraw_all"));
-                                    }
                                 }
                             }
                         }

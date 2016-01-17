@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.UUID;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.util.FileUtil;
 
 /**
@@ -59,7 +60,7 @@ public class XPKeeperUUIDConverter {
         File oldFile = new File(plugin.getDataFolder() + File.separator + "XPKeeper.db");
         File newFile = new File(plugin.getDataFolder() + File.separator + "XPKeeper_" + System.currentTimeMillis() + ".db");
         FileUtil.copy(oldFile, newFile);
-        // get all TARDIS owners from database
+        // get all players from database
         Statement statement = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
@@ -116,12 +117,55 @@ public class XPKeeperUUIDConverter {
         return true;
     }
 
+    public boolean addLastKnownNames() {
+        // get all UUIDs from database
+        Statement statement = null;
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        String query = "SELECT DISTINCT uuid FROM xpk";
+        String lkn_update = "UPDATE xpk SET player = ? WHERE uuid = ?";
+        int count = 0;
+        try {
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+            if (rs.isBeforeFirst()) {
+                ps = connection.prepareStatement(lkn_update);
+                while (rs.next()) {
+                    String uuid = rs.getString("uuid");
+                    OfflinePlayer op = plugin.getServer().getOfflinePlayer(UUID.fromString(uuid));
+                    if (op != null) {
+                        ps.setString(1, op.getName());
+                        ps.setString(2, uuid);
+                        count += ps.executeUpdate();
+                    }
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("[XPKeeper] ResultSet error for last known player names! " + e.getMessage());
+            return false;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                System.err.println("[XPKeeper] Error closing tardis table! " + e.getMessage());
+            }
+        }
+        System.out.println("[XPKeeper] Added " + count + " last known player names to database.");
+        return true;
+    }
+
     /**
-     * Gets the server default resource pack. Will use the Minecraft default
-     * pack if none is specified. Until Minecraft/Bukkit lets us set the RP back
-     * to Default, we'll have to host it on DropBox
+     * Gets the server's online mode.
      *
-     * @return The server specified texture pack.
+     * @return true or false
      */
     public boolean getOnlineMode() {
         FileInputStream in = null;

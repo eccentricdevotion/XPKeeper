@@ -48,9 +48,9 @@ public class XPKeeper extends JavaPlugin {
             System.err.println("[XPKeeper] Connection and Tables Error: " + e);
         }
         pm = getServer().getPluginManager();
+        XPKeeperUUIDConverter uc = new XPKeeperUUIDConverter(this);
         // update database add and populate uuid fields
         if (!getConfig().getBoolean("uuid_conversion_done")) {
-            XPKeeperUUIDConverter uc = new XPKeeperUUIDConverter(this);
             if (!uc.convert()) {
                 // conversion failed
                 System.err.println("[XPKeeper]" + ChatColor.RED + "UUID conversion failed, disabling...");
@@ -60,6 +60,17 @@ public class XPKeeper extends JavaPlugin {
                 getConfig().set("uuid_conversion_done", true);
                 saveConfig();
                 System.out.println("[XPKeeper] UUID conversion successful :)");
+            }
+        }
+        // update database add and populate player fields
+        if (!getConfig().getBoolean("player_names_added")) {
+            if (!uc.addLastKnownNames()) {
+                // conversion failed
+                System.err.println("[XPKeeper]" + ChatColor.RED + "Adding last known player names failed!");
+            } else {
+                getConfig().set("player_names_added", true);
+                saveConfig();
+                System.out.println("[XPKeeper] Added last known player names :)");
             }
         }
         signListener = new XPKsign(this);
@@ -123,13 +134,14 @@ public class XPKeeper extends JavaPlugin {
         }
     }
 
-    public void insKeptXP(UUID uuid, String w) {
+    public void insKeptXP(UUID uuid, String w, String lkn) {
         try {
             Connection connection = service.getConnection();
-            String queryXPInsert = "INSERT INTO xpk (uuid, world, amount) VALUES (?, ?, 0)";
+            String queryXPInsert = "INSERT INTO xpk (uuid, player, world, amount) VALUES (?, ?, ?, 0)";
             PreparedStatement statement = connection.prepareStatement(queryXPInsert);
             statement.setString(1, uuid.toString());
-            statement.setString(2, w);
+            statement.setString(2, lkn);
+            statement.setString(3, w);
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
@@ -172,6 +184,38 @@ public class XPKeeper extends JavaPlugin {
                 statement.close();
             } catch (SQLException e) {
                 System.err.println("[XPKeeper] Could not GET XP: " + e);
+            }
+        } else {
+            // name may have changed - check last known name (player field in db)
+            try {
+                Connection connection = service.getConnection();
+                String queryLKN = "SELECT player FROM xpk WHERE uuid = ? AND world = ?";
+                PreparedStatement statement = connection.prepareStatement(queryLKN);
+                statement.setString(1, uuid.toString());
+                statement.setString(2, world);
+                ResultSet rslkn = statement.executeQuery();
+                if (rslkn.isBeforeFirst()) {
+                    rslkn.next();
+                    String lkn = rslkn.getString("player");
+                    if (lkn.length() > 15) {
+                        lkn = lkn.substring(0, 14);
+                    }
+                    if (nameOnSign.equals(lkn)) {
+                        chk = true;
+                        // update player field in db
+                        String queryUpdate = "UPDATE xpk SET player = ? WHERE uuid = ? AND world = ?";
+                        PreparedStatement ps = connection.prepareStatement(queryUpdate);
+                        ps.setString(1, alias);
+                        ps.setString(2, uuid.toString());
+                        ps.setString(3, world);
+                        ps.executeUpdate();
+                        ps.close();
+                    }
+                }
+                rslkn.close();
+                statement.close();
+            } catch (SQLException e) {
+                System.err.println("[XPKeeper] Could not GET XP (from last known player name): " + e);
             }
         }
         return chk;

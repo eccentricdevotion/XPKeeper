@@ -32,7 +32,7 @@ public class XPKsign implements Listener {
                 // check to see if they have a keeper already
                 int keptXP = plugin.getKeptXP(uuid, world);
                 if (keptXP < 0) {
-                    plugin.insKeptXP(uuid, world);
+                    plugin.insKeptXP(uuid, world, sign_str);
                     String flc = plugin.getConfig().getString("firstline_colour");
                     if (!flc.equals("&0")) {
                         event.setLine(0, ChatColor.translateAlternateColorCodes('&', flc) + firstline);
