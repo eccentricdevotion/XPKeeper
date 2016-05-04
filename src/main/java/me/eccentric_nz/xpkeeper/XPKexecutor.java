@@ -116,22 +116,31 @@ public class XPKexecutor implements CommandExecutor {
                 p = (Player) sender;
             }
             String uuid;
-            String name = "";
-            if (args.length == 1 && sender.hasPermission("xpkeeper.force")) {
-                OfflinePlayer player = plugin.getServer().getOfflinePlayer(args[0]);
-                if (player == null) {
-                    sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "Player not found!");
-                    return true;
-                }
-                uuid = player.getUniqueId().toString();
-            } else {
-                if (sender instanceof Player && p != null) {
-                    uuid = p.getUniqueId().toString();
-                    name = p.getName();
-                } else {
-                    sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "You must specify a player name when running this command from the console.");
-                    return true;
-                }
+            String name;
+            switch (args.length) {
+                case 0:
+                    if (sender instanceof Player && p != null) {
+                        uuid = p.getUniqueId().toString();
+                        name = p.getName();
+                    } else {
+                        sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "You must specify a player name when running this command from the console.");
+                        return true;
+                    }
+                    break;
+                default:
+                    if (!sender.hasPermission("xpkeeper.force")) {
+                        sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
+                        return true;
+                    } else {
+                        OfflinePlayer player = plugin.getServer().getOfflinePlayer(args[0]);
+                        if (player == null) {
+                            sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "Player not found!");
+                            return true;
+                        }
+                        name = args[0];
+                        uuid = player.getUniqueId().toString();
+                    }
+                    break;
             }
             Statement statement = null;
             ResultSet rsget = null;
@@ -214,6 +223,13 @@ public class XPKexecutor implements CommandExecutor {
             return true;
         }
         if (cmd.getName().equalsIgnoreCase("xpkcolour")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                if (!player.hasPermission("xpkeeper.admin")) {
+                    player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
+                    return true;
+                }
+            }
             String c = args[0].toLowerCase();
             if (!colours.containsKey(c)) {
                 sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You must specify a colour code like this: &6");
