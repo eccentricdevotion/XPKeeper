@@ -32,14 +32,20 @@ commands:
     aliases: [xpkg]
     description: Give a player some XP.
     usage: /<command> [player] [amount]
+    permission: xpkeeper.admin
+    permission-message: You don't have the permission <permission> to use this command
   xpkset:
     aliases: [xpks]
     description: Set a player's total XP.
     usage: /<command> [player] [amount]
+    permission: xpkeeper.admin
+    permission-message: You don't have the permission <permission> to use this command
   xpkremove:
     aliases: [xpkr, xpkrem]
     description: Remove an XPKeeper sign.
     usage: /<command>
+    permission: xpkeeper.use
+    permission-message: You don't have the permission <permission> to use this command
   xpkforceremove:
     aliases: [xpkfr, xpkforce]
     description: Remove ALL player data from the database - use with caution.
@@ -48,27 +54,41 @@ commands:
     aliases: [xpkf]
     description: Toggle the XPKeeper must_use_fist config option.
     usage: /<command>
+    permission: xpkeeper.fist
+    permission-message: You don't have the permission <permission> to use this command
   xpkedit:
     aliases: [xpke]
     description: Edit the first line of the XPKeeper sign.
     usage: /<command>
+    permission: xpkeeper.editsign
+    permission-message: You don't have the permission <permission> to use this command
   xpkpay:
     aliases: [xpkp]
     description: Pay another player some XP.
     usage: /<command> [player] [amount]
+    permission: xpkeeper.use
+    permission-message: You don't have the permission <permission> to use this command
   xpkwithdraw:
     aliases: [xpkw, xpkwd]
     description: Set the amount, in levels, that is withdrawn from an XPKeeper sign. 0 = all.
     usage: /<command> [amount]
+    permission: xpkeeper.admin
+    permission-message: You don't have the permission <permission> to use this command
   xpklimit:
     aliases: [xpkl]
     description: Toggle the XPKeeper set_limits config option.
     usage: /<command>
+    permission: xpkeeper.limit
+    permission-message: You don't have the permission <permission> to use this command
   xpkreload:
     aliases: [xpkrl]
     description: Reloads the config file.
     usage: /<command>
+    permission: xpkeeper.admin
+    permission-message: You don't have the permission <permission> to use this command
   xpkcolour:
     aliases: [xpkc,xpkcolor]
     description: Sets 'firstline_colour' in the config file.
     usage: /<command> [colour code e.g. &6]
+    permission: xpkeeper.admin
+    permission-message: You don't have the permission <permission> to use this command
