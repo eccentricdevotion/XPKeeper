@@ -43,7 +43,7 @@ public class XPKeeperUUIDConverter {
     private final XPKeeper plugin;
     private final XPKdatabase service = XPKdatabase.getInstance();
     private final Connection connection = service.getConnection();
-    private final List<String> players = new ArrayList<String>();
+    private final List<String> players = new ArrayList<>();
 
     public XPKeeperUUIDConverter(XPKeeper plugin) {
         this.plugin = plugin;
@@ -78,7 +78,7 @@ public class XPKeeperUUIDConverter {
                 }
                 XPKUUIDFetcher fetcher = new XPKUUIDFetcher(players);
                 // get UUIDs
-                Map<String, UUID> response = null;
+                Map<String, UUID> response;
                 try {
                     response = fetcher.call();
                 } catch (Exception e) {

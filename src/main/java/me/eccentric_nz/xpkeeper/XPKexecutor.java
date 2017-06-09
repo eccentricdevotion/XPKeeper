@@ -23,7 +23,7 @@ public class XPKexecutor implements CommandExecutor {
 
     public XPKexecutor(XPKeeper plugin) {
         this.plugin = plugin;
-        colours = new HashMap<String, String>();
+        colours = new HashMap<>();
         colours.put("&0", "Black");
         colours.put("&1", "Dark Blue");
         colours.put("&2", "Dark Green");

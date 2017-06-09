@@ -13,9 +13,9 @@ public class XPKconfig {
     private final XPKeeper plugin;
     private FileConfiguration config = null;
     private File configFile = null;
-    HashMap<String, String> strOptions = new HashMap<String, String>();
-    HashMap<String, Integer> intOptions = new HashMap<String, Integer>();
-    HashMap<String, Boolean> boolOptions = new HashMap<String, Boolean>();
+    HashMap<String, String> strOptions = new HashMap<>();
+    HashMap<String, Integer> intOptions = new HashMap<>();
+    HashMap<String, Boolean> boolOptions = new HashMap<>();
 
     public XPKconfig(XPKeeper plugin) {
         this.plugin = plugin;

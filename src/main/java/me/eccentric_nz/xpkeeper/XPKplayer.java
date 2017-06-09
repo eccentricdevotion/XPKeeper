@@ -58,7 +58,7 @@ public class XPKplayer implements Listener {
                         // remove database record
                         plugin.delKeptXP(uuid, world);
                         player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.removed"));
-                    } else if (plugin.getConfig().getBoolean("must_use_fist") && !player.getItemInHand().getType().equals(Material.AIR)) {
+                    } else if (plugin.getConfig().getBoolean("must_use_fist") && !player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                         player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.use_fist"));
                     } else {
                         Action action = event.getAction();

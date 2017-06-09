@@ -25,9 +25,9 @@ public class XPKarrgghh implements Listener {
             return;
         }
         String firstline = plugin.getConfig().getString("firstline");
-        List<Block> blockList = new ArrayList<Block>();
+        List<Block> blockList = new ArrayList<>();
         blockList.addAll(event.blockList());
-        for (Block block : blockList) {
+        blockList.forEach((block) -> {
             if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
                 Sign sign = (Sign) block.getState();
                 String line0 = plugin.stripColourCode(sign.getLine(0));
@@ -56,6 +56,6 @@ public class XPKarrgghh implements Listener {
                     }
                 }
             }
-        }
+        });
     }
 }

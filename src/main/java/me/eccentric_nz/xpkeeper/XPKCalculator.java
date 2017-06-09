@@ -41,7 +41,7 @@ public class XPKCalculator {
      */
     public XPKCalculator(Player player) {
         Validate.notNull(player, "Player cannot be null");
-        this.player = new WeakReference<Player>(player);
+        this.player = new WeakReference<>(player);
         this.playerName = player.getName();
     }
 

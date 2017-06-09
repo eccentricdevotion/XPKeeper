@@ -83,8 +83,8 @@ public class XPKeeper extends JavaPlugin {
         pm.registerEvents(breakListener, this);
         pm.registerEvents(explodeListener, this);
         pm.registerEvents(pistonListener, this);
-        trackPlayers = new ArrayList<UUID>();
-        trackOps = new ArrayList<UUID>();
+        trackPlayers = new ArrayList<>();
+        trackOps = new ArrayList<>();
         xpkExecutor = new XPKexecutor(this);
         getCommand("xpkgive").setExecutor(xpkExecutor);
         getCommand("xpkset").setExecutor(xpkExecutor);

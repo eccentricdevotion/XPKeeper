@@ -13,7 +13,7 @@ import org.bukkit.event.block.BlockPistonRetractEvent;
 public class XPKPistonListener implements Listener {
 
     private final XPKeeper plugin;
-    private final List<BlockFace> faces = new ArrayList<BlockFace>();
+    private final List<BlockFace> faces = new ArrayList<>();
 
     public XPKPistonListener(XPKeeper plugin) {
         this.plugin = plugin;
