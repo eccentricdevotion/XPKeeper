@@ -47,11 +47,11 @@ public class XPKPistonListener implements Listener {
     }
 
     public boolean checkXPKSign(Block b) {
-        if (b.getType() == Material.WALL_SIGN || b.getType() == Material.SIGN_POST) {
+        if (b.getType() == Material.WALL_SIGN || b.getType() == Material.SIGN) {
             return isXPKSign(b);
         } else {
             // check if there is an XPKeeper sign attached to the block
-            if (b.getRelative(BlockFace.UP).getType() == Material.SIGN_POST) {
+            if (b.getRelative(BlockFace.UP).getType() == Material.SIGN) {
                 return isXPKSign(b.getRelative(BlockFace.UP));
             }
             for (BlockFace bf : faces) {

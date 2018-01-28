@@ -35,7 +35,7 @@ public class XPKplayer implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         Block block = event.getClickedBlock();
-        if (block != null && (block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN_POST)) {
+        if (block != null && (block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN)) {
             String firstline = plugin.getConfig().getString("firstline");
             Sign sign = (Sign) block.getState();
             String first = ChatColor.stripColor(sign.getLine(0));

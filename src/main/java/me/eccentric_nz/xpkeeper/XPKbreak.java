@@ -28,7 +28,7 @@ public class XPKbreak implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         Material blockType = block.getType();
-        if (blockType == Material.WALL_SIGN || blockType == Material.SIGN_POST) {
+        if (blockType == Material.WALL_SIGN || blockType == Material.SIGN) {
             // check the text on the sign
             String firstline = plugin.getConfig().getString("firstline");
             Sign sign = (Sign) block.getState();
@@ -77,7 +77,7 @@ public class XPKbreak implements Listener {
                         xpkSign(faceBlock, event, player);
                     }
                 }
-                if (bf.equals(BlockFace.UP) && faceBlockType == Material.SIGN_POST) {
+                if (bf.equals(BlockFace.UP) && faceBlockType == Material.SIGN) {
                     xpkSign(faceBlock, event, player);
                 }
             }

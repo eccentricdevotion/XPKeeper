@@ -28,12 +28,12 @@ public class XPKarrgghh implements Listener {
         List<Block> blockList = new ArrayList<>();
         blockList.addAll(event.blockList());
         blockList.forEach((block) -> {
-            if (block.getType() == Material.SIGN_POST || block.getType() == Material.WALL_SIGN) {
+            if (block.getType() == Material.SIGN || block.getType() == Material.WALL_SIGN) {
                 Sign sign = (Sign) block.getState();
                 String line0 = plugin.stripColourCode(sign.getLine(0));
                 if (line0.equalsIgnoreCase("[" + firstline + "]")) {
                     event.blockList().remove(block);
-                    if (block.getType() == Material.SIGN_POST) {
+                    if (block.getType() == Material.SIGN) {
                         Block blockdown = block.getRelative(BlockFace.DOWN, 1);
                         event.blockList().remove(blockdown);
                     }
