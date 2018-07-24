@@ -1,5 +1,12 @@
 package me.eccentric_nz.xpkeeper;
 
+import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.material.Sign;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -8,25 +15,19 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.material.Sign;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class XPKeeper extends JavaPlugin {
 
+    public List<UUID> trackPlayers;
+    public List<UUID> trackOps;
     XPKdatabase service;
-    private XPKexecutor xpkExecutor;
     XPKsign signListener;
     XPKplayer playerListener;
     XPKbreak breakListener;
     XPKarrgghh explodeListener;
     XPKPistonListener pistonListener;
     PluginManager pm;
-    public List<UUID> trackPlayers;
-    public List<UUID> trackOps;
+    private XPKexecutor xpkExecutor;
 
     @Override
     public void onDisable() {

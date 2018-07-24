@@ -1,7 +1,5 @@
 package me.eccentric_nz.xpkeeper;
 
-import java.util.Arrays;
-import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,14 +12,17 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.MaterialData;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class XPKbreak implements Listener {
 
     private final XPKeeper plugin;
+    List<BlockFace> faces = Arrays.asList(BlockFace.UP, BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH);
 
     public XPKbreak(XPKeeper plugin) {
         this.plugin = plugin;
     }
-    List<BlockFace> faces = Arrays.asList(BlockFace.UP, BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH);
 
     @EventHandler
     public void onPlayerBreakSign(BlockBreakEvent event) {

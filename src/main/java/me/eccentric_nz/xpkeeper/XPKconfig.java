@@ -1,21 +1,22 @@
 package me.eccentric_nz.xpkeeper;
 
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
+
 import java.io.File;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 public class XPKconfig {
 
     private final XPKeeper plugin;
-    private FileConfiguration config = null;
-    private File configFile = null;
     HashMap<String, String> strOptions = new HashMap<>();
     HashMap<String, Integer> intOptions = new HashMap<>();
     HashMap<String, Boolean> boolOptions = new HashMap<>();
+    private FileConfiguration config = null;
+    private File configFile = null;
 
     public XPKconfig(XPKeeper plugin) {
         this.plugin = plugin;

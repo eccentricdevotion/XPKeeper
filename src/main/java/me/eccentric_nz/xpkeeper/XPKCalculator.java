@@ -1,37 +1,36 @@
 package me.eccentric_nz.xpkeeper;
 
-import java.lang.ref.WeakReference;
-import java.util.Arrays;
 import org.apache.commons.lang.Validate;
 import org.bukkit.entity.Player;
 
+import java.lang.ref.WeakReference;
+import java.util.Arrays;
+
 /**
  * @author desht
- *
+ * <p>
  * Adapted from ExperienceUtils code originally in ScrollingMenuSign.
- *
- * Credit to nisovin
- * (http://forums.bukkit.org/threads/experienceutils-make-giving-taking-exp-a-bit-more-intuitive.54450/#post-1067480)
- * for an implementation that avoids the problems of getTotalExperience(), which
- * doesn't work properly after a player has enchanted something.
- *
- * Credit to comphenix for further contributions: See
- * http://forums.bukkit.org/threads/experiencemanager-was-experienceutils-make-giving-taking-exp-a-bit-more-intuitive.54450/page-3#post-1273622
- *
+ * <p>
+ * Credit to nisovin (http://forums.bukkit.org/threads/experienceutils-make-giving-taking-exp-a-bit-more-intuitive.54450/#post-1067480)
+ * for an implementation that avoids the problems of getTotalExperience(), which doesn't work properly after a player
+ * has enchanted something.
+ * <p>
+ * Credit to comphenix for further contributions: See http://forums.bukkit.org/threads/experiencemanager-was-experienceutils-make-giving-taking-exp-a-bit-more-intuitive.54450/page-3#post-1273622
  */
 public class XPKCalculator {
 
     // this is to stop the lookup table growing without control
     private static int hardMaxLevel = 100000;
     private static int xpTotalToReachLevel[];
-    private final WeakReference<Player> player;
-    private final String playerName;
 
     static {
         // 25 is an arbitrary value for the initial table size - the actual
         // value isn't critically important since the table is resized as needed.
         initLookupTables(25);
     }
+
+    private final WeakReference<Player> player;
+    private final String playerName;
 
     /**
      * Create a new XPKCalculator for the given player.
@@ -64,8 +63,7 @@ public class XPKCalculator {
     }
 
     /**
-     * Initialize the XP lookup table. See
-     * http://minecraft.gamepedia.com/Experience
+     * Initialize the XP lookup table. See http://minecraft.gamepedia.com/Experience
      *
      * @param maxLevel The highest level handled by the lookup tables
      */
@@ -75,15 +73,14 @@ public class XPKCalculator {
         for (int i = 0; i < xpTotalToReachLevel.length; i++) {
             xpTotalToReachLevel[i]
                     = i >= 30 ? (int) (3.5 * i * i - 151.5 * i + 2220)
-                            : i >= 16 ? (int) (1.5 * i * i - 29.5 * i + 360)
-                                    : 17 * i;
+                    : i >= 16 ? (int) (1.5 * i * i - 29.5 * i + 360)
+                    : 17 * i;
         }
     }
 
     /**
-     * Calculate the level that the given XP quantity corresponds to, without
-     * using the lookup tables. This is needed if getLevelForExp() is called
-     * with an XP quantity beyond the range of the existing lookup tables.
+     * Calculate the level that the given XP quantity corresponds to, without using the lookup tables. This is needed if
+     * getLevelForExp() is called with an XP quantity beyond the range of the existing lookup tables.
      *
      * @param exp
      * @return
@@ -116,9 +113,8 @@ public class XPKCalculator {
     }
 
     /**
-     * Adjust the player's XP by the given amount in an intelligent fashion.
-     * Works around some of the non-intuitive behaviour of the basic Bukkit
-     * player.giveExp() method.
+     * Adjust the player's XP by the given amount in an intelligent fashion. Works around some of the non-intuitive
+     * behaviour of the basic Bukkit player.giveExp() method.
      *
      * @param amt Amount of XP, may be negative
      */
@@ -127,9 +123,8 @@ public class XPKCalculator {
     }
 
     /**
-     * Adjust the player's XP by the given amount in an intelligent fashion.
-     * Works around some of the non-intuitive behaviour of the basic Bukkit
-     * player.giveExp() method.
+     * Adjust the player's XP by the given amount in an intelligent fashion. Works around some of the non-intuitive
+     * behaviour of the basic Bukkit player.giveExp() method.
      *
      * @param amt Amount of XP, may be negative
      */
@@ -243,8 +238,7 @@ public class XPKCalculator {
     }
 
     /**
-     * Retrieves the amount of experience the experience bar can hold at the
-     * given level.
+     * Retrieves the amount of experience the experience bar can hold at the given level.
      *
      * @param level the level to check
      * @return the amount of experience at this level in the level bar
@@ -260,8 +254,7 @@ public class XPKCalculator {
      *
      * @param level The level to check for.
      * @return The amount of XP needed for the level.
-     * @throws IllegalArgumentException if the level is less than 0 or greater
-     * than the current hard maximum
+     * @throws IllegalArgumentException if the level is less than 0 or greater than the current hard maximum
      */
     public int getXpForLevel(int level) {
         Validate.isTrue(level >= 0 && level <= hardMaxLevel, "Invalid level " + level + "(must be in range 0.." + hardMaxLevel + ")");

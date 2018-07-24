@@ -1,11 +1,5 @@
 package me.eccentric_nz.xpkeeper;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.HashMap;
-import java.util.Set;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -15,11 +9,18 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.Set;
+
 public class XPKexecutor implements CommandExecutor {
 
+    public final HashMap<String, String> colours;
     private final XPKeeper plugin;
     private final XPKdatabase service = XPKdatabase.getInstance();
-    public final HashMap<String, String> colours;
 
     public XPKexecutor(XPKeeper plugin) {
         this.plugin = plugin;
