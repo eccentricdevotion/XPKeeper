@@ -17,3 +17,5 @@ xcuserdata
 .svn
 CVS
 /target/
+*.iml
+.idea
