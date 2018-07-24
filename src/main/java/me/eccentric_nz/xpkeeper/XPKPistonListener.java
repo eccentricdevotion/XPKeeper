@@ -19,10 +19,10 @@ public class XPKPistonListener implements Listener {
 
     public XPKPistonListener(XPKeeper plugin) {
         this.plugin = plugin;
-        this.faces.add(BlockFace.EAST);
-        this.faces.add(BlockFace.WEST);
-        this.faces.add(BlockFace.NORTH);
-        this.faces.add(BlockFace.SOUTH);
+        faces.add(BlockFace.EAST);
+        faces.add(BlockFace.WEST);
+        faces.add(BlockFace.NORTH);
+        faces.add(BlockFace.SOUTH);
     }
 
     @EventHandler

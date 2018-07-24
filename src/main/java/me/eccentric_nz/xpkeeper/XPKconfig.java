@@ -20,8 +20,8 @@ public class XPKconfig {
 
     public XPKconfig(XPKeeper plugin) {
         this.plugin = plugin;
-        this.configFile = new File(plugin.getDataFolder(), "config.yml");
-        this.config = YamlConfiguration.loadConfiguration(configFile);
+        configFile = new File(plugin.getDataFolder(), "config.yml");
+        config = YamlConfiguration.loadConfiguration(configFile);
         boolOptions.put("must_use_fist", true);
         boolOptions.put("set_limits", false);
         boolOptions.put("uuid_conversion_done", false);

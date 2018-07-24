@@ -43,7 +43,6 @@ public class XPKexecutor implements CommandExecutor {
         colours.put("&f", "White");
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
         if (cmd.getName().equalsIgnoreCase("xpkreload")) {
