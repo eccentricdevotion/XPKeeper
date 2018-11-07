@@ -4,12 +4,12 @@ main: me.eccentric_nz.xpkeeper.XPKeeper
 dev-url: http://dev.bukkit.org/bukkit-plugins/xpkeeper/
 name: XPKeeper
 load: POSTWORLD
-version: 1.5
+version: 1.5.1
 api-version: 1.13
 permissions:
   xpkeeper.use:
     description: Allow players to use XPKeeper signs
-    default: op
+    default: true
   xpkeeper.fist:
     description: Allow players to toggle must_use_fist true|false
     default: op
