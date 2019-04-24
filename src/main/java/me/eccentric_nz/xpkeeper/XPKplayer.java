@@ -3,10 +3,7 @@
  */
 package me.eccentric_nz.xpkeeper;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -35,7 +32,7 @@ public class XPKplayer implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         Block block = event.getClickedBlock();
-        if (block != null && (block.getType() == Material.WALL_SIGN || block.getType() == Material.SIGN)) {
+        if (block != null && Tag.SIGNS.getValues().contains(block.getType())) {
             String firstline = plugin.getConfig().getString("firstline");
             Sign sign = (Sign) block.getState();
             String first = ChatColor.stripColor(sign.getLine(0));
@@ -47,11 +44,16 @@ public class XPKplayer implements Listener {
                     if (plugin.trackPlayers.contains(uuid)) {
                         plugin.trackPlayers.remove(uuid);
                         // set the sign block to AIR and delete the XPKeeper data
+                        Material material = block.getType();
+                        String check = material.toString();
+                        if (check.contains("WALL")) {
+                            material = Material.valueOf(check.replace("WALL_", ""));
+                        }
                         block.setType(Material.AIR);
                         // drop a sign
                         Location l = block.getLocation();
                         World w = l.getWorld();
-                        w.dropItemNaturally(l, new ItemStack(Material.SIGN, 1));
+                        w.dropItemNaturally(l, new ItemStack(material, 1));
                         // return any kept XP
                         int keptXP = plugin.getKeptXP(uuid, world);
                         new XPKCalculator(player).changeExp(keptXP);
