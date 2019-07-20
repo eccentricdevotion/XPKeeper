@@ -1,6 +1,6 @@
 package me.eccentric_nz.xpkeeper;
 
-import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -49,15 +49,15 @@ public class XPKPistonListener implements Listener {
     }
 
     public boolean checkXPKSign(Block b) {
-        if (b.getType() == Material.WALL_SIGN || b.getType() == Material.SIGN) {
+        if (Tag.SIGNS.isTagged(b.getType())) {
             return isXPKSign(b);
         } else {
             // check if there is an XPKeeper sign attached to the block
-            if (b.getRelative(BlockFace.UP).getType() == Material.SIGN) {
+            if (Tag.STANDING_SIGNS.isTagged(b.getRelative(BlockFace.UP).getType())) {
                 return isXPKSign(b.getRelative(BlockFace.UP));
             }
             for (BlockFace bf : faces) {
-                if (b.getRelative(bf).getType() == Material.WALL_SIGN) {
+                if (Tag.WALL_SIGNS.isTagged(b.getRelative(bf).getType())) {
                     return isXPKSign(b.getRelative(bf));
                 }
             }

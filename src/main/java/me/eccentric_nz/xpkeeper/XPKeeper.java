@@ -49,31 +49,6 @@ public class XPKeeper extends JavaPlugin {
             System.err.println("[XPKeeper] Connection and Tables Error: " + e);
         }
         pm = getServer().getPluginManager();
-        XPKeeperUUIDConverter uc = new XPKeeperUUIDConverter(this);
-        // update database add and populate uuid fields
-        if (!getConfig().getBoolean("uuid_conversion_done")) {
-            if (!uc.convert()) {
-                // conversion failed
-                System.err.println("[XPKeeper]" + ChatColor.RED + "UUID conversion failed, disabling...");
-                pm.disablePlugin(this);
-                return;
-            } else {
-                getConfig().set("uuid_conversion_done", true);
-                saveConfig();
-                System.out.println("[XPKeeper] UUID conversion successful :)");
-            }
-        }
-        // update database add and populate player fields
-        if (!getConfig().getBoolean("player_names_added")) {
-            if (!uc.addLastKnownNames()) {
-                // conversion failed
-                System.err.println("[XPKeeper]" + ChatColor.RED + "Adding last known player names failed!");
-            } else {
-                getConfig().set("player_names_added", true);
-                saveConfig();
-                System.out.println("[XPKeeper] Added last known player names :)");
-            }
-        }
         signListener = new XPKsign(this);
         playerListener = new XPKplayer(this);
         breakListener = new XPKbreak(this);

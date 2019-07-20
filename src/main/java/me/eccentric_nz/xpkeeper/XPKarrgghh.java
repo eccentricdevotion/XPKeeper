@@ -1,6 +1,6 @@
 package me.eccentric_nz.xpkeeper;
 
-import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -28,16 +28,16 @@ public class XPKarrgghh implements Listener {
         List<Block> blockList = new ArrayList<>();
         blockList.addAll(event.blockList());
         blockList.forEach((block) -> {
-            if (block.getType() == Material.SIGN || block.getType() == Material.WALL_SIGN) {
+            if (Tag.SIGNS.isTagged(block.getType())) {
                 Sign sign = (Sign) block.getState();
                 String line0 = plugin.stripColourCode(sign.getLine(0));
                 if (line0.equalsIgnoreCase("[" + firstline + "]")) {
                     event.blockList().remove(block);
-                    if (block.getType() == Material.SIGN) {
+                    if (Tag.STANDING_SIGNS.isTagged(block.getType())) {
                         Block blockdown = block.getRelative(BlockFace.DOWN, 1);
                         event.blockList().remove(blockdown);
                     }
-                    if (block.getType() == Material.WALL_SIGN) {
+                    if (Tag.WALL_SIGNS.isTagged(block.getType())) {
                         Block blockbehind = null;
                         byte data = block.getData();
                         if (data == 4) {

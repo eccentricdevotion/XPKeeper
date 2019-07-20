@@ -2,6 +2,7 @@ package me.eccentric_nz.xpkeeper;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
@@ -29,7 +30,7 @@ public class XPKbreak implements Listener {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         Material blockType = block.getType();
-        if (blockType == Material.WALL_SIGN || blockType == Material.SIGN) {
+        if (Tag.SIGNS.isTagged(blockType)) {
             // check the text on the sign
             String firstline = plugin.getConfig().getString("firstline");
             Sign sign = (Sign) block.getState();
@@ -51,7 +52,7 @@ public class XPKbreak implements Listener {
             for (BlockFace bf : faces) {
                 Block faceBlock = block.getRelative(bf);
                 Material faceBlockType = faceBlock.getType();
-                if (faceBlockType == Material.WALL_SIGN) {
+                if (Tag.WALL_SIGNS.isTagged(faceBlockType)) {
                     Sign sign = (Sign) faceBlock.getState();
                     MaterialData m = sign.getData();
                     BlockFace attachedFace;
@@ -78,7 +79,7 @@ public class XPKbreak implements Listener {
                         xpkSign(faceBlock, event, player);
                     }
                 }
-                if (bf.equals(BlockFace.UP) && faceBlockType == Material.SIGN) {
+                if (bf.equals(BlockFace.UP) && Tag.STANDING_SIGNS.isTagged(faceBlockType)) {
                     xpkSign(faceBlock, event, player);
                 }
             }
