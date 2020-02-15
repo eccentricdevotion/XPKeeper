@@ -4,6 +4,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -38,20 +39,8 @@ public class XPKarrgghh implements Listener {
                         event.blockList().remove(blockdown);
                     }
                     if (Tag.WALL_SIGNS.isTagged(block.getType())) {
-                        Block blockbehind = null;
-                        byte data = block.getData();
-                        if (data == 4) {
-                            blockbehind = block.getRelative(BlockFace.SOUTH, 1);
-                        }
-                        if (data == 5) {
-                            blockbehind = block.getRelative(BlockFace.NORTH, 1);
-                        }
-                        if (data == 3) {
-                            blockbehind = block.getRelative(BlockFace.EAST, 1);
-                        }
-                        if (data == 2) {
-                            blockbehind = block.getRelative(BlockFace.WEST, 1);
-                        }
+                        WallSign data = (WallSign) block.getBlockData();
+                        Block blockbehind = block.getRelative(data.getFacing().getOppositeFace(), 1);
                         event.blockList().remove(blockbehind);
                     }
                 }
