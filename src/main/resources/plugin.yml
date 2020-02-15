@@ -4,7 +4,7 @@ main: me.eccentric_nz.xpkeeper.XPKeeper
 dev-url: http://dev.bukkit.org/bukkit-plugins/xpkeeper/
 name: XPKeeper
 load: POSTWORLD
-version: 1.6
+version: 1.6.1
 api-version: 1.14
 permissions:
   xpkeeper.use:
