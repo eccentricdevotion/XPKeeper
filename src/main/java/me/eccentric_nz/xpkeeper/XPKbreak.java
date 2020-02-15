@@ -6,12 +6,11 @@ import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.type.WallSign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.material.Attachable;
-import org.bukkit.material.MaterialData;
 
 import java.util.Arrays;
 import java.util.List;
@@ -53,29 +52,8 @@ public class XPKbreak implements Listener {
                 Block faceBlock = block.getRelative(bf);
                 Material faceBlockType = faceBlock.getType();
                 if (Tag.WALL_SIGNS.isTagged(faceBlockType)) {
-                    Sign sign = (Sign) faceBlock.getState();
-                    MaterialData m = sign.getData();
-                    BlockFace attachedFace;
-                    BlockFace chkFace = null;
-                    if (m instanceof Attachable) {
-                        attachedFace = ((Attachable) m).getAttachedFace();
-                        // get opposite face
-                        switch (attachedFace) {
-                            case EAST:
-                                chkFace = BlockFace.WEST;
-                                break;
-                            case NORTH:
-                                chkFace = BlockFace.SOUTH;
-                                break;
-                            case WEST:
-                                chkFace = BlockFace.EAST;
-                                break;
-                            default:
-                                chkFace = BlockFace.NORTH;
-                                break;
-                        }
-                    }
-                    if (bf.equals(chkFace)) {
+                    BlockFace attachedFace = ((WallSign) faceBlock.getState().getBlockData()).getFacing();
+                    if (bf.equals(attachedFace)) {
                         xpkSign(faceBlock, event, player);
                     }
                 }
