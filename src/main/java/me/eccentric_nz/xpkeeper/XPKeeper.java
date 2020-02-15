@@ -1,9 +1,6 @@
 package me.eccentric_nz.xpkeeper;
 
 import org.bukkit.ChatColor;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.material.Sign;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -195,12 +192,6 @@ public class XPKeeper extends JavaPlugin {
             }
         }
         return chk;
-    }
-
-    public BlockFace getFace(Block b) {
-        Sign s = (Sign) b.getState().getData();
-        BlockFace bf = s.getAttachedFace();
-        return bf;
     }
 
     public String stripColourCode(String s) {
