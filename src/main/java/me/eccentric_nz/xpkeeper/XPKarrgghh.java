@@ -26,8 +26,7 @@ public class XPKarrgghh implements Listener {
             return;
         }
         String firstline = plugin.getConfig().getString("firstline");
-        List<Block> blockList = new ArrayList<>();
-        blockList.addAll(event.blockList());
+        List<Block> blockList = new ArrayList<>(event.blockList());
         blockList.forEach((block) -> {
             if (Tag.SIGNS.isTagged(block.getType())) {
                 Sign sign = (Sign) block.getState();
