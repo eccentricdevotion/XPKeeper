@@ -1,5 +1,6 @@
 package me.eccentric_nz.xpkeeper;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -67,7 +68,7 @@ public class XPKPistonListener implements Listener {
 
     private boolean isXPKSign(Block b) {
         Sign s = (Sign) b.getState();
-        String line = plugin.stripColourCode(s.getLine(0));
+        String line = ChatColor.stripColor(s.getLine(0));
         return line.equalsIgnoreCase("[" + plugin.getConfig().getString("firstline") + "]");
     }
 }

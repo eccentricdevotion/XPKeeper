@@ -4,8 +4,8 @@ main: me.eccentric_nz.xpkeeper.XPKeeper
 dev-url: http://dev.bukkit.org/bukkit-plugins/xpkeeper/
 name: XPKeeper
 load: POSTWORLD
-version: 1.6.1
-api-version: 1.14
+version: 1.7.0
+api-version: 1.16
 permissions:
   xpkeeper.use:
     description: Allow players to use XPKeeper signs
@@ -30,65 +30,71 @@ permissions:
     default: op
 commands:
   xpkgive:
-    aliases: [xpkg]
+    aliases: [ xpkg ]
     description: Give a player some XP.
     usage: /<command> [player] [amount]
     permission: xpkeeper.admin
     permission-message: You don't have the permission <permission> to use this command
   xpkset:
-    aliases: [xpks]
+    aliases: [ xpks ]
     description: Set a player's total XP.
     usage: /<command> [player] [amount]
     permission: xpkeeper.admin
     permission-message: You don't have the permission <permission> to use this command
   xpkremove:
-    aliases: [xpkr, xpkrem]
+    aliases: [ xpkr, xpkrem ]
     description: Remove an XPKeeper sign.
     usage: /<command>
     permission: xpkeeper.use
     permission-message: You don't have the permission <permission> to use this command
+  xpkupdate:
+    aliases: [ xpku ]
+    description: Update an XPKeeper sign to add persistent UUID data.
+    usage: /<command>
+    permission: xpkeeper.use
+    permission-message: You don't have the permission <permission> to use this command
   xpkforceremove:
-    aliases: [xpkfr, xpkforce]
+    aliases: [ xpkfr, xpkforce ]
     description: Remove ALL player data from the database - use with caution.
     usage: /<command> [player]
   xpkfist:
-    aliases: [xpkf]
+    aliases: [ xpkf ]
     description: Toggle the XPKeeper must_use_fist config option.
     usage: /<command>
     permission: xpkeeper.fist
     permission-message: You don't have the permission <permission> to use this command
   xpkedit:
-    aliases: [xpke]
+    aliases: [ xpke ]
     description: Edit the first line of the XPKeeper sign.
     usage: /<command>
     permission: xpkeeper.editsign
     permission-message: You don't have the permission <permission> to use this command
   xpkpay:
-    aliases: [xpkp]
+    aliases: [ xpkp ]
     description: Pay another player some XP.
     usage: /<command> [player] [amount]
     permission: xpkeeper.use
     permission-message: You don't have the permission <permission> to use this command
   xpkwithdraw:
-    aliases: [xpkw, xpkwd]
+    aliases: [ xpkw, xpkwd ]
     description: Set the amount, in levels, that is withdrawn from an XPKeeper sign. 0 = all.
     usage: /<command> [amount]
     permission: xpkeeper.admin
     permission-message: You don't have the permission <permission> to use this command
   xpklimit:
-    aliases: [xpkl]
+    aliases: [ xpkl ]
     description: Toggle the XPKeeper set_limits config option.
     usage: /<command>
     permission: xpkeeper.limit
     permission-message: You don't have the permission <permission> to use this command
   xpkreload:
-    aliases: [xpkrl]
+    aliases: [ xpkrl ]
     description: Reloads the config file.
     usage: /<command>
     permission: xpkeeper.admin
     permission-message: You don't have the permission <permission> to use this command
   xpkcolour:
-    aliases: [xpkc,xpkcolor]
+    aliases: [ xpkc,xpkcolor ]
     description: Sets 'firstline_colour' in the config file.
     usage: /<command> [colour code e.g. &6]
     permission: xpkeeper.admin

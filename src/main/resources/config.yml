@@ -15,12 +15,14 @@ messages:
   arguments: Not enough command arguments!
   no_player: Could not find that player!
   removed: The XPKeeper was successfully removed.
+  updated: The XPKeeper was successfully updated.
   use_fist: You must hit the sign with your fist.
   deposit: You deposited %d XP and have reached level %d :)
   withdraw_all: You withdrew all your XP!
   withdraw_some: You withdrew %d XP Levels!
   not_your_sign: Get your own sign!
   click_sign: Click the XPKeeper sign you wish to remove.
+  update_sign: Click the XPKeeper sign you wish to update.
   no_sign: Couldn't find the sign, maybe you're too far away.
   look_sign: You aren't looking at a sign!
   not_enough: You don't have enough XP! Try withdrawing from your XPKeeper sign first.

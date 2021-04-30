@@ -15,12 +15,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import java.util.Arrays;
 import java.util.List;
 
-public class XPKbreak implements Listener {
+public class XPKBreak implements Listener {
 
     private final XPKeeper plugin;
     List<BlockFace> faces = Arrays.asList(BlockFace.UP, BlockFace.EAST, BlockFace.NORTH, BlockFace.WEST, BlockFace.SOUTH);
 
-    public XPKbreak(XPKeeper plugin) {
+    public XPKBreak(XPKeeper plugin) {
         this.plugin = plugin;
     }
 
@@ -37,7 +37,7 @@ public class XPKbreak implements Listener {
             String line1 = sign.getLine(1);
             String line2 = sign.getLine(2);
             String line3 = sign.getLine(3);
-            if (plugin.stripColourCode(line0).equalsIgnoreCase("[" + firstline + "]")) {
+            if (ChatColor.stripColor(line0).equalsIgnoreCase("[" + firstline + "]")) {
                 event.setCancelled(true);
                 sign.setLine(0, line0);
                 sign.setLine(1, line1);
@@ -71,7 +71,7 @@ public class XPKbreak implements Listener {
         String line1 = sign.getLine(1);
         String line2 = sign.getLine(2);
         String line3 = sign.getLine(3);
-        if (plugin.stripColourCode(line0).equalsIgnoreCase("[" + firstline + "]")) {
+        if (ChatColor.stripColor(line0).equalsIgnoreCase("[" + firstline + "]")) {
             e.setCancelled(true);
             sign.setLine(0, line0);
             sign.setLine(1, line1);

@@ -1,5 +1,6 @@
 package me.eccentric_nz.xpkeeper;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -12,11 +13,11 @@ import org.bukkit.event.entity.EntityExplodeEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class XPKarrgghh implements Listener {
+public class XPKArrgghh implements Listener {
 
     private final XPKeeper plugin;
 
-    public XPKarrgghh(XPKeeper plugin) {
+    public XPKArrgghh(XPKeeper plugin) {
         this.plugin = plugin;
     }
 
@@ -30,7 +31,7 @@ public class XPKarrgghh implements Listener {
         blockList.forEach((block) -> {
             if (Tag.SIGNS.isTagged(block.getType())) {
                 Sign sign = (Sign) block.getState();
-                String line0 = plugin.stripColourCode(sign.getLine(0));
+                String line0 = ChatColor.stripColor(sign.getLine(0));
                 if (line0.equalsIgnoreCase("[" + firstline + "]")) {
                     event.blockList().remove(block);
                     if (Tag.STANDING_SIGNS.isTagged(block.getType())) {

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class XPKconfig {
+public class XPKConfig {
 
     private final XPKeeper plugin;
     HashMap<String, String> strOptions = new HashMap<>();
@@ -18,7 +18,7 @@ public class XPKconfig {
     private FileConfiguration config = null;
     private File configFile = null;
 
-    public XPKconfig(XPKeeper plugin) {
+    public XPKConfig(XPKeeper plugin) {
         this.plugin = plugin;
         configFile = new File(plugin.getDataFolder(), "config.yml");
         config = YamlConfiguration.loadConfiguration(configFile);

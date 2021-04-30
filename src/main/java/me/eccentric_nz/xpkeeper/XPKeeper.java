@@ -1,6 +1,9 @@
 package me.eccentric_nz.xpkeeper;
 
-import org.bukkit.ChatColor;
+import org.bukkit.NamespacedKey;
+import org.bukkit.block.Sign;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,15 +19,14 @@ import java.util.UUID;
 public class XPKeeper extends JavaPlugin {
 
     public List<UUID> trackPlayers;
+    public List<UUID> trackUpdaters;
     public List<UUID> trackOps;
-    XPKdatabase service;
-    XPKsign signListener;
-    XPKplayer playerListener;
-    XPKbreak breakListener;
-    XPKarrgghh explodeListener;
-    XPKPistonListener pistonListener;
-    PluginManager pm;
-    private XPKexecutor xpkExecutor;
+    private XPKDatabase service;
+    private PluginManager pm;
+    private XPKExecutor xpkExecutor;
+    private PersistentDataType<byte[], UUID> persistentDataTypeUUID;
+    private NamespacedKey nskPlayer;
+    private NamespacedKey nskSign;
 
     @Override
     public void onDisable() {
@@ -35,9 +37,9 @@ public class XPKeeper extends JavaPlugin {
     public void onEnable() {
 
         saveDefaultConfig();
-        XPKconfig xpkc = new XPKconfig(this);
+        XPKConfig xpkc = new XPKConfig(this);
         xpkc.checkConfig();
-        service = XPKdatabase.getInstance();
+        service = XPKDatabase.getInstance();
         try {
             String path = getDataFolder() + File.separator + "XPKeeper.db";
             service.setConnection(path);
@@ -46,22 +48,22 @@ public class XPKeeper extends JavaPlugin {
             System.err.println("[XPKeeper] Connection and Tables Error: " + e);
         }
         pm = getServer().getPluginManager();
-        signListener = new XPKsign(this);
-        playerListener = new XPKplayer(this);
-        breakListener = new XPKbreak(this);
-        explodeListener = new XPKarrgghh(this);
-        pistonListener = new XPKPistonListener(this);
-        pm.registerEvents(signListener, this);
-        pm.registerEvents(playerListener, this);
-        pm.registerEvents(breakListener, this);
-        pm.registerEvents(explodeListener, this);
-        pm.registerEvents(pistonListener, this);
+        persistentDataTypeUUID = new XPKUuid();
+        nskPlayer = new NamespacedKey(this, "uuid_player");
+        nskSign = new NamespacedKey(this, "uuid_sign");
+        pm.registerEvents(new XPKSign(this), this);
+        pm.registerEvents(new XPKPlayer(this), this);
+        pm.registerEvents(new XPKBreak(this), this);
+        pm.registerEvents(new XPKArrgghh(this), this);
+        pm.registerEvents(new XPKPistonListener(this), this);
         trackPlayers = new ArrayList<>();
+        trackUpdaters = new ArrayList<>();
         trackOps = new ArrayList<>();
-        xpkExecutor = new XPKexecutor(this);
+        xpkExecutor = new XPKExecutor(this);
         getCommand("xpkgive").setExecutor(xpkExecutor);
         getCommand("xpkset").setExecutor(xpkExecutor);
         getCommand("xpkremove").setExecutor(xpkExecutor);
+        getCommand("xpkupdate").setExecutor(xpkExecutor);
         getCommand("xpkforceremove").setExecutor(xpkExecutor);
         getCommand("xpkfist").setExecutor(xpkExecutor);
         getCommand("xpkedit").setExecutor(xpkExecutor);
@@ -72,19 +74,32 @@ public class XPKeeper extends JavaPlugin {
         getCommand("xpkcolour").setExecutor(xpkExecutor);
     }
 
-    public int getKeptXP(UUID uuid, String w) {
+    public PersistentDataType<byte[], UUID> getPersistentDataTypeUUID() {
+        return persistentDataTypeUUID;
+    }
+
+    public NamespacedKey getNskPlayer() {
+        return nskPlayer;
+    }
+
+    public NamespacedKey getNskSign() {
+        return nskSign;
+    }
+
+    public int getKeptXP(UUID uuid, String w, String signUuid) {
         int keptXP = -1;
         try {
             Connection connection = service.getConnection();
-            String queryXPGet = "SELECT amount FROM xpk WHERE uuid = ? AND world = ?";
+            String queryXPGet = "SELECT amount FROM xpk WHERE uuid = ? AND world = ? AND sign = ?";
             PreparedStatement statement = connection.prepareStatement(queryXPGet);
             statement.setString(1, uuid.toString());
             statement.setString(2, w);
-            ResultSet rsget = statement.executeQuery();
-            if (rsget.next()) {
-                keptXP = rsget.getInt("amount");
+            statement.setString(3, signUuid);
+            ResultSet rsGet = statement.executeQuery();
+            if (rsGet.next()) {
+                keptXP = rsGet.getInt("amount");
             }
-            rsget.close();
+            rsGet.close();
             statement.close();
         } catch (SQLException e) {
             System.err.println("[XPKeeper] Could not GET XP: " + e);
@@ -92,14 +107,15 @@ public class XPKeeper extends JavaPlugin {
         return keptXP;
     }
 
-    public void setKeptXP(double a, UUID uuid, String w) {
+    public void setKeptXP(double a, UUID uuid, String w, String signUuid) {
         try {
             Connection connection = service.getConnection();
-            String queryXPSet = "UPDATE xpk SET amount = ? WHERE uuid = ? AND world = ?";
+            String queryXPSet = "UPDATE xpk SET amount = ? WHERE uuid = ? AND world = ? AND sign = ?";
             PreparedStatement statement = connection.prepareStatement(queryXPSet);
             statement.setDouble(1, a);
             statement.setString(2, uuid.toString());
             statement.setString(3, w);
+            statement.setString(4, signUuid);
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
@@ -107,14 +123,15 @@ public class XPKeeper extends JavaPlugin {
         }
     }
 
-    public void insKeptXP(UUID uuid, String w, String lkn) {
+    public void insKeptXP(UUID uuid, String w, String playerName, String signUuid) {
         try {
             Connection connection = service.getConnection();
-            String queryXPInsert = "INSERT INTO xpk (uuid, player, world, amount) VALUES (?, ?, ?, 0)";
+            String queryXPInsert = "INSERT INTO xpk (uuid, player, world, sign, amount) VALUES (?, ?, ?, ?, 0)";
             PreparedStatement statement = connection.prepareStatement(queryXPInsert);
             statement.setString(1, uuid.toString());
-            statement.setString(2, lkn);
+            statement.setString(2, playerName);
             statement.setString(3, w);
+            statement.setString(4, signUuid);
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
@@ -122,13 +139,14 @@ public class XPKeeper extends JavaPlugin {
         }
     }
 
-    public void delKeptXP(UUID uuid, String w) {
+    public void delKeptXP(UUID uuid, String w, String signUuid) {
         try {
             Connection connection = service.getConnection();
-            String queryXPDelete = "DELETE FROM xpk WHERE uuid = ? AND world = ?";
+            String queryXPDelete = "DELETE FROM xpk WHERE uuid = ? AND world = ? AND sign = ?";
             PreparedStatement statement = connection.prepareStatement(queryXPDelete);
             statement.setString(1, uuid.toString());
             statement.setString(2, w);
+            statement.setString(3, signUuid);
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
@@ -136,69 +154,83 @@ public class XPKeeper extends JavaPlugin {
         }
     }
 
-    public boolean isPlayersXPKSign(UUID uuid, String world, String nameOnSign) {
+    public boolean isPlayersXPKSign(Sign sign, UUID uuid, String world, String nameOnSign) {
         boolean chk = false;
-        String alias = getServer().getPlayer(uuid).getName();
-        if (alias.length() > 15) {
-            alias = alias.substring(0, 14);
-        }
-        if (nameOnSign.equals(alias)) {
-            try {
-                Connection connection = service.getConnection();
-                String queryUUIDGet = "SELECT uuid FROM xpk WHERE uuid = ? AND world = ?";
-                PreparedStatement statement = connection.prepareStatement(queryUUIDGet);
-                statement.setString(1, uuid.toString());
-                statement.setString(2, world);
-                ResultSet rsget = statement.executeQuery();
-                if (rsget.isBeforeFirst()) {
-                    chk = true;
-                }
-                rsget.close();
-                statement.close();
-            } catch (SQLException e) {
-                System.err.println("[XPKeeper] Could not GET XP: " + e);
-            }
+        PersistentDataContainer pdc = sign.getPersistentDataContainer();
+        if (pdc.has(nskPlayer, persistentDataTypeUUID)) {
+            UUID storedUuid = pdc.get(nskPlayer, persistentDataTypeUUID);
+            chk = storedUuid != null && storedUuid.equals(uuid);
         } else {
-            // name may have changed - check last known name (player field in db)
-            try {
-                Connection connection = service.getConnection();
-                String queryLKN = "SELECT player FROM xpk WHERE uuid = ? AND world = ?";
-                PreparedStatement statement = connection.prepareStatement(queryLKN);
-                statement.setString(1, uuid.toString());
-                statement.setString(2, world);
-                ResultSet rslkn = statement.executeQuery();
-                if (rslkn.isBeforeFirst()) {
-                    rslkn.next();
-                    String lkn = rslkn.getString("player");
-                    if (lkn.length() > 15) {
-                        lkn = lkn.substring(0, 14);
-                    }
-                    if (nameOnSign.equals(lkn)) {
+            String alias = getServer().getPlayer(uuid).getName();
+            if (alias.length() > 15) {
+                alias = alias.substring(0, 14);
+            }
+            if (nameOnSign.equals(alias)) {
+                try {
+                    Connection connection = service.getConnection();
+                    String queryUUIDGet = "SELECT uuid FROM xpk WHERE uuid = ? AND world = ?";
+                    PreparedStatement statement = connection.prepareStatement(queryUUIDGet);
+                    statement.setString(1, uuid.toString());
+                    statement.setString(2, world);
+                    ResultSet rsget = statement.executeQuery();
+                    if (rsget.isBeforeFirst()) {
                         chk = true;
-                        // update player field in db
-                        String queryUpdate = "UPDATE xpk SET player = ? WHERE uuid = ? AND world = ?";
-                        PreparedStatement ps = connection.prepareStatement(queryUpdate);
-                        ps.setString(1, alias);
-                        ps.setString(2, uuid.toString());
-                        ps.setString(3, world);
-                        ps.executeUpdate();
-                        ps.close();
                     }
+                    rsget.close();
+                    statement.close();
+                } catch (SQLException e) {
+                    System.err.println("[XPKeeper] Could not GET XP: " + e);
                 }
-                rslkn.close();
-                statement.close();
-            } catch (SQLException e) {
-                System.err.println("[XPKeeper] Could not GET XP (from last known player name): " + e);
+            } else {
+                // name may have changed - check last known name (player field in db)
+                try {
+                    Connection connection = service.getConnection();
+                    String queryLKN = "SELECT player FROM xpk WHERE uuid = ? AND world = ?";
+                    PreparedStatement statement = connection.prepareStatement(queryLKN);
+                    statement.setString(1, uuid.toString());
+                    statement.setString(2, world);
+                    ResultSet rsLKN = statement.executeQuery();
+                    if (rsLKN.isBeforeFirst()) {
+                        rsLKN.next();
+                        String lkn = rsLKN.getString("player");
+                        if (lkn.length() > 15) {
+                            lkn = lkn.substring(0, 14);
+                        }
+                        if (nameOnSign.equals(lkn)) {
+                            chk = true;
+                            // update player field in db
+                            String queryUpdate = "UPDATE xpk SET player = ? WHERE uuid = ? AND world = ?";
+                            PreparedStatement ps = connection.prepareStatement(queryUpdate);
+                            ps.setString(1, alias);
+                            ps.setString(2, uuid.toString());
+                            ps.setString(3, world);
+                            ps.executeUpdate();
+                            ps.close();
+                        }
+                    }
+                    rsLKN.close();
+                    statement.close();
+                } catch (SQLException e) {
+                    System.err.println("[XPKeeper] Could not GET XP (from last known player name): " + e);
+                }
             }
         }
         return chk;
     }
 
-    public String stripColourCode(String s) {
-        if (s.startsWith(String.valueOf(ChatColor.COLOR_CHAR))) {
-            return s.substring(2);
-        } else {
-            return s;
+    public void updateXPKRecord(UUID uuid, String world, String signUuid) {
+        try {
+            Connection connection = service.getConnection();
+            // update sign field in db if it is empty
+            String queryUpdate = "UPDATE xpk SET sign = ? WHERE uuid = ? AND world = ? AND sign = ''";
+            PreparedStatement ps = connection.prepareStatement(queryUpdate);
+            ps.setString(1, signUuid);
+            ps.setString(2, uuid.toString());
+            ps.setString(3, world);
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            System.err.println("[XPKeeper] Could not GET XP (from last known player name): " + e);
         }
     }
 
@@ -211,17 +243,5 @@ public class XPKeeper extends JavaPlugin {
         } catch (SQLException e) {
             System.err.println("[XPKeeper] Could not close database connection: " + e);
         }
-    }
-
-    /**
-     * Get if CraftBukkit version is 1.8 or higher
-     *
-     * @return true if version is >= 1.8
-     */
-    public boolean is1_8() {
-        String name = getServer().getClass().getPackage().getName();
-        String v = name.substring(name.lastIndexOf('.') + 1);
-        String[] versions = v.split("_");
-        return (versions[0].equals("v1") && Integer.parseInt(versions[1]) >= 8);
     }
 }

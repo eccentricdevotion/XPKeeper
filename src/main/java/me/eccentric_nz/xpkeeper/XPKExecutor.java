@@ -1,7 +1,6 @@
 package me.eccentric_nz.xpkeeper;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
 import org.bukkit.command.Command;
@@ -14,15 +13,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
-import java.util.Set;
 
-public class XPKexecutor implements CommandExecutor {
+public class XPKExecutor implements CommandExecutor {
 
     public final HashMap<String, String> colours;
     private final XPKeeper plugin;
-    private final XPKdatabase service = XPKdatabase.getInstance();
+    private final XPKDatabase service = XPKDatabase.getInstance();
 
-    public XPKexecutor(XPKeeper plugin) {
+    public XPKExecutor(XPKeeper plugin) {
         this.plugin = plugin;
         colours = new HashMap<>();
         colours.put("&0", "Black");
@@ -117,30 +115,27 @@ public class XPKexecutor implements CommandExecutor {
             }
             String uuid;
             String name;
-            switch (args.length) {
-                case 0:
-                    if (sender instanceof Player && p != null) {
-                        uuid = p.getUniqueId().toString();
-                        name = p.getName();
-                    } else {
-                        sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "You must specify a player name when running this command from the console.");
+            if (args.length == 0) {
+                if (sender instanceof Player && p != null) {
+                    uuid = p.getUniqueId().toString();
+                    name = p.getName();
+                } else {
+                    sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "You must specify a player name when running this command from the console.");
+                    return true;
+                }
+            } else {
+                if (!sender.hasPermission("xpkeeper.force")) {
+                    sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
+                    return true;
+                } else {
+                    OfflinePlayer player = plugin.getServer().getOfflinePlayer(args[0]);
+                    if (player == null) {
+                        sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "Player not found!");
                         return true;
                     }
-                    break;
-                default:
-                    if (!sender.hasPermission("xpkeeper.force")) {
-                        sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
-                        return true;
-                    } else {
-                        OfflinePlayer player = plugin.getServer().getOfflinePlayer(args[0]);
-                        if (player == null) {
-                            sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "Player not found!");
-                            return true;
-                        }
-                        name = args[0];
-                        uuid = player.getUniqueId().toString();
-                    }
-                    break;
+                    name = args[0];
+                    uuid = player.getUniqueId().toString();
+                }
             }
             Statement statement = null;
             ResultSet rsget = null;
@@ -170,6 +165,7 @@ public class XPKexecutor implements CommandExecutor {
                         statement.close();
                     }
                 } catch (SQLException e) {
+                    System.err.println("[XPKeeper] Could not close result set/statement when removing player data: " + e);
                 }
             }
             return false;
@@ -252,7 +248,7 @@ public class XPKexecutor implements CommandExecutor {
             }
             Sign sign;
             try {
-                sign = (Sign) player.getTargetBlock((Set<Material>) null, 10).getState();
+                sign = (Sign) player.getTargetBlock(null, 10).getState();
             } catch (NullPointerException ex) {
                 player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_sign"));
                 return true;
@@ -313,6 +309,14 @@ public class XPKexecutor implements CommandExecutor {
             giver.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.giver"), args[0], i));
             receiver.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.reciever"), giver.getName(), i));
             return true;
+        }
+        if (cmd.getName().equalsIgnoreCase("xpkupdate")) {
+            if (sender instanceof Player) {
+                Player player = (Player) sender;
+                plugin.trackUpdaters.add(player.getUniqueId());
+                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.update_sign"));
+                return true;
+            }
         }
         return false;
     }
