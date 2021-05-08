@@ -7,6 +7,7 @@ limits:
   - 30
   - 50
   - 100
+allow_raids: false
 # messages must contain %s and %d where appropriate as these are placeholders that get replaced in the message!
 messages:
   have_sign: You already have an XPKeeper in this world!
@@ -14,6 +15,7 @@ messages:
   no_perms_command: You do not have permission to use that command!
   arguments: Not enough command arguments!
   no_player: Could not find that player!
+  raided: The XPKeeper sign was successfully raided.
   removed: The XPKeeper was successfully removed.
   updated: The XPKeeper was successfully updated.
   use_fist: You must hit the sign with your fist.

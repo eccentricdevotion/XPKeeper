@@ -24,6 +24,7 @@ public class XPKConfig {
         config = YamlConfiguration.loadConfiguration(configFile);
         boolOptions.put("must_use_fist", true);
         boolOptions.put("set_limits", false);
+        boolOptions.put("allow_raids", false);
         boolOptions.put("uuid_conversion_done", false);
         boolOptions.put("player_names_added", false);
         intOptions.put("withdraw", 5);
