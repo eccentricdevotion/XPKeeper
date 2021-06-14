@@ -101,8 +101,7 @@ public class XPKExecutor implements CommandExecutor {
             return true;
         }
         if (cmd.getName().equalsIgnoreCase("xpkremove")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
+            if (sender instanceof Player player) {
                 plugin.trackPlayers.add(player.getUniqueId());
                 player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.click_sign"));
                 return true;
@@ -171,8 +170,7 @@ public class XPKExecutor implements CommandExecutor {
             return false;
         }
         if (cmd.getName().equalsIgnoreCase("xpkfist")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
+            if (sender instanceof Player player) {
                 if (!player.hasPermission("xpkeeper.fist")) {
                     player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                     return true;
@@ -185,8 +183,7 @@ public class XPKExecutor implements CommandExecutor {
             return true;
         }
         if (cmd.getName().equalsIgnoreCase("xpklimit")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
+            if (sender instanceof Player player) {
                 if (!player.hasPermission("xpkeeper.limit")) {
                     player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                     return true;
@@ -199,8 +196,7 @@ public class XPKExecutor implements CommandExecutor {
             return true;
         }
         if (cmd.getName().equalsIgnoreCase("xpkwithdraw")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
+            if (sender instanceof Player player) {
                 if (!player.hasPermission("xpkeeper.admin")) {
                     player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                     return true;
@@ -219,8 +215,7 @@ public class XPKExecutor implements CommandExecutor {
             return true;
         }
         if (cmd.getName().equalsIgnoreCase("xpkcolour")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
+            if (sender instanceof Player player) {
                 if (!player.hasPermission("xpkeeper.admin")) {
                     player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                     return true;
@@ -311,8 +306,7 @@ public class XPKExecutor implements CommandExecutor {
             return true;
         }
         if (cmd.getName().equalsIgnoreCase("xpkupdate")) {
-            if (sender instanceof Player) {
-                Player player = (Player) sender;
+            if (sender instanceof Player player) {
                 plugin.trackUpdaters.add(player.getUniqueId());
                 player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.update_sign"));
                 return true;
