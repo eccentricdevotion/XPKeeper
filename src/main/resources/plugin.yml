@@ -5,7 +5,7 @@ dev-url: http://dev.bukkit.org/bukkit-plugins/xpkeeper/
 name: XPKeeper
 load: POSTWORLD
 version: 1.8
-api-version: 1.17
+api-version: 1.18
 permissions:
   xpkeeper.use:
     description: Allow players to use XPKeeper signs

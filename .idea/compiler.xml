@@ -10,7 +10,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="XPKeeper" target="16" />
+      <module name="XPKeeper" target="17" />
     </bytecodeTargetLevel>
   </component>
 </project>
