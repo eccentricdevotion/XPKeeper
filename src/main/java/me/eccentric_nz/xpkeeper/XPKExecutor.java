@@ -61,11 +61,11 @@ public class XPKExecutor implements CommandExecutor {
                 sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.arguments"));
                 return false;
             }
-            if (plugin.getServer().getPlayer(args[0]) == null) {
+            Player player = plugin.getServer().getPlayer(args[0]);
+            if (player == null) {
                 sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_player"));
                 return true;
             }
-            Player player = plugin.getServer().getPlayer(args[0]);
             XPKCalculator xpkc = new XPKCalculator(player);
             int i = 0;
             try {
@@ -202,6 +202,10 @@ public class XPKExecutor implements CommandExecutor {
                     return true;
                 }
             }
+            if (args.length < 1) {
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You must specify a number");
+                return true;
+            }
             int amount;
             try {
                 amount = Integer.parseInt(args[0]);
@@ -220,6 +224,10 @@ public class XPKExecutor implements CommandExecutor {
                     player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                     return true;
                 }
+            }
+            if (args.length < 1) {
+                sender.sendMessage(ChatColor.GRAY + "[XPKeeper]" + ChatColor.RESET + " You must specify a colour code like this: &6");
+                return true;
             }
             String c = args[0].toLowerCase();
             if (!colours.containsKey(c)) {
@@ -263,7 +271,7 @@ public class XPKExecutor implements CommandExecutor {
             return true;
         }
         if (cmd.getName().equalsIgnoreCase("xpkpay")) {
-            if (!sender.hasPermission("xpkeeper.use")) {
+            if (!sender.hasPermission("xpkeeper.pay")) {
                 sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_command"));
                 return true;
             }
