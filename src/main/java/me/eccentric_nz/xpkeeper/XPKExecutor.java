@@ -13,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
+import java.util.logging.Level;
 
 public class XPKExecutor implements CommandExecutor {
 
@@ -71,7 +72,7 @@ public class XPKExecutor implements CommandExecutor {
             try {
                 i = Integer.parseInt(args[1]);
             } catch (NumberFormatException nfe) {
-                System.err.println("[XPKeeper] could not convert to number!");
+                plugin.getLogger().log(Level.INFO, "Could not convert to number!");
             }
             xpkc.changeExp(i);
             return true;
@@ -95,7 +96,7 @@ public class XPKExecutor implements CommandExecutor {
             try {
                 i = Integer.parseInt(args[1]);
             } catch (NumberFormatException nfe) {
-                System.err.println("[XPKeeper] could not convert to number!");
+                plugin.getLogger().log(Level.INFO, "Could not convert to number!");
             }
             xpkc.setExp(i);
             return true;
@@ -154,7 +155,7 @@ public class XPKExecutor implements CommandExecutor {
                     return true;
                 }
             } catch (SQLException e) {
-                System.err.println("[XPKeeper] Could not get and remove player data: " + e);
+                plugin.getLogger().log(Level.INFO, "Could not get and remove player data: " + e);
             } finally {
                 try {
                     if (rsget != null) {
@@ -164,7 +165,7 @@ public class XPKExecutor implements CommandExecutor {
                         statement.close();
                     }
                 } catch (SQLException e) {
-                    System.err.println("[XPKeeper] Could not close result set/statement when removing player data: " + e);
+                    plugin.getLogger().log(Level.INFO, "Could not close result set/statement when removing player data: " + e);
                 }
             }
             return false;

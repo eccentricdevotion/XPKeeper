@@ -15,6 +15,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 public class XPKeeper extends JavaPlugin {
 
@@ -45,7 +46,7 @@ public class XPKeeper extends JavaPlugin {
             service.setConnection(path);
             service.createTable();
         } catch (Exception e) {
-            System.err.println("[XPKeeper] Connection and Tables Error: " + e);
+            getLogger().log(Level.INFO, "Connection and Tables Error: " + e);
         }
         pm = getServer().getPluginManager();
         persistentDataTypeUUID = new XPKUuid();
@@ -102,7 +103,7 @@ public class XPKeeper extends JavaPlugin {
             rsGet.close();
             statement.close();
         } catch (SQLException e) {
-            System.err.println("[XPKeeper] Could not GET XP: " + e);
+            getLogger().log(Level.INFO, "Could not GET XP: " + e);
         }
         return keptXP;
     }
@@ -119,7 +120,7 @@ public class XPKeeper extends JavaPlugin {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
-            System.err.println("[XPKeeper] Could not SET XP: " + e);
+            getLogger().log(Level.INFO, "Could not SET XP: " + e);
         }
     }
 
@@ -135,7 +136,7 @@ public class XPKeeper extends JavaPlugin {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
-            System.err.println("[XPKeeper] Could not add new database record: " + e);
+            getLogger().log(Level.INFO, "Could not add new database record: " + e);
         }
     }
 
@@ -150,7 +151,7 @@ public class XPKeeper extends JavaPlugin {
             statement.executeUpdate();
             statement.close();
         } catch (SQLException e) {
-            System.err.println("[XPKeeper] Could not delete database record: " + e);
+            getLogger().log(Level.INFO, "Could not delete database record: " + e);
         }
     }
 
@@ -179,7 +180,7 @@ public class XPKeeper extends JavaPlugin {
                     rsget.close();
                     statement.close();
                 } catch (SQLException e) {
-                    System.err.println("[XPKeeper] Could not GET XP: " + e);
+                    getLogger().log(Level.INFO, "Could not GET XP: " + e);
                 }
             } else {
                 // name may have changed - check last known name (player field in db)
@@ -211,7 +212,7 @@ public class XPKeeper extends JavaPlugin {
                     rsLKN.close();
                     statement.close();
                 } catch (SQLException e) {
-                    System.err.println("[XPKeeper] Could not GET XP (from last known player name): " + e);
+                    getLogger().log(Level.INFO, "Could not GET XP (from last known player name): " + e);
                 }
             }
         }
@@ -230,7 +231,7 @@ public class XPKeeper extends JavaPlugin {
             ps.executeUpdate();
             ps.close();
         } catch (SQLException e) {
-            System.err.println("[XPKeeper] Could not GET XP (from last known player name): " + e);
+            getLogger().log(Level.INFO, "Could not GET XP (from last known player name): " + e);
         }
     }
 
@@ -241,7 +242,7 @@ public class XPKeeper extends JavaPlugin {
         try {
             service.connection.close();
         } catch (SQLException e) {
-            System.err.println("[XPKeeper] Could not close database connection: " + e);
+            getLogger().log(Level.INFO, "Could not close database connection: " + e);
         }
     }
 }

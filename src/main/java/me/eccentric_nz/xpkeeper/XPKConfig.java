@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 
 public class XPKConfig {
 
@@ -81,7 +82,7 @@ public class XPKConfig {
         }
         plugin.saveConfig();
         if (i > 0) {
-            System.out.println("[XPKeeper] Added " + i + " new items to config");
+            plugin.getLogger().log(Level.INFO, " Added " + i + " new items to config");
         }
     }
 }

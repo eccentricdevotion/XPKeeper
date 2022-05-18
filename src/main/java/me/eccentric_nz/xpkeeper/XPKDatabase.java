@@ -1,6 +1,9 @@
 package me.eccentric_nz.xpkeeper;
 
+import org.bukkit.Bukkit;
+
 import java.sql.*;
+import java.util.logging.Level;
 
 public class XPKDatabase {
 
@@ -32,7 +35,7 @@ public class XPKDatabase {
             if (!rsUUID.next()) {
                 String queryAlterU = "ALTER TABLE xpk ADD uuid TEXT";
                 statement.executeUpdate(queryAlterU);
-                System.out.println("[XPKeeper] Adding UUID to database!");
+                Bukkit.getLogger().log(Level.INFO, " Adding UUID to database!");
             }
             // update xpk if there is no sign column
             String querySign = "SELECT sql FROM sqlite_master WHERE tbl_name = 'xpk' AND sql LIKE '%sign TEXT%'";
@@ -40,10 +43,10 @@ public class XPKDatabase {
             if (!rsSign.next()) {
                 String queryAlterU = "ALTER TABLE xpk ADD sign TEXT";
                 statement.executeUpdate(queryAlterU);
-                System.out.println("[XPKeeper] Adding Sign UUID to database!");
+                Bukkit.getLogger().log(Level.INFO, " Adding Sign UUID to database!");
             }
         } catch (SQLException e) {
-            System.err.println("[XPKeeper] Create table error: " + e);
+            Bukkit.getLogger().log(Level.INFO, "Create table error: " + e);
         }
     }
 }
