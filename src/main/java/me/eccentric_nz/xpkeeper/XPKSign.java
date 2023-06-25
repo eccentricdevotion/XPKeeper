@@ -1,13 +1,13 @@
 package me.eccentric_nz.xpkeeper;
 
+import java.util.UUID;
 import org.bukkit.ChatColor;
+import org.bukkit.Tag;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
-
-import java.util.UUID;
 
 public class XPKSign implements Listener {
 
@@ -29,21 +29,18 @@ public class XPKSign implements Listener {
                 String playerNameStr = player.getName();
                 String sign_str = playerNameStr;
                 UUID signUuid = UUID.randomUUID();
-                if (playerNameStr.length() > 15) {
+                if (Tag.SIGNS.isTagged(event.getBlock().getType()) && playerNameStr.length() > 15) {
                     sign_str = playerNameStr.substring(0, 14);
                 }
-                plugin.insKeptXP(uuid, world, sign_str, signUuid.toString());
-                String flc = plugin.getConfig().getString("firstline_colour");
-                if (!flc.equals("&0")) {
-                    event.setLine(0, ChatColor.translateAlternateColorCodes('&', flc) + firstLine);
+                if (Tag.ALL_HANGING_SIGNS.isTagged(event.getBlock().getType()) && playerNameStr.length() > 11) {
+                    sign_str = playerNameStr.substring(0, 10);
                 }
-                event.setLine(1, sign_str);
-                event.setLine(2, "Level: 0");
-                event.setLine(3, "XP: 0");
+                plugin.insKeptXP(uuid, world, sign_str, signUuid.toString());
+                String flc = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("firstline_colour")) + firstLine;
                 Sign sign = (Sign) event.getBlock().getState();
                 sign.getPersistentDataContainer().set(plugin.getNskSign(), plugin.getPersistentDataTypeUUID(), signUuid);
                 sign.getPersistentDataContainer().set(plugin.getNskPlayer(), plugin.getPersistentDataTypeUUID(), uuid);
-                sign.update();
+                XPKWriteSign.update(sign, flc, sign_str, "Level: 0", "XP: 0");
             } else {
                 event.setLine(0, "");
                 player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_create"));

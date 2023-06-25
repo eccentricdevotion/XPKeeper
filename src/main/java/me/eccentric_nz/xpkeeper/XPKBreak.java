@@ -1,5 +1,8 @@
 package me.eccentric_nz.xpkeeper;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -13,10 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 
 public class XPKBreak implements Listener {
 
@@ -66,11 +65,7 @@ public class XPKBreak implements Listener {
         String line3 = sign.getLine(3);
         if (ChatColor.stripColor(line0).equalsIgnoreCase("[" + firstLine + "]")) {
             e.setCancelled(true);
-            sign.setLine(0, line0);
-            sign.setLine(1, line1);
-            sign.setLine(2, line2);
-            sign.setLine(3, line3);
-            sign.update();
+            XPKWriteSign.update(sign, line0, line1, line2, line3);
             p.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString(message));
         }
     }
@@ -104,11 +99,7 @@ public class XPKBreak implements Listener {
                 p.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.raided"));
             } else {
                 e.setCancelled(true);
-                sign.setLine(0, line0);
-                sign.setLine(1, line1);
-                sign.setLine(2, line2);
-                sign.setLine(3, line3);
-                sign.update();
+                XPKWriteSign.update(sign, line0, line1, line2, line3);
                 p.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.removed"));
             }
         }

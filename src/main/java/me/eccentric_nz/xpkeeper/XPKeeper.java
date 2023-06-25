@@ -1,12 +1,5 @@
 package me.eccentric_nz.xpkeeper;
 
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.Sign;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,6 +9,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
+import org.bukkit.NamespacedKey;
+import org.bukkit.block.Sign;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
 
 public class XPKeeper extends JavaPlugin {
 
@@ -163,10 +162,7 @@ public class XPKeeper extends JavaPlugin {
             chk = storedUuid != null && storedUuid.equals(uuid);
         } else {
             String alias = getServer().getPlayer(uuid).getName();
-            if (alias.length() > 15) {
-                alias = alias.substring(0, 14);
-            }
-            if (nameOnSign.equals(alias)) {
+            if (alias.startsWith(nameOnSign)) {
                 try {
                     Connection connection = service.getConnection();
                     String queryUUIDGet = "SELECT uuid FROM xpk WHERE uuid = ? AND world = ?";
@@ -194,10 +190,7 @@ public class XPKeeper extends JavaPlugin {
                     if (rsLKN.isBeforeFirst()) {
                         rsLKN.next();
                         String lkn = rsLKN.getString("player");
-                        if (lkn.length() > 15) {
-                            lkn = lkn.substring(0, 14);
-                        }
-                        if (nameOnSign.equals(lkn)) {
+                        if (lkn.startsWith(nameOnSign)) {
                             chk = true;
                             // update player field in db
                             String queryUpdate = "UPDATE xpk SET player = ? WHERE uuid = ? AND world = ?";

@@ -3,6 +3,8 @@
  */
 package me.eccentric_nz.xpkeeper;
 
+import java.util.List;
+import java.util.UUID;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -12,9 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.List;
-import java.util.UUID;
 
 /**
  * @author eccentric_nz
@@ -32,11 +31,12 @@ public class XPKPlayer implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         Block block = event.getClickedBlock();
-        if (block != null && Tag.SIGNS.getValues().contains(block.getType())) {
+        if (block != null && Tag.ALL_SIGNS.getValues().contains(block.getType())) {
             String firstLine = plugin.getConfig().getString("firstline");
             Sign sign = (Sign) block.getState();
             String first = ChatColor.stripColor(sign.getLine(0));
             if (first.equalsIgnoreCase("[" + firstLine + "]")) {
+                event.setCancelled(true);
                 String world = block.getWorld().getName();
                 String second = ChatColor.stripColor(sign.getLine(1));
                 // is it the player's XPKeeper sign?
@@ -83,9 +83,7 @@ public class XPKPlayer implements Listener {
                         int level = xpkc.getLevelForExp(keptXP);
                         int levelXP = xpkc.getXpForLevel(level);
                         int leftoverXP = keptXP - levelXP;
-                        sign.setLine(2, "Level: " + level);
-                        sign.setLine(3, "XP: " + leftoverXP);
-                        sign.update();
+                        XPKWriteSign.update(sign, level, leftoverXP);
                         player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.updated"));
                     } else if (plugin.getConfig().getBoolean("must_use_fist") && !player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                         player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.use_fist"));
@@ -125,10 +123,7 @@ public class XPKPlayer implements Listener {
                             int leftoverXP = newXPAmount - levelXP;
                             // update sign with player's current name
                             String name = (player.getName().length() > 15) ? player.getName().substring(0, 14) : player.getName();
-                            sign.setLine(1, name);
-                            sign.setLine(2, "Level: " + level);
-                            sign.setLine(3, "XP: " + leftoverXP);
-                            sign.update();
+                            XPKWriteSign.update(sign, name, level, leftoverXP);
                             // remove XP from player
                             xpkc.setExp(setXP);
                             player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.deposit"), (xp - setXP), level));
@@ -142,9 +137,7 @@ public class XPKPlayer implements Listener {
                                 xpkc.changeExp(keptXP);
                                 plugin.setKeptXP(0, uuid, world, signUuid);
                                 // update the sign
-                                sign.setLine(2, "Level: 0");
-                                sign.setLine(3, "XP: 0");
-                                sign.update();
+                                XPKWriteSign.update(sign, 0, 0);
                                 player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.withdraw_all"));
                             } else {
                                 int levelXP = xpkc.getXpForLevel(withdrawAmount);
@@ -155,18 +148,14 @@ public class XPKPlayer implements Listener {
                                     int newLevel = xpkc.getLevelForExp(remainingXP);
                                     int newLevelXP = xpkc.getXpForLevel(newLevel);
                                     int leftoverXP = remainingXP - newLevelXP;
-                                    sign.setLine(2, "Level: " + newLevel);
-                                    sign.setLine(3, "XP: " + leftoverXP);
-                                    sign.update();
+                                    XPKWriteSign.update(sign, newLevel, leftoverXP);
                                     xpkc.changeExp(levelXP);
                                     player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.withdraw_some"), withdrawAmount));
                                 } else {
                                     xpkc.changeExp(keptXP);
                                     plugin.setKeptXP(0, uuid, world, signUuid);
                                     // update the sign
-                                    sign.setLine(2, "Level: 0");
-                                    sign.setLine(3, "XP: 0");
-                                    sign.update();
+                                    XPKWriteSign.update(sign, 0, 0);
                                     player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.withdraw_all"));
                                 }
                             }

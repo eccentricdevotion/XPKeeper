@@ -1,5 +1,11 @@
 package me.eccentric_nz.xpkeeper;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.HashMap;
+import java.util.logging.Level;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Sign;
@@ -7,13 +13,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.HashMap;
-import java.util.logging.Level;
 
 public class XPKExecutor implements CommandExecutor {
 
@@ -267,8 +266,7 @@ public class XPKExecutor implements CommandExecutor {
             String newline = builder.toString();
             // remove trailing space
             String trimmed = newline.substring(0, newline.length() - 1);
-            sign.setLine(0, trimmed);
-            sign.update();
+            XPKWriteSign.update(sign, trimmed);
             return true;
         }
         if (cmd.getName().equalsIgnoreCase("xpkpay")) {
