@@ -46,7 +46,7 @@ public class XPKWriteSign {
         for (Side s : sides) {
             SignSide side = sign.getSide(s);
             side.setLine(0, edit);
-            setWaxed(sign);
+            sign.setWaxed(true);
             sign.update();
         }
     }
@@ -63,7 +63,7 @@ public class XPKWriteSign {
             SignSide side = sign.getSide(s);
             side.setLine(2, "Level: " + level);
             side.setLine(3, "XP: " + xp);
-            setWaxed(sign);
+            sign.setWaxed(true);
             sign.update();
         }
     }
@@ -82,7 +82,7 @@ public class XPKWriteSign {
             side.setLine(1, name);
             side.setLine(2, "Level: " + level);
             side.setLine(3, "XP: " + xp);
-            setWaxed(sign);
+            sign.setWaxed(true);
             sign.update();
         }
     }
@@ -103,19 +103,8 @@ public class XPKWriteSign {
             side.setLine(1, name);
             side.setLine(2, level);
             side.setLine(3, xp);
-            setWaxed(sign);
-            sign.update();
-        }
-    }
-
-    private static void setWaxed(Sign sign) {
-        if (PaperLib.isPaper()) {
-            Location l = sign.getLocation();
-            ServerLevel world = ((CraftWorld) sign.getWorld()).getHandle();
-            SignBlockEntity sbe = (SignBlockEntity) world.getBlockEntity(new BlockPos(l.getBlockX(), l.getBlockY(), l.getBlockZ()));
-            sbe.setWaxed(true);
-        } else {
             sign.setWaxed(true);
+            sign.update();
         }
     }
 }

@@ -1,6 +1,5 @@
 package me.eccentric_nz.xpkeeper;
 
-import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.Tag;
 import org.bukkit.block.Sign;
@@ -8,6 +7,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
+
+import java.util.UUID;
 
 public class XPKSign implements Listener {
 
@@ -40,7 +41,10 @@ public class XPKSign implements Listener {
                 Sign sign = (Sign) event.getBlock().getState();
                 sign.getPersistentDataContainer().set(plugin.getNskSign(), plugin.getPersistentDataTypeUUID(), signUuid);
                 sign.getPersistentDataContainer().set(plugin.getNskPlayer(), plugin.getPersistentDataTypeUUID(), uuid);
-                XPKWriteSign.update(sign, flc, sign_str, "Level: 0", "XP: 0");
+                final String name = sign_str;
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+                    XPKWriteSign.update(sign, flc, name, "Level: 0", "XP: 0");
+                }, 2L);
             } else {
                 event.setLine(0, "");
                 player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_create"));
