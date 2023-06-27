@@ -1,12 +1,12 @@
 firstline: XPKeeper
-firstline_colour: &0
+firstline_colour: '&0'
 must_use_fist: true
 withdraw: 5
 set_limits: false
 limits:
-  - 30
-  - 50
-  - 100
+- 30
+- 50
+- 100
 allow_raids: false
 # messages must contain %s and %d where appropriate as these are placeholders that get replaced in the message!
 messages:
