@@ -16,17 +16,11 @@
  */
 package me.eccentric_nz.xpkeeper;
 
-import io.papermc.lib.PaperLib;
 import java.util.Arrays;
 import java.util.List;
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.level.block.entity.SignBlockEntity;
-import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
-import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 
 /**
  *
