@@ -5,6 +5,8 @@ package me.eccentric_nz.xpkeeper;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
+
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -68,7 +70,8 @@ public class XPKPlayer implements Listener {
                         // remove database record
                         plugin.delKeptXP(uuid, world, signUuid);
                         player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.removed"));
-                    } else if (plugin.trackUpdaters.contains(uuid)) {
+                    } else if (plugin.trackUpdaters.containsKey(uuid)) {
+                        world = (plugin.trackUpdaters.get(uuid) != null) ? plugin.trackUpdaters.get(uuid) : "";
                         plugin.trackUpdaters.remove(uuid);
                         // update sign with persistent data
                         if (!sign.getPersistentDataContainer().has(plugin.getNskPlayer(), plugin.getPersistentDataTypeUUID())) {
@@ -77,14 +80,16 @@ public class XPKPlayer implements Listener {
                         if (!sign.getPersistentDataContainer().has(plugin.getNskSign(), plugin.getPersistentDataTypeUUID())) {
                             sign.getPersistentDataContainer().set(plugin.getNskSign(), plugin.getPersistentDataTypeUUID(), UUID.randomUUID());
                         }
-                        XPKCalculator xpkc = new XPKCalculator(player);
-                        // calculate level and update the sign
-                        int keptXP = plugin.getKeptXP(uuid, world, signUuid);
-                        int level = xpkc.getLevelForExp(keptXP);
-                        int levelXP = xpkc.getXpForLevel(level);
-                        int leftoverXP = keptXP - levelXP;
-                        XPKWriteSign.update(sign, level, leftoverXP);
-                        player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.updated"));
+                        if (!world.isEmpty()) {
+                            XPKCalculator xpkc = new XPKCalculator(player);
+                            // calculate level and update the sign
+                            int keptXP = plugin.getKeptXP(uuid, world, signUuid);
+                            int level = xpkc.getLevelForExp(keptXP);
+                            int levelXP = xpkc.getXpForLevel(level);
+                            int leftoverXP = keptXP - levelXP;
+                            XPKWriteSign.update(sign, level, leftoverXP, world, player.getWorld().getName(), uuid);
+                            player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.updated"));
+                        }
                     } else if (plugin.getConfig().getBoolean("must_use_fist") && !player.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
                         player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.use_fist"));
                     } else {

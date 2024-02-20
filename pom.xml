@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.eccentric_nz.xpkeeper</groupId>
     <artifactId>XPKeeper</artifactId>
-    <version>1.9.0</version>
+    <version>1.9.1</version>
     <name>XPKeeper</name>
     <repositories>
         <repository>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.20.1-R0.1-SNAPSHOT</version>
+            <version>1.20.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

@@ -314,7 +314,8 @@ public class XPKExecutor implements CommandExecutor {
         }
         if (cmd.getName().equalsIgnoreCase("xpkupdate")) {
             if (sender instanceof Player player) {
-                plugin.trackUpdaters.add(player.getUniqueId());
+                String world = args.length > 0 ? args[0]: null;
+                plugin.trackUpdaters.put(player.getUniqueId(), world);
                 player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.update_sign"));
                 return true;
             }

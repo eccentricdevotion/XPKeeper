@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
@@ -19,7 +20,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class XPKeeper extends JavaPlugin {
 
     public List<UUID> trackPlayers;
-    public List<UUID> trackUpdaters;
+    public HashMap<UUID, String> trackUpdaters;
     public List<UUID> trackOps;
     private XPKDatabase service;
     private PluginManager pm;
@@ -57,7 +58,7 @@ public class XPKeeper extends JavaPlugin {
         pm.registerEvents(new XPKArrgghh(this), this);
         pm.registerEvents(new XPKPistonListener(this), this);
         trackPlayers = new ArrayList<>();
-        trackUpdaters = new ArrayList<>();
+        trackUpdaters = new HashMap<>();
         trackOps = new ArrayList<>();
         xpkExecutor = new XPKExecutor(this);
         getCommand("xpkgive").setExecutor(xpkExecutor);
