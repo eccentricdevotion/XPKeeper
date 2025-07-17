@@ -22,6 +22,7 @@ messages:
   deposit: You deposited %d XP and have reached level %d :)
   withdraw_all: You withdrew all your XP!
   withdraw_some: You withdrew %d XP Levels!
+  mending: You mended an item for %d XP!
   not_your_sign: Get your own sign!
   click_sign: Click the XPKeeper sign you wish to remove.
   update_sign: Click the XPKeeper sign you wish to update.
