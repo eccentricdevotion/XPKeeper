@@ -59,21 +59,21 @@ public class XPKWriteSign {
      * @param level the level to set on line 3
      * @param xp    the xp to set on line 4
      */
-    public static void update(Sign sign, int level, int xp) {
+    public static void update(Sign sign, int level, double xp) {
         for (Side s : sides) {
             SignSide side = sign.getSide(s);
             side.setLine(2, "Level: " + level);
-            side.setLine(3, "XP: " + xp);
+            side.setLine(3, "XP: " + (int) xp);
             sign.setWaxed(true);
             sign.update();
         }
     }
 
-    public static void update(Sign sign, int level, int xp, String oldWorld, String newWorld, UUID uuid) {
+    public static void update(Sign sign, int level, double xp, String oldWorld, String newWorld, UUID uuid) {
         for (Side s : sides) {
             SignSide side = sign.getSide(s);
             side.setLine(2, "Level: " + level);
-            side.setLine(3, "XP: " + xp);
+            side.setLine(3, "XP: " + (int) xp);
             sign.setWaxed(true);
             sign.update();
         }
@@ -110,12 +110,12 @@ public class XPKWriteSign {
      * @param level the level to set on line 3
      * @param xp    the xp to set on line 4
      */
-    public static void update(Sign sign, String name, int level, int xp) {
+    public static void update(Sign sign, String name, int level, double xp) {
         for (Side s : sides) {
             SignSide side = sign.getSide(s);
             side.setLine(1, name);
             side.setLine(2, "Level: " + level);
-            side.setLine(3, "XP: " + xp);
+            side.setLine(3, "XP: " + (int) xp);
             sign.setWaxed(true);
             sign.update();
         }

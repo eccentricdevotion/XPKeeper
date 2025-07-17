@@ -84,12 +84,11 @@ public class XPKPlayer implements Listener {
                             sign.getPersistentDataContainer().set(plugin.getNskSign(), plugin.getPersistentDataTypeUUID(), UUID.randomUUID());
                         }
                         if (!world.isEmpty()) {
-                            XPKCalculator calculator = new XPKCalculator(player);
                             // calculate level and update the sign
                             int keptXP = plugin.getKeptXP(uuid, world, signUuid);
-                            int level = calculator.getLevelForExp(keptXP);
-                            int levelXP = calculator.getXpForLevel(level);
-                            int leftoverXP = keptXP - levelXP;
+                            int level = XPKCalculator.getLevelForExp(keptXP);
+                            double levelXP = XPKCalculator.getXpForLevel(level);
+                            double leftoverXP = keptXP - levelXP;
                             XPKWriteSign.update(sign, level, leftoverXP, world, player.getWorld().getName(), uuid);
                             player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.updated"));
                         }
@@ -99,15 +98,14 @@ public class XPKPlayer implements Listener {
                         Action action = event.getAction();
                         XPKCalculator calculator = new XPKCalculator(player);
                         // get players XP
-                        int xp = calculator.getCurrentExp();
+                        double xp = calculator.getCurrentExp();
                         if (action == Action.LEFT_CLICK_BLOCK) {
                             // deposit XP
                             // sign is set up so update the amount kept
                             int keptXP = plugin.getKeptXP(uuid, world, signUuid);
-                            // int keptLevel = plugin.getKeptLevel(uuid, world);
-                            int newXPAmount = xp + keptXP;
-                            int setXP = 0;
-                            int newLevel = calculator.getLevelForExp(newXPAmount);
+                            double newXPAmount = xp + keptXP;
+                            double setXP = 0;
+                            int newLevel = XPKCalculator.getLevelForExp(newXPAmount);
                             if (plugin.getConfig().getBoolean("set_limits") && !player.hasPermission("xpkeeper.limit.bypass")) {
                                 List<Double> limits = plugin.getConfig().getDoubleList("limits");
                                 double l = 0;
@@ -120,15 +118,15 @@ public class XPKPlayer implements Listener {
                                 }
                                 if (l != 0 && (newLevel + 1) > (int) l) {
                                     player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + "That amount would take you over your maximum deposit level, depositing as much as we can.");
-                                    newXPAmount = calculator.getXpForLevel((int) l);
+                                    newXPAmount = XPKCalculator.getXpForLevel((int) l);
                                     setXP = (xp + keptXP) - newXPAmount;
                                 }
                             }
                             plugin.setKeptXP(newXPAmount, uuid, world, signUuid);
                             // calculate level and update the sign
-                            int level = calculator.getLevelForExp(newXPAmount);
-                            int levelXP = calculator.getXpForLevel(level);
-                            int leftoverXP = newXPAmount - levelXP;
+                            int level = XPKCalculator.getLevelForExp(newXPAmount);
+                            double levelXP = XPKCalculator.getXpForLevel(level);
+                            double leftoverXP = newXPAmount - levelXP;
                             // update sign with player's current name
                             String name = (player.getName().length() > 15) ? player.getName().substring(0, 14) : player.getName();
                             XPKWriteSign.update(sign, name, level, leftoverXP);
@@ -149,9 +147,9 @@ public class XPKPlayer implements Listener {
                                     // calculate remaining XP amount
                                     int remainingXP = keptXP - repair;
                                     plugin.setKeptXP(remainingXP, uuid, world, signUuid);
-                                    int newLevel = calculator.getLevelForExp(remainingXP);
-                                    int newLevelXP = calculator.getXpForLevel(newLevel);
-                                    int leftoverXP = remainingXP - newLevelXP;
+                                    int newLevel = XPKCalculator.getLevelForExp(remainingXP);
+                                    double newLevelXP = XPKCalculator.getXpForLevel(newLevel);
+                                    double leftoverXP = remainingXP - newLevelXP;
                                     XPKWriteSign.update(sign, newLevel, leftoverXP);
                                     damageable.setDamage(0);
                                     is.setItemMeta(damageable);
@@ -169,14 +167,14 @@ public class XPKPlayer implements Listener {
                                     XPKWriteSign.update(sign, 0, 0);
                                     player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.withdraw_all"));
                                 } else {
-                                    int levelXP = calculator.getXpForLevel(withdrawAmount);
+                                    double levelXP = calculator.getXpForLevel(withdrawAmount);
                                     if (keptXP >= levelXP) {
                                         // calculate remaining XP amount
-                                        int remainingXP = keptXP - levelXP;
+                                        double remainingXP = keptXP - levelXP;
                                         plugin.setKeptXP(remainingXP, uuid, world, signUuid);
                                         int newLevel = calculator.getLevelForExp(remainingXP);
-                                        int newLevelXP = calculator.getXpForLevel(newLevel);
-                                        int leftoverXP = remainingXP - newLevelXP;
+                                        double newLevelXP = calculator.getXpForLevel(newLevel);
+                                        double leftoverXP = remainingXP - newLevelXP;
                                         XPKWriteSign.update(sign, newLevel, leftoverXP);
                                         calculator.changeExp(levelXP);
                                         player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.withdraw_some"), withdrawAmount));

@@ -301,7 +301,7 @@ public class XPKExecutor implements CommandExecutor {
                 return false;
             }
             // check whether the giver has enough to give
-            int checkEnough = xpkc_g.getCurrentExp();
+            double checkEnough = xpkc_g.getCurrentExp();
             if (i > checkEnough) {
                 sender.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.not_enough"));
                 return true;
