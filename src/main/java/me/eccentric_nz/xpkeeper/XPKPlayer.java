@@ -132,7 +132,7 @@ public class XPKPlayer implements Listener {
                             XPKWriteSign.update(sign, name, level, leftoverXP);
                             // remove XP from player
                             calculator.setExp(setXP);
-                            player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.deposit"), (xp - setXP), level));
+                            player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + String.format(plugin.getConfig().getString("messages.deposit"), ((int)(xp - setXP)), level));
                         }
                         if (action == Action.RIGHT_CLICK_BLOCK) {
                             if (is.containsEnchantment(Enchantment.MENDING)) {
