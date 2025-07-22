@@ -1,8 +1,5 @@
 package me.eccentric_nz.xpkeeper;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -16,6 +13,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.UUID;
 
 public class XPKBreak implements Listener {
 

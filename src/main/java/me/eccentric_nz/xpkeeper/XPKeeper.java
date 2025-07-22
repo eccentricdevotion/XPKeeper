@@ -1,5 +1,12 @@
 package me.eccentric_nz.xpkeeper;
 
+import org.bukkit.NamespacedKey;
+import org.bukkit.block.Sign;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.PluginManager;
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,12 +17,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.logging.Level;
-import org.bukkit.NamespacedKey;
-import org.bukkit.block.Sign;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.PluginManager;
-import org.bukkit.plugin.java.JavaPlugin;
 
 public class XPKeeper extends JavaPlugin {
 

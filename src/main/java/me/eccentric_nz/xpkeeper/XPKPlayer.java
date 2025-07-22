@@ -17,7 +17,6 @@ import org.bukkit.inventory.meta.Damageable;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 
 /**
  * @author eccentric_nz
