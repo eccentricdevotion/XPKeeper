@@ -1,6 +1,6 @@
 package me.eccentric_nz.xpkeeper;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.World;
@@ -8,6 +8,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.type.WallSign;
+import org.bukkit.block.sign.Side;
+import org.bukkit.block.sign.SignSide;
 import org.bukkit.entity.ExperienceOrb;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -60,25 +62,27 @@ public class XPKBreak implements Listener {
     private void xpkSign(Block b, BlockBreakEvent e, Player p, String message) {
         String firstLine = plugin.getConfig().getString("firstline");
         Sign sign = (Sign) b.getState();
-        String line0 = sign.getLine(0);
-        String line1 = sign.getLine(1);
-        String line2 = sign.getLine(2);
-        String line3 = sign.getLine(3);
-        if (ChatColor.stripColor(line0).equalsIgnoreCase("[" + firstLine + "]")) {
+        SignSide side = sign.getSide(Side.FRONT);
+        Component line0 = side.line(0);
+        Component line1 = side.line(1);
+        Component line2 = side.line(2);
+        Component line3 = side.line(3);
+        if (XPKUtils.stripColour(line0).equalsIgnoreCase("[" + firstLine + "]")) {
             e.setCancelled(true);
             XPKWriteSign.update(sign, line0, line1, line2, line3);
-            p.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString(message));
+            XPKUtils.xpkMessage(p, plugin.getConfig().getString(message));
         }
     }
 
     private void raidSign(Block b, BlockBreakEvent e, Player p) {
         String firstLine = plugin.getConfig().getString("firstline");
         Sign sign = (Sign) b.getState();
-        String line0 = sign.getLine(0);
-        String line1 = sign.getLine(1);
-        String line2 = sign.getLine(2);
-        String line3 = sign.getLine(3);
-        if (ChatColor.stripColor(line0).equalsIgnoreCase("[" + firstLine + "]")) {
+        SignSide side = sign.getSide(Side.FRONT);
+        Component line0 = side.line(0);
+        Component line1 = side.line(1);
+        Component line2 = side.line(2);
+        Component line3 = side.line(3);
+        if (XPKUtils.stripColour(line0).equalsIgnoreCase("[" + firstLine + "]")) {
             // get experience from sign
             String signUuid = "";
             boolean hasUUID = sign.getPersistentDataContainer().has(plugin.getNskSign(), plugin.getPersistentDataTypeUUID());
@@ -88,7 +92,7 @@ public class XPKBreak implements Listener {
                     signUuid = su.toString();
                 }
             }
-            Player raided = plugin.getServer().getPlayer(line1);
+            Player raided = plugin.getServer().getPlayer(XPKUtils.stripColour(line1));
             if (raided != null) {
                 UUID uuid = raided.getUniqueId();
                 World world = sign.getWorld();
@@ -97,11 +101,11 @@ public class XPKBreak implements Listener {
                 world.spawn(sign.getLocation(), ExperienceOrb.class).setExperience(keptXP);
                 // remove database record
                 plugin.delKeptXP(uuid, world.getName(), signUuid);
-                p.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.raided"));
+                XPKUtils.xpkMessage(p, plugin.getConfig().getString("messages.raided"));
             } else {
                 e.setCancelled(true);
                 XPKWriteSign.update(sign, line0, line1, line2, line3);
-                p.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.removed"));
+                XPKUtils.xpkMessage(p, plugin.getConfig().getString("messages.removed"));
             }
         }
     }

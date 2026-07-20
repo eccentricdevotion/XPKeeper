@@ -16,6 +16,7 @@
  */
 package me.eccentric_nz.xpkeeper;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
@@ -46,7 +47,7 @@ public class XPKWriteSign {
     public static void update(Sign sign, String edit) {
         for (Side s : sides) {
             SignSide side = sign.getSide(s);
-            side.setLine(0, edit);
+            side.line(0, Component.text(edit));
             sign.setWaxed(true);
             sign.update();
         }
@@ -62,8 +63,8 @@ public class XPKWriteSign {
     public static void update(Sign sign, int level, double xp) {
         for (Side s : sides) {
             SignSide side = sign.getSide(s);
-            side.setLine(2, "Level: " + level);
-            side.setLine(3, "XP: " + (int) xp);
+            side.line(2, Component.text("Level: " + level));
+            side.line(3, Component.text("XP: " + (int) xp));
             sign.setWaxed(true);
             sign.update();
         }
@@ -72,8 +73,8 @@ public class XPKWriteSign {
     public static void update(Sign sign, int level, double xp, String oldWorld, String newWorld, UUID uuid) {
         for (Side s : sides) {
             SignSide side = sign.getSide(s);
-            side.setLine(2, "Level: " + level);
-            side.setLine(3, "XP: " + (int) xp);
+            side.line(2, Component.text("Level: " + level));
+            side.line(3, Component.text("XP: " + (int) xp));
             sign.setWaxed(true);
             sign.update();
         }
@@ -97,7 +98,7 @@ public class XPKWriteSign {
                 rsGet.close();
                 statement.close();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.INFO, "Could not update world name change P: " + e);
+                Bukkit.getLogger().log(Level.INFO, "Could not update world name change " + e);
             }
         }
     }
@@ -113,9 +114,9 @@ public class XPKWriteSign {
     public static void update(Sign sign, String name, int level, double xp) {
         for (Side s : sides) {
             SignSide side = sign.getSide(s);
-            side.setLine(1, name);
-            side.setLine(2, "Level: " + level);
-            side.setLine(3, "XP: " + (int) xp);
+            side.line(1, Component.text(name));
+            side.line(2, Component.text("Level: " + level));
+            side.line(3, Component.text("XP: " + (int) xp));
             sign.setWaxed(true);
             sign.update();
         }
@@ -130,13 +131,13 @@ public class XPKWriteSign {
      * @param level  the level to set on line 3
      * @param xp     the xp to set on line 4
      */
-    public static void update(Sign sign, String keeper, String name, String level, String xp) {
+    public static void update(Sign sign, Component keeper, Component name, Component level, Component xp) {
         for (Side s : sides) {
             SignSide side = sign.getSide(s);
-            side.setLine(0, keeper);
-            side.setLine(1, name);
-            side.setLine(2, level);
-            side.setLine(3, xp);
+            side.line(0, keeper);
+            side.line(1, name);
+            side.line(2, level);
+            side.line(3, xp);
             sign.setWaxed(true);
             sign.update();
         }
