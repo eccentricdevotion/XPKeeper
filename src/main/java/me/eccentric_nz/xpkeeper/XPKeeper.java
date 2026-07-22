@@ -1,5 +1,6 @@
 package me.eccentric_nz.xpkeeper;
 
+import io.papermc.paper.plugin.lifecycle.event.types.LifecycleEvents;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Sign;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -24,8 +25,6 @@ public class XPKeeper extends JavaPlugin {
     public HashMap<UUID, String> trackUpdaters;
     public List<UUID> trackOps;
     private XPKDatabase service;
-    private PluginManager pm;
-    private XPKExecutor xpkExecutor;
     private PersistentDataType<byte[], UUID> persistentDataTypeUUID;
     private NamespacedKey nskPlayer;
     private NamespacedKey nskSign;
@@ -49,10 +48,10 @@ public class XPKeeper extends JavaPlugin {
         } catch (Exception e) {
             getLogger().log(Level.INFO, "Connection and Tables Error: " + e);
         }
-        pm = getServer().getPluginManager();
         persistentDataTypeUUID = new XPKUuid();
         nskPlayer = new NamespacedKey(this, "uuid_player");
         nskSign = new NamespacedKey(this, "uuid_sign");
+        PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new XPKSign(this), this);
         pm.registerEvents(new XPKPlayer(this), this);
         pm.registerEvents(new XPKBreak(this), this);
@@ -61,19 +60,8 @@ public class XPKeeper extends JavaPlugin {
         trackPlayers = new ArrayList<>();
         trackUpdaters = new HashMap<>();
         trackOps = new ArrayList<>();
-        xpkExecutor = new XPKExecutor(this);
-        getCommand("xpkgive").setExecutor(xpkExecutor);
-        getCommand("xpkset").setExecutor(xpkExecutor);
-        getCommand("xpkremove").setExecutor(xpkExecutor);
-        getCommand("xpkupdate").setExecutor(xpkExecutor);
-        getCommand("xpkforceremove").setExecutor(xpkExecutor);
-        getCommand("xpkfist").setExecutor(xpkExecutor);
-        getCommand("xpkedit").setExecutor(xpkExecutor);
-        getCommand("xpkpay").setExecutor(xpkExecutor);
-        getCommand("xpkwithdraw").setExecutor(xpkExecutor);
-        getCommand("xpklimit").setExecutor(xpkExecutor);
-        getCommand("xpkreload").setExecutor(xpkExecutor);
-        getCommand("xpkcolour").setExecutor(xpkExecutor);
+        this.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, commands ->
+                new XPKCommandRegister(commands, this).addAll());
     }
 
     public PersistentDataType<byte[], UUID> getPersistentDataTypeUUID() {

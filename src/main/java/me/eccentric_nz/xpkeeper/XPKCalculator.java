@@ -93,7 +93,7 @@ public class XPKCalculator {
      *
      * @return the player's total XP
      */
-    double getCurrentExp() {
+    public double getCurrentExp() {
         Player p = getPlayer();
         int lvl = p.getLevel();
         return getXpForLevel(lvl) + Math.round(getXpNeededToLevelUp(lvl) * p.getExp());
