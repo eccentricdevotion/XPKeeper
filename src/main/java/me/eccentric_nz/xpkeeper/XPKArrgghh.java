@@ -37,13 +37,13 @@ public class XPKArrgghh implements Listener {
                 if (line0.equalsIgnoreCase("[" + firstline + "]")) {
                     event.blockList().remove(block);
                     if (Tag.STANDING_SIGNS.isTagged(block.getType())) {
-                        Block blockdown = block.getRelative(BlockFace.DOWN, 1);
-                        event.blockList().remove(blockdown);
+                        Block blockDown = block.getRelative(BlockFace.DOWN, 1);
+                        event.blockList().remove(blockDown);
                     }
                     if (Tag.WALL_SIGNS.isTagged(block.getType())) {
                         WallSign data = (WallSign) block.getBlockData();
-                        Block blockbehind = block.getRelative(data.getFacing().getOppositeFace(), 1);
-                        event.blockList().remove(blockbehind);
+                        Block blockBehind = block.getRelative(data.getFacing().getOppositeFace(), 1);
+                        event.blockList().remove(blockBehind);
                     }
                 }
             }

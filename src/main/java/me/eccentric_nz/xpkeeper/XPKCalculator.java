@@ -104,7 +104,7 @@ public class XPKCalculator {
      *
      * @return Gets the players current experience points towards the next level.
      */
-    public static float getFractionalExp(int level, double exp) {
+    public float getFractionalExp(int level, double exp) {
         return (float) ((exp - getXpForLevel(level)) / getXpNeededToLevelUp(level));
     }
 
@@ -112,7 +112,7 @@ public class XPKCalculator {
      * Get the level
      * Theoretically the decimal part could be used for setExp, but since it's an approximation
      * sometimes it's wrong by a single exp point, e.g. if you set your exp to 1520 the points will slowly
-     * increase by one when switching gamemodes
+     * increase by one when switching game modes
      *
      * @param exp the amount to check for
      * @return the level that a player with this amount total XP would be

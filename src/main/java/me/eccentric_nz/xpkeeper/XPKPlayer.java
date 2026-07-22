@@ -94,7 +94,7 @@ public class XPKPlayer implements Listener {
                             int level = XPKCalculator.getLevelForExp(keptXP);
                             double levelXP = XPKCalculator.getXpForLevel(level);
                             double leftoverXP = keptXP - levelXP;
-                            XPKWriteSign.update(sign, level, leftoverXP, world, player.getWorld().getName(), uuid);
+                            XPKWriteSign.update(plugin, sign, level, leftoverXP, world, player.getWorld().getName(), uuid);
                             XPKUtils.xpkMessage(player, plugin.getConfig().getString("messages.updated"));
                         }
                     } else if (plugin.getConfig().getBoolean("must_use_fist") && checkHand(is)) {
@@ -137,7 +137,7 @@ public class XPKPlayer implements Listener {
                             XPKWriteSign.update(sign, name, level, leftoverXP);
                             // remove XP from player
                             calculator.setExp(setXP);
-                            XPKUtils.xpkMessage(player, String.format(plugin.getConfig().getString("messages.deposit"), ((int)(xp - setXP)), level));
+                            XPKUtils.xpkMessage(player, String.format(plugin.getConfig().getString("messages.deposit", "You deposited %d XP and have reached level %d :)"), ((int)(xp - setXP)), level));
                         }
                         if (action == Action.RIGHT_CLICK_BLOCK) {
                             if (is.containsEnchantment(Enchantment.MENDING)) {
@@ -158,7 +158,7 @@ public class XPKPlayer implements Listener {
                                     XPKWriteSign.update(sign, newLevel, leftoverXP);
                                     damageable.setDamage(0);
                                     is.setItemMeta(damageable);
-                                    XPKUtils.xpkMessage(player, String.format(plugin.getConfig().getString("messages.mending"), repair));
+                                    XPKUtils.xpkMessage(player, String.format(plugin.getConfig().getString("messages.mending", "You mended an item for %d XP!"), repair));
                                 }
                             } else {
                                 // get withdrawal amount - 0 = all, 5 = 5 levels
@@ -182,7 +182,7 @@ public class XPKPlayer implements Listener {
                                         double leftoverXP = remainingXP - newLevelXP;
                                         XPKWriteSign.update(sign, newLevel, leftoverXP);
                                         calculator.changeExp(levelXP);
-                                        XPKUtils.xpkMessage(player, String.format(plugin.getConfig().getString("messages.withdraw_some"), withdrawAmount));
+                                        XPKUtils.xpkMessage(player, String.format(plugin.getConfig().getString("messages.withdraw_some", "You withdrew %d XP Levels!"), withdrawAmount));
                                     } else {
                                         calculator.changeExp(keptXP);
                                         plugin.setKeptXP(0, uuid, world, signUuid);

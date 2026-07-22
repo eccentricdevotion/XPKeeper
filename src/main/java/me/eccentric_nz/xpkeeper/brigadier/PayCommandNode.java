@@ -41,7 +41,7 @@ public class PayCommandNode {
                                     xpkc_r.changeExp(amount);
                                     xpkc_g.changeExp(-amount);
                                     XPKUtils.xpkMessage(giver, String.format(plugin.getConfig().getString("messages.giver"), receiver.getName(), amount));
-                                    XPKUtils.xpkMessage(receiver, String.format(plugin.getConfig().getString("messages.reciever"), giver.getName(), amount));
+                                    XPKUtils.xpkMessage(receiver, String.format(plugin.getConfig().getString("messages.receiver"), giver.getName(), amount));
                                     return Command.SINGLE_SUCCESS;
                                 })));
         return command.build();

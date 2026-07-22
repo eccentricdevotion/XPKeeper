@@ -17,7 +17,6 @@
 package me.eccentric_nz.xpkeeper;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.block.sign.SignSide;
@@ -70,7 +69,7 @@ public class XPKWriteSign {
         }
     }
 
-    public static void update(Sign sign, int level, double xp, String oldWorld, String newWorld, UUID uuid) {
+    public static void update(XPKeeper plugin, Sign sign, int level, double xp, String oldWorld, String newWorld, UUID uuid) {
         for (Side s : sides) {
             SignSide side = sign.getSide(s);
             side.line(2, Component.text("Level: " + level));
@@ -98,7 +97,7 @@ public class XPKWriteSign {
                 rsGet.close();
                 statement.close();
             } catch (SQLException e) {
-                Bukkit.getLogger().log(Level.INFO, "Could not update world name change " + e);
+                plugin.getLogger().log(Level.INFO, "Could not update world name change " + e);
             }
         }
     }

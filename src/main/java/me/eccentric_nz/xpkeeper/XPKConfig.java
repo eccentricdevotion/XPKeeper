@@ -16,13 +16,11 @@ public class XPKConfig {
     HashMap<String, String> strOptions = new HashMap<>();
     HashMap<String, Integer> intOptions = new HashMap<>();
     HashMap<String, Boolean> boolOptions = new HashMap<>();
-    private FileConfiguration config = null;
-    private File configFile = null;
+    private final FileConfiguration config;
 
     public XPKConfig(XPKeeper plugin) {
         this.plugin = plugin;
-        configFile = new File(plugin.getDataFolder(), "config.yml");
-        config = YamlConfiguration.loadConfiguration(configFile);
+        config = YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), "config.yml"));
         boolOptions.put("must_use_fist", true);
         boolOptions.put("set_limits", false);
         boolOptions.put("allow_raids", false);
@@ -76,7 +74,7 @@ public class XPKConfig {
             }
         }
         if (!config.contains("limits")) {
-            List<Integer> limits = Arrays.asList(new Integer[]{30, 50, 100});
+            List<Integer> limits = Arrays.asList(30, 50, 100);
             plugin.getConfig().set("limits", limits);
             i++;
         }

@@ -38,13 +38,13 @@ public class XPKeeper extends JavaPlugin {
     public void onEnable() {
 
         saveDefaultConfig();
-        XPKConfig xpkc = new XPKConfig(this);
-        xpkc.checkConfig();
+        XPKConfig xpkConfig = new XPKConfig(this);
+        xpkConfig.checkConfig();
         service = XPKDatabase.getInstance();
         try {
             String path = getDataFolder() + File.separator + "XPKeeper.db";
             service.setConnection(path);
-            service.createTable();
+            service.createTable(this);
         } catch (Exception e) {
             getLogger().log(Level.INFO, "Connection and Tables Error: " + e);
         }
@@ -159,11 +159,11 @@ public class XPKeeper extends JavaPlugin {
                     PreparedStatement statement = connection.prepareStatement(queryUUIDGet);
                     statement.setString(1, uuid.toString());
                     statement.setString(2, world);
-                    ResultSet rsget = statement.executeQuery();
-                    if (rsget.isBeforeFirst()) {
+                    ResultSet resultSet = statement.executeQuery();
+                    if (resultSet.isBeforeFirst()) {
                         chk = true;
                     }
-                    rsget.close();
+                    resultSet.close();
                     statement.close();
                 } catch (SQLException e) {
                     getLogger().log(Level.INFO, "Could not GET XP: " + e);
