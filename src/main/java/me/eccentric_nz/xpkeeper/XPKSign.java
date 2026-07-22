@@ -1,6 +1,7 @@
 package me.eccentric_nz.xpkeeper;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Tag;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -20,7 +21,7 @@ public class XPKSign implements Listener {
 
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
-        String xpkLine = event.getLine(0);
+        String xpkLine = XPKUtils.stripColour(event.line(0));
         String firstLine = "[" + plugin.getConfig().getString("firstline") + "]";
         if (firstLine.equalsIgnoreCase(xpkLine)) {
             Player player = event.getPlayer();
@@ -37,17 +38,16 @@ public class XPKSign implements Listener {
                     sign_str = playerNameStr.substring(0, 10);
                 }
                 plugin.insKeptXP(uuid, world, sign_str, signUuid.toString());
-                String flc = ChatColor.translateAlternateColorCodes('&', plugin.getConfig().getString("firstline_colour")) + firstLine;
+                Component flc = LegacyComponentSerializer.legacyAmpersand().deserialize(plugin.getConfig().getString("firstline_colour") + firstLine);
                 Sign sign = (Sign) event.getBlock().getState();
                 sign.getPersistentDataContainer().set(plugin.getNskSign(), plugin.getPersistentDataTypeUUID(), signUuid);
                 sign.getPersistentDataContainer().set(plugin.getNskPlayer(), plugin.getPersistentDataTypeUUID(), uuid);
                 final String name = sign_str;
-                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                    XPKWriteSign.update(sign, flc, name, "Level: 0", "XP: 0");
-                }, 2L);
+                plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () ->
+                        XPKWriteSign.update(sign, flc, Component.text(name), Component.text("Level: 0"), Component.text("XP: 0")), 2L);
             } else {
-                event.setLine(0, "");
-                player.sendMessage(ChatColor.GRAY + "[XPKeeper] " + ChatColor.RESET + plugin.getConfig().getString("messages.no_perms_create"));
+                event.line(0, Component.text(""));
+                XPKUtils.xpkMessage(player, plugin.getConfig().getString("messages.no_perms_create"));
             }
         }
     }

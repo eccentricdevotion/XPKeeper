@@ -1,10 +1,11 @@
 package me.eccentric_nz.xpkeeper;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
+import org.bukkit.block.sign.SignSide;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPistonExtendEvent;
@@ -35,7 +36,7 @@ public class XPKPistonListener implements Listener {
 
     @EventHandler
     public void onBlockPistonRetract(BlockPistonRetractEvent event) {
-        if (event.isSticky() && checkXPKSign(event.getRetractLocation().getBlock())) {
+        if (event.isSticky() && hasXPKSign(event.getBlocks())) {
             event.setCancelled(true);
         }
     }
@@ -67,8 +68,9 @@ public class XPKPistonListener implements Listener {
     }
 
     private boolean isXPKSign(Block b) {
-        Sign s = (Sign) b.getState();
-        String line = ChatColor.stripColor(s.getLine(0));
+        Sign sign = (Sign) b.getState();
+        SignSide side = sign.getSide(Side.FRONT);
+        String line = XPKUtils.stripColour(side.line(0));
         return line.equalsIgnoreCase("[" + plugin.getConfig().getString("firstline") + "]");
     }
 }

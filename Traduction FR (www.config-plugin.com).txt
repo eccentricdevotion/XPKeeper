@@ -17,6 +17,6 @@ messages:
   look_sign: Vous ne regardez pas votre panneau !
   not_enough: Vous n avez pas assez d XP a deposer !
   giver: Vous avez payer %s %d XP :)
-  reciever: '%s vous recevez %d XP :)'
+  receiver: '%s vous recevez %d XP :)'
   use_command: Veuillez utiliser la commande /xpkremove pour supprimez votre panneau XP !
   no_grief: Arreter d essayer de casser ce panneau !
